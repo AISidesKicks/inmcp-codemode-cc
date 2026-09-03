@@ -1,0 +1,2 @@
+# mcp-codemode-cc
+EDU AI LAB: codemode - new way how LLM can exec code inside MCP srv (Contrast &amp; Compare old ways)
