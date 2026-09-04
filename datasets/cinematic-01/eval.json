@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "name": "cinematic-01",
+    "test": "smoketests/cinematic-01/test.py",
+    "run_id": "run-20260823-112134-local-sglang",
+    "run_at": "2026-08-23T11:31:57+0200",
+    "model_alias": "local-sglang",
+    "cache_mode": "both",
+    "base_url": "http://localhost:4000",
+    "dataset": "/home/roro/Workspaces/localai-isnot-cheap/datasets/cinematic-01/dataset.csv",
+    "sample": 154,
+    "year_tolerance": 2,
+    "reasoning": "disabled",
+    "workers": 4
+  },
+  "scenario_1_studio_recall": {
+    "metric": "manual exact match",
+    "score": "51/154",
+    "fraction": 0.331
+  },
+  "scenario_2_year_match": {
+    "metric": "abs diff <= 2",
+    "score": "134/154",
+    "fraction": 0.87
+  },
+  "scenario_3_year_repeat": {
+    "metric": "deepeval.ExactMatchMetric",
+    "threshold": 0.8,
+    "score": 0.844,
+    "passed": true
+  }
+}

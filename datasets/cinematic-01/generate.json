@@ -1,0 +1,4951 @@
+{
+  "meta": {
+    "name": "cinematic-01",
+    "generator": "smoketests/cinematic-01/generate.py",
+    "generated": "2026-08-22T15:59:38+0200",
+    "model_alias": "local-gguf",
+    "base_url": "http://localhost:4000",
+    "studios": 20,
+    "max_films": 10,
+    "skip_year": false,
+    "reasoning": "disabled",
+    "year_guard": [
+      1900,
+      2023
+    ],
+    "entries": 154,
+    "ok": 154,
+    "failed": 0,
+    "elapsed_s": 514.5
+  },
+  "films": [
+    {
+      "studio": "Marvel Studios",
+      "title": "Iron Man",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.696,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 236
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 236,
+        "total_tokens": 280
+      },
+      "films_seconds": 7.12,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 826
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 826,
+        "total_tokens": 872
+      }
+    },
+    {
+      "studio": "Marvel Studios",
+      "title": "The Incredible Hulk",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.299,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 466
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 466,
+        "total_tokens": 514
+      },
+      "films_seconds": 7.12,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 826
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 826,
+        "total_tokens": 872
+      }
+    },
+    {
+      "studio": "Marvel Studios",
+      "title": "Thor",
+      "year": 2011,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.34,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 329
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 329,
+        "total_tokens": 373
+      },
+      "films_seconds": 7.12,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 826
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 826,
+        "total_tokens": 872
+      }
+    },
+    {
+      "studio": "Marvel Studios",
+      "title": "Captain America: The First Avenger",
+      "year": 2011,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.156,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 302
+      },
+      "year_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 302,
+        "total_tokens": 352
+      },
+      "films_seconds": 7.12,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 826
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 826,
+        "total_tokens": 872
+      }
+    },
+    {
+      "studio": "Marvel Studios",
+      "title": "The Avengers",
+      "year": 2012,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.779,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 49,
+        "cache_n": 0,
+        "predicted_n": 388
+      },
+      "year_usage": {
+        "prompt_tokens": 49,
+        "completion_tokens": 388,
+        "total_tokens": 437
+      },
+      "films_seconds": 7.12,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 826
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 826,
+        "total_tokens": 872
+      }
+    },
+    {
+      "studio": "Marvel Studios",
+      "title": "Iron Man 2",
+      "year": 2010,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.764,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 247
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 247,
+        "total_tokens": 293
+      },
+      "films_seconds": 7.12,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 826
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 826,
+        "total_tokens": 872
+      }
+    },
+    {
+      "studio": "Marvel Studios",
+      "title": "Guardians of the Galaxy",
+      "year": 2014,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.821,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 255
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 255,
+        "total_tokens": 303
+      },
+      "films_seconds": 7.12,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 826
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 826,
+        "total_tokens": 872
+      }
+    },
+    {
+      "studio": "Marvel Studios",
+      "title": "Captain Marvel",
+      "year": 2019,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.293,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 322
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 322,
+        "total_tokens": 367
+      },
+      "films_seconds": 7.12,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 826
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 826,
+        "total_tokens": 872
+      }
+    },
+    {
+      "studio": "Marvel Studios",
+      "title": "Black Panther",
+      "year": 2018,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.199,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 451
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 451,
+        "total_tokens": 496
+      },
+      "films_seconds": 7.12,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 826
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 826,
+        "total_tokens": 872
+      }
+    },
+    {
+      "studio": "Marvel Studios",
+      "title": "Doctor Strange",
+      "year": 2016,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.616,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 225
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 225,
+        "total_tokens": 270
+      },
+      "films_seconds": 7.12,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 826
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 826,
+        "total_tokens": 872
+      }
+    },
+    {
+      "studio": "DC Studios",
+      "title": "The Dark Knight",
+      "year": 2008,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.427,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 198
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 198,
+        "total_tokens": 243
+      },
+      "films_seconds": 4.328,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 612
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 612,
+        "total_tokens": 658
+      }
+    },
+    {
+      "studio": "DC Studios",
+      "title": "Batman v Superman: Dawn of Justice",
+      "year": 2016,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.78,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 249
+      },
+      "year_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 249,
+        "total_tokens": 299
+      },
+      "films_seconds": 4.328,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 612
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 612,
+        "total_tokens": 658
+      }
+    },
+    {
+      "studio": "DC Studios",
+      "title": "Justice League",
+      "year": 2017,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.12,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 298
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 298,
+        "total_tokens": 343
+      },
+      "films_seconds": 4.328,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 612
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 612,
+        "total_tokens": 658
+      }
+    },
+    {
+      "studio": "DC Studios",
+      "title": "Wonder Woman",
+      "year": 2017,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 4.679,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 662
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 662,
+        "total_tokens": 707
+      },
+      "films_seconds": 4.328,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 612
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 612,
+        "total_tokens": 658
+      }
+    },
+    {
+      "studio": "DC Studios",
+      "title": "Aquaman",
+      "year": 2018,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.378,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 475
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 475,
+        "total_tokens": 519
+      },
+      "films_seconds": 4.328,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 612
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 612,
+        "total_tokens": 658
+      }
+    },
+    {
+      "studio": "DC Studios",
+      "title": "Shazam!",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.777,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 534
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 534,
+        "total_tokens": 579
+      },
+      "films_seconds": 4.328,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 612
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 612,
+        "total_tokens": 658
+      }
+    },
+    {
+      "studio": "DC Studios",
+      "title": "The Flash",
+      "year": 2023,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.401,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 337
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 337,
+        "total_tokens": 381
+      },
+      "films_seconds": 4.328,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 612
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 612,
+        "total_tokens": 658
+      }
+    },
+    {
+      "studio": "DC Studios",
+      "title": "Zack Snyder's Justice League",
+      "year": 2021,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.277,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 49,
+        "cache_n": 0,
+        "predicted_n": 320
+      },
+      "year_usage": {
+        "prompt_tokens": 49,
+        "completion_tokens": 320,
+        "total_tokens": 369
+      },
+      "films_seconds": 4.328,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 612
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 612,
+        "total_tokens": 658
+      }
+    },
+    {
+      "studio": "DC Studios",
+      "title": "The Batman",
+      "year": 2022,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.938,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 272
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 272,
+        "total_tokens": 316
+      },
+      "films_seconds": 4.328,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 612
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 612,
+        "total_tokens": 658
+      }
+    },
+    {
+      "studio": "DC Studios",
+      "title": "Shazam! Fury of the Gods",
+      "year": 2023,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.327,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 326
+      },
+      "year_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 326,
+        "total_tokens": 377
+      },
+      "films_seconds": 4.328,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 612
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 612,
+        "total_tokens": 658
+      }
+    },
+    {
+      "studio": "Walt Disney Pictures",
+      "title": "The Lion King",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.635,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 371
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 371,
+        "total_tokens": 416
+      },
+      "films_seconds": 3.776,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 534
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 534,
+        "total_tokens": 581
+      }
+    },
+    {
+      "studio": "Walt Disney Pictures",
+      "title": "Frozen",
+      "year": 2013,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.911,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 268
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 268,
+        "total_tokens": 313
+      },
+      "films_seconds": 3.776,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 534
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 534,
+        "total_tokens": 581
+      }
+    },
+    {
+      "studio": "Walt Disney Pictures",
+      "title": "The Little Mermaid",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.395,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 337
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 337,
+        "total_tokens": 384
+      },
+      "films_seconds": 3.776,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 534
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 534,
+        "total_tokens": 581
+      }
+    },
+    {
+      "studio": "Walt Disney Pictures",
+      "title": "Aladdin",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.266,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 176
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 176,
+        "total_tokens": 221
+      },
+      "films_seconds": 3.776,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 534
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 534,
+        "total_tokens": 581
+      }
+    },
+    {
+      "studio": "Walt Disney Pictures",
+      "title": "Beauty and the Beast",
+      "year": 1991,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 8.423,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 49,
+        "cache_n": 0,
+        "predicted_n": 1194
+      },
+      "year_usage": {
+        "prompt_tokens": 49,
+        "completion_tokens": 1194,
+        "total_tokens": 1243
+      },
+      "films_seconds": 3.776,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 534
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 534,
+        "total_tokens": 581
+      }
+    },
+    {
+      "studio": "Walt Disney Pictures",
+      "title": "Mulan",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.973,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 418
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 418,
+        "total_tokens": 462
+      },
+      "films_seconds": 3.776,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 534
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 534,
+        "total_tokens": 581
+      }
+    },
+    {
+      "studio": "Walt Disney Pictures",
+      "title": "Toy Story",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.235,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 171
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 171,
+        "total_tokens": 216
+      },
+      "films_seconds": 3.776,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 534
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 534,
+        "total_tokens": 581
+      }
+    },
+    {
+      "studio": "Walt Disney Pictures",
+      "title": "The Princess and the Frog",
+      "year": 2009,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.62,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 369
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 369,
+        "total_tokens": 417
+      },
+      "films_seconds": 3.776,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 534
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 534,
+        "total_tokens": 581
+      }
+    },
+    {
+      "studio": "Walt Disney Pictures",
+      "title": "Wreck-It Ralph",
+      "year": 2012,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.603,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 223
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 223,
+        "total_tokens": 270
+      },
+      "films_seconds": 3.776,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 534
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 534,
+        "total_tokens": 581
+      }
+    },
+    {
+      "studio": "Walt Disney Pictures",
+      "title": "Moana",
+      "year": 2016,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.52,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 212
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 212,
+        "total_tokens": 256
+      },
+      "films_seconds": 3.776,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 534
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 534,
+        "total_tokens": 581
+      }
+    },
+    {
+      "studio": "Pixar Animation Studios",
+      "title": "A Bug's Life",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.189,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 164
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 164,
+        "total_tokens": 210
+      },
+      "films_seconds": 3.051,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 431
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 431,
+        "total_tokens": 479
+      }
+    },
+    {
+      "studio": "Pixar Animation Studios",
+      "title": "Finding Nemo",
+      "year": 2003,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.745,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 244
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 244,
+        "total_tokens": 289
+      },
+      "films_seconds": 3.051,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 431
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 431,
+        "total_tokens": 479
+      }
+    },
+    {
+      "studio": "Pixar Animation Studios",
+      "title": "The Incredibles",
+      "year": 2004,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.14,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 301
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 301,
+        "total_tokens": 347
+      },
+      "films_seconds": 3.051,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 431
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 431,
+        "total_tokens": 479
+      }
+    },
+    {
+      "studio": "Pixar Animation Studios",
+      "title": "Up",
+      "year": 2009,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.524,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 43,
+        "cache_n": 0,
+        "predicted_n": 213
+      },
+      "year_usage": {
+        "prompt_tokens": 43,
+        "completion_tokens": 213,
+        "total_tokens": 256
+      },
+      "films_seconds": 3.051,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 431
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 431,
+        "total_tokens": 479
+      }
+    },
+    {
+      "studio": "Pixar Animation Studios",
+      "title": "WALL-E",
+      "year": 2008,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.739,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 243
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 243,
+        "total_tokens": 288
+      },
+      "films_seconds": 3.051,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 431
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 431,
+        "total_tokens": 479
+      }
+    },
+    {
+      "studio": "Pixar Animation Studios",
+      "title": "Brave",
+      "year": 2012,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.604,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 509
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 509,
+        "total_tokens": 553
+      },
+      "films_seconds": 3.051,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 431
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 431,
+        "total_tokens": 479
+      }
+    },
+    {
+      "studio": "Pixar Animation Studios",
+      "title": "Coco",
+      "year": 2017,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.921,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 269
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 269,
+        "total_tokens": 313
+      },
+      "films_seconds": 3.051,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 431
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 431,
+        "total_tokens": 479
+      }
+    },
+    {
+      "studio": "Pixar Animation Studios",
+      "title": "Inside Out",
+      "year": 2015,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.665,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 233
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 233,
+        "total_tokens": 277
+      },
+      "films_seconds": 3.051,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 431
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 431,
+        "total_tokens": 479
+      }
+    },
+    {
+      "studio": "Pixar Animation Studios",
+      "title": "Toy Story 2",
+      "year": 1999,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.107,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 296
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 296,
+        "total_tokens": 343
+      },
+      "films_seconds": 3.051,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 431
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 431,
+        "total_tokens": 479
+      }
+    },
+    {
+      "studio": "Warner Bros. Pictures",
+      "title": "The Dark Knight Rises",
+      "year": 2012,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.761,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 245
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 245,
+        "total_tokens": 292
+      },
+      "films_seconds": 7.856,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 1113
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 1113,
+        "total_tokens": 1161
+      }
+    },
+    {
+      "studio": "Warner Bros. Pictures",
+      "title": "Harry Potter and the Sorcerer's Stone",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.326,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 327
+      },
+      "year_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 327,
+        "total_tokens": 378
+      },
+      "films_seconds": 7.856,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 1113
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 1113,
+        "total_tokens": 1161
+      }
+    },
+    {
+      "studio": "Warner Bros. Pictures",
+      "title": "The Lord of the Rings: The Fellowship of the Ring",
+      "year": 2001,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.335,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 54,
+        "cache_n": 0,
+        "predicted_n": 328
+      },
+      "year_usage": {
+        "prompt_tokens": 54,
+        "completion_tokens": 328,
+        "total_tokens": 382
+      },
+      "films_seconds": 7.856,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 1113
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 1113,
+        "total_tokens": 1161
+      }
+    },
+    {
+      "studio": "Warner Bros. Pictures",
+      "title": "The Lord of the Rings: The Two Towers",
+      "year": 2002,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.228,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 53,
+        "cache_n": 0,
+        "predicted_n": 313
+      },
+      "year_usage": {
+        "prompt_tokens": 53,
+        "completion_tokens": 313,
+        "total_tokens": 366
+      },
+      "films_seconds": 7.856,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 1113
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 1113,
+        "total_tokens": 1161
+      }
+    },
+    {
+      "studio": "Warner Bros. Pictures",
+      "title": "The Lord of the Rings: The Return of the King",
+      "year": 2003,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.711,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 54,
+        "cache_n": 0,
+        "predicted_n": 239
+      },
+      "year_usage": {
+        "prompt_tokens": 54,
+        "completion_tokens": 239,
+        "total_tokens": 293
+      },
+      "films_seconds": 7.856,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 1113
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 1113,
+        "total_tokens": 1161
+      }
+    },
+    {
+      "studio": "Warner Bros. Pictures",
+      "title": "Batman Begins",
+      "year": 2005,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.01,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 282
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 282,
+        "total_tokens": 328
+      },
+      "films_seconds": 7.856,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 1113
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 1113,
+        "total_tokens": 1161
+      }
+    },
+    {
+      "studio": "Warner Bros. Pictures",
+      "title": "Man of Steel",
+      "year": 2013,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.072,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 291
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 291,
+        "total_tokens": 336
+      },
+      "films_seconds": 7.856,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 1113
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 1113,
+        "total_tokens": 1161
+      }
+    },
+    {
+      "studio": "Universal Pictures",
+      "title": "Jurassic Park",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.087,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 292
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 292,
+        "total_tokens": 338
+      },
+      "films_seconds": 4.219,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 594
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 594,
+        "total_tokens": 640
+      }
+    },
+    {
+      "studio": "Universal Pictures",
+      "title": "The Godfather",
+      "year": 1972,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.591,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 222
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 222,
+        "total_tokens": 267
+      },
+      "films_seconds": 4.219,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 594
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 594,
+        "total_tokens": 640
+      }
+    },
+    {
+      "studio": "Universal Pictures",
+      "title": "Titanic",
+      "year": 1997,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.266,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 318
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 318,
+        "total_tokens": 363
+      },
+      "films_seconds": 4.219,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 594
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 594,
+        "total_tokens": 640
+      }
+    },
+    {
+      "studio": "Universal Pictures",
+      "title": "E.T. the Extra-Terrestrial",
+      "year": 1982,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.661,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 373
+      },
+      "year_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 373,
+        "total_tokens": 424
+      },
+      "films_seconds": 4.219,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 594
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 594,
+        "total_tokens": 640
+      }
+    },
+    {
+      "studio": "Universal Pictures",
+      "title": "The Super Mario Bros. Movie",
+      "year": 2023,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.033,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 428
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 428,
+        "total_tokens": 476
+      },
+      "films_seconds": 4.219,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 594
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 594,
+        "total_tokens": 640
+      }
+    },
+    {
+      "studio": "Universal Pictures",
+      "title": "Fast & Furious",
+      "year": 2001,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.716,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 239
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 239,
+        "total_tokens": 285
+      },
+      "films_seconds": 4.219,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 594
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 594,
+        "total_tokens": 640
+      }
+    },
+    {
+      "studio": "Universal Pictures",
+      "title": "Back to the Future",
+      "year": 1985,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.477,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 347
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 347,
+        "total_tokens": 393
+      },
+      "films_seconds": 4.219,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 594
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 594,
+        "total_tokens": 640
+      }
+    },
+    {
+      "studio": "Universal Pictures",
+      "title": "The Wizard of Oz",
+      "year": 1939,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.944,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 272
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 272,
+        "total_tokens": 319
+      },
+      "films_seconds": 4.219,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 594
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 594,
+        "total_tokens": 640
+      }
+    },
+    {
+      "studio": "Universal Pictures",
+      "title": "Scooby-Doo",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.541,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 500
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 500,
+        "total_tokens": 547
+      },
+      "films_seconds": 4.219,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 594
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 594,
+        "total_tokens": 640
+      }
+    },
+    {
+      "studio": "Paramount Pictures",
+      "title": "Star Wars: Episode IV – A New Hope",
+      "year": 1977,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.484,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 348
+      },
+      "year_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 348,
+        "total_tokens": 399
+      },
+      "films_seconds": 8.475,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1202
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1202,
+        "total_tokens": 1249
+      }
+    },
+    {
+      "studio": "Paramount Pictures",
+      "title": "The Sound of Music",
+      "year": 1965,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.946,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 416
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 416,
+        "total_tokens": 462
+      },
+      "films_seconds": 8.475,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1202
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1202,
+        "total_tokens": 1249
+      }
+    },
+    {
+      "studio": "Paramount Pictures",
+      "title": "The Exorcist",
+      "year": 1973,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.834,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 256
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 256,
+        "total_tokens": 302
+      },
+      "films_seconds": 8.475,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1202
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1202,
+        "total_tokens": 1249
+      }
+    },
+    {
+      "studio": "Paramount Pictures",
+      "title": "The Shining",
+      "year": 1980,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.493,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 351
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 351,
+        "total_tokens": 396
+      },
+      "films_seconds": 8.475,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1202
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1202,
+        "total_tokens": 1249
+      }
+    },
+    {
+      "studio": "Paramount Pictures",
+      "title": "The Ten Commandments",
+      "year": 1956,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.261,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 461
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 461,
+        "total_tokens": 507
+      },
+      "films_seconds": 8.475,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1202
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1202,
+        "total_tokens": 1249
+      }
+    },
+    {
+      "studio": "Paramount Pictures",
+      "title": "The Great Escape",
+      "year": 1963,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.213,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 310
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 310,
+        "total_tokens": 356
+      },
+      "films_seconds": 8.475,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1202
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1202,
+        "total_tokens": 1249
+      }
+    },
+    {
+      "studio": "Sony Pictures",
+      "title": "Spider-Man: Into the Spider-Verse",
+      "year": 2018,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.567,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 215
+      },
+      "year_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 215,
+        "total_tokens": 266
+      },
+      "films_seconds": 7.74,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1095
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1095,
+        "total_tokens": 1141
+      }
+    },
+    {
+      "studio": "Sony Pictures",
+      "title": "The Amazing Spider-Man",
+      "year": 2003,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.888,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 549
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 549,
+        "total_tokens": 595
+      },
+      "films_seconds": 7.74,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1095
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1095,
+        "total_tokens": 1141
+      }
+    },
+    {
+      "studio": "Sony Pictures",
+      "title": "Gravity",
+      "year": 2013,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.626,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 227
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 227,
+        "total_tokens": 272
+      },
+      "films_seconds": 7.74,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1095
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1095,
+        "total_tokens": 1141
+      }
+    },
+    {
+      "studio": "Sony Pictures",
+      "title": "The Lost City",
+      "year": 2022,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.023,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 284
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 284,
+        "total_tokens": 329
+      },
+      "films_seconds": 7.74,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1095
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1095,
+        "total_tokens": 1141
+      }
+    },
+    {
+      "studio": "Sony Pictures",
+      "title": "Creed",
+      "year": 2015,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.588,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 222
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 222,
+        "total_tokens": 266
+      },
+      "films_seconds": 7.74,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1095
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1095,
+        "total_tokens": 1141
+      }
+    },
+    {
+      "studio": "Sony Pictures",
+      "title": "Alita: Battle Angel",
+      "year": 2019,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.048,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 287
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 287,
+        "total_tokens": 334
+      },
+      "films_seconds": 7.74,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1095
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1095,
+        "total_tokens": 1141
+      }
+    },
+    {
+      "studio": "Sony Pictures",
+      "title": "Venom",
+      "year": 2018,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 7.944,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 1125
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 1125,
+        "total_tokens": 1169
+      },
+      "films_seconds": 7.74,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1095
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1095,
+        "total_tokens": 1141
+      }
+    },
+    {
+      "studio": "Sony Pictures",
+      "title": "Joy",
+      "year": 2015,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.792,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 249
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 249,
+        "total_tokens": 293
+      },
+      "films_seconds": 7.74,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1095
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1095,
+        "total_tokens": 1141
+      }
+    },
+    {
+      "studio": "Sony Pictures",
+      "title": "The Girl with the Dragon Tattoo",
+      "year": 2009,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.849,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 400
+      },
+      "year_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 400,
+        "total_tokens": 450
+      },
+      "films_seconds": 7.74,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1095
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1095,
+        "total_tokens": 1141
+      }
+    },
+    {
+      "studio": "Columbia Pictures",
+      "title": "Gone with the Wind",
+      "year": 1939,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.219,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 453
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 453,
+        "total_tokens": 500
+      },
+      "films_seconds": 8.079,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1145
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1145,
+        "total_tokens": 1191
+      }
+    },
+    {
+      "studio": "Columbia Pictures",
+      "title": "Home Alone",
+      "year": 1990,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.29,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 321
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 321,
+        "total_tokens": 366
+      },
+      "films_seconds": 8.079,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1145
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1145,
+        "total_tokens": 1191
+      }
+    },
+    {
+      "studio": "Columbia Pictures",
+      "title": "The Last of the Mohicans",
+      "year": 1992,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.305,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 466
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 466,
+        "total_tokens": 514
+      },
+      "films_seconds": 8.079,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1145
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1145,
+        "total_tokens": 1191
+      }
+    },
+    {
+      "studio": "Columbia Pictures",
+      "title": "The Shawshank Redemption",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.641,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 371
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 371,
+        "total_tokens": 419
+      },
+      "films_seconds": 8.079,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1145
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1145,
+        "total_tokens": 1191
+      }
+    },
+    {
+      "studio": "20th Century Studios",
+      "title": "Ratatouille",
+      "year": 2007,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.822,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 254
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 254,
+        "total_tokens": 301
+      },
+      "films_seconds": 4.862,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 53,
+        "cache_n": 0,
+        "predicted_n": 686
+      },
+      "films_usage": {
+        "prompt_tokens": 53,
+        "completion_tokens": 686,
+        "total_tokens": 739
+      }
+    },
+    {
+      "studio": "20th Century Studios",
+      "title": "Cars",
+      "year": 2006,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 4.748,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 668
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 668,
+        "total_tokens": 716
+      },
+      "films_seconds": 4.862,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 53,
+        "cache_n": 0,
+        "predicted_n": 686
+      },
+      "films_usage": {
+        "prompt_tokens": 53,
+        "completion_tokens": 686,
+        "total_tokens": 739
+      }
+    },
+    {
+      "studio": "DreamWorks Animation",
+      "title": "Shrek",
+      "year": 2001,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.886,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 263
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 263,
+        "total_tokens": 307
+      },
+      "films_seconds": 4.006,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 566
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 566,
+        "total_tokens": 613
+      }
+    },
+    {
+      "studio": "DreamWorks Animation",
+      "title": "Shrek 2",
+      "year": 2004,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.512,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 211
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 211,
+        "total_tokens": 257
+      },
+      "films_seconds": 4.006,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 566
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 566,
+        "total_tokens": 613
+      }
+    },
+    {
+      "studio": "DreamWorks Animation",
+      "title": "Kung Fu Panda",
+      "year": 2008,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.623,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 227
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 227,
+        "total_tokens": 274
+      },
+      "films_seconds": 4.006,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 566
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 566,
+        "total_tokens": 613
+      }
+    },
+    {
+      "studio": "DreamWorks Animation",
+      "title": "Madagascar",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.539,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 358
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 358,
+        "total_tokens": 403
+      },
+      "films_seconds": 4.006,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 566
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 566,
+        "total_tokens": 613
+      }
+    },
+    {
+      "studio": "DreamWorks Animation",
+      "title": "Monsters vs. Aliens",
+      "year": 2009,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.034,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 426
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 426,
+        "total_tokens": 474
+      },
+      "films_seconds": 4.006,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 566
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 566,
+        "total_tokens": 613
+      }
+    },
+    {
+      "studio": "DreamWorks Animation",
+      "title": "How to Train Your Dragon",
+      "year": 2010,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 4.21,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 595
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 595,
+        "total_tokens": 642
+      },
+      "films_seconds": 4.006,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 566
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 566,
+        "total_tokens": 613
+      }
+    },
+    {
+      "studio": "DreamWorks Animation",
+      "title": "The Prince of Egypt",
+      "year": 1998,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.06,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 432
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 432,
+        "total_tokens": 478
+      },
+      "films_seconds": 4.006,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 566
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 566,
+        "total_tokens": 613
+      }
+    },
+    {
+      "studio": "DreamWorks Animation",
+      "title": "Chicken Run",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.043,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 142
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 142,
+        "total_tokens": 187
+      },
+      "films_seconds": 4.006,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 566
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 566,
+        "total_tokens": 613
+      }
+    },
+    {
+      "studio": "DreamWorks Animation",
+      "title": "Puss in Boots",
+      "year": 2011,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.665,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 376
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 376,
+        "total_tokens": 423
+      },
+      "films_seconds": 4.006,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 566
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 566,
+        "total_tokens": 613
+      }
+    },
+    {
+      "studio": "DreamWorks Animation",
+      "title": "Rise of the Guardians",
+      "year": 2012,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.371,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 333
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 333,
+        "total_tokens": 381
+      },
+      "films_seconds": 4.006,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 566
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 566,
+        "total_tokens": 613
+      }
+    },
+    {
+      "studio": "Lionsgate Films",
+      "title": "The Fast and the Furious",
+      "year": 2001,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.761,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 246
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 246,
+        "total_tokens": 294
+      },
+      "films_seconds": 0.012,
+      "films_cache_regime": "litellm-redis-hit",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 800
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 800,
+        "total_tokens": 851
+      }
+    },
+    {
+      "studio": "Lionsgate Films",
+      "title": "The Fast & Furious 7",
+      "year": 2015,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.652,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 49,
+        "cache_n": 0,
+        "predicted_n": 231
+      },
+      "year_usage": {
+        "prompt_tokens": 49,
+        "completion_tokens": 231,
+        "total_tokens": 280
+      },
+      "films_seconds": 0.012,
+      "films_cache_regime": "litellm-redis-hit",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 800
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 800,
+        "total_tokens": 851
+      }
+    },
+    {
+      "studio": "Lionsgate Films",
+      "title": "Transformers",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.774,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 248
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 248,
+        "total_tokens": 292
+      },
+      "films_seconds": 0.012,
+      "films_cache_regime": "litellm-redis-hit",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 800
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 800,
+        "total_tokens": 851
+      }
+    },
+    {
+      "studio": "Lionsgate Films",
+      "title": "Transformers: Dark of the Moon",
+      "year": 2011,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.88,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 49,
+        "cache_n": 0,
+        "predicted_n": 263
+      },
+      "year_usage": {
+        "prompt_tokens": 49,
+        "completion_tokens": 263,
+        "total_tokens": 312
+      },
+      "films_seconds": 0.012,
+      "films_cache_regime": "litellm-redis-hit",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 800
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 800,
+        "total_tokens": 851
+      }
+    },
+    {
+      "studio": "Lionsgate Films",
+      "title": "The Hunger Games",
+      "year": 2012,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.423,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 341
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 341,
+        "total_tokens": 386
+      },
+      "films_seconds": 0.012,
+      "films_cache_regime": "litellm-redis-hit",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 800
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 800,
+        "total_tokens": 851
+      }
+    },
+    {
+      "studio": "Lionsgate Films",
+      "title": "John Carter",
+      "year": 2012,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.052,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 288
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 288,
+        "total_tokens": 332
+      },
+      "films_seconds": 0.012,
+      "films_cache_regime": "litellm-redis-hit",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 800
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 800,
+        "total_tokens": 851
+      }
+    },
+    {
+      "studio": "Lionsgate Films",
+      "title": "The Expendables",
+      "year": 2010,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.325,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 327
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 327,
+        "total_tokens": 373
+      },
+      "films_seconds": 0.012,
+      "films_cache_regime": "litellm-redis-hit",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 800
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 800,
+        "total_tokens": 851
+      }
+    },
+    {
+      "studio": "Lionsgate Films",
+      "title": "The Mummy (2001)",
+      "year": 2001,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.313,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 325
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 325,
+        "total_tokens": 373
+      },
+      "films_seconds": 0.012,
+      "films_cache_regime": "litellm-redis-hit",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 800
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 800,
+        "total_tokens": 851
+      }
+    },
+    {
+      "studio": "Lionsgate Films",
+      "title": "The Mummy: Tomb of the Dragon Emperor",
+      "year": 1999,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.625,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 368
+      },
+      "year_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 368,
+        "total_tokens": 419
+      },
+      "films_seconds": 0.012,
+      "films_cache_regime": "litellm-redis-hit",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 800
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 800,
+        "total_tokens": 851
+      }
+    },
+    {
+      "studio": "Lionsgate Films",
+      "title": "The Mummy (2017)",
+      "year": 2017,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.578,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 220
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 220,
+        "total_tokens": 268
+      },
+      "films_seconds": 0.012,
+      "films_cache_regime": "litellm-redis-hit",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 800
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 800,
+        "total_tokens": 851
+      }
+    },
+    {
+      "studio": "A24",
+      "title": "Get Out",
+      "year": 2017,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.431,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 199
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 199,
+        "total_tokens": 243
+      },
+      "films_seconds": 3.346,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 472
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 472,
+        "total_tokens": 518
+      }
+    },
+    {
+      "studio": "A24",
+      "title": "Midsommar",
+      "year": 2019,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.251,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 316
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 316,
+        "total_tokens": 362
+      },
+      "films_seconds": 3.346,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 472
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 472,
+        "total_tokens": 518
+      }
+    },
+    {
+      "studio": "A24",
+      "title": "The Lighthouse",
+      "year": 2019,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.884,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 263
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 263,
+        "total_tokens": 308
+      },
+      "films_seconds": 3.346,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 472
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 472,
+        "total_tokens": 518
+      }
+    },
+    {
+      "studio": "A24",
+      "title": "Us",
+      "year": 2019,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.636,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 43,
+        "cache_n": 0,
+        "predicted_n": 228
+      },
+      "year_usage": {
+        "prompt_tokens": 43,
+        "completion_tokens": 228,
+        "total_tokens": 271
+      },
+      "films_seconds": 3.346,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 472
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 472,
+        "total_tokens": 518
+      }
+    },
+    {
+      "studio": "A24",
+      "title": "Tár",
+      "year": 2022,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.683,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 235
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 235,
+        "total_tokens": 279
+      },
+      "films_seconds": 3.346,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 472
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 472,
+        "total_tokens": 518
+      }
+    },
+    {
+      "studio": "A24",
+      "title": "The Witch",
+      "year": 2015,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.662,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 232
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 232,
+        "total_tokens": 276
+      },
+      "films_seconds": 3.346,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 472
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 472,
+        "total_tokens": 518
+      }
+    },
+    {
+      "studio": "A24",
+      "title": "Hereditary",
+      "year": 2018,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.056,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 288
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 288,
+        "total_tokens": 333
+      },
+      "films_seconds": 3.346,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 472
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 472,
+        "total_tokens": 518
+      }
+    },
+    {
+      "studio": "A24",
+      "title": "The Florida Project",
+      "year": 2017,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.712,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 238
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 238,
+        "total_tokens": 283
+      },
+      "films_seconds": 3.346,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 472
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 472,
+        "total_tokens": 518
+      }
+    },
+    {
+      "studio": "A24",
+      "title": "The Night House",
+      "year": 2020,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.436,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 200
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 200,
+        "total_tokens": 245
+      },
+      "films_seconds": 3.346,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 472
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 472,
+        "total_tokens": 518
+      }
+    },
+    {
+      "studio": "A24",
+      "title": "The Menu",
+      "year": 2022,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.863,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 261
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 261,
+        "total_tokens": 305
+      },
+      "films_seconds": 3.346,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 472
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 472,
+        "total_tokens": 518
+      }
+    },
+    {
+      "studio": "Metro-Goldwyn-Mayer",
+      "title": "Singin' in the Rain",
+      "year": 1952,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.692,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 378
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 378,
+        "total_tokens": 426
+      },
+      "films_seconds": 6.001,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 849
+      },
+      "films_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 849,
+        "total_tokens": 899
+      }
+    },
+    {
+      "studio": "Metro-Goldwyn-Mayer",
+      "title": "Ben-Hur",
+      "year": 1959,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.855,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 545
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 545,
+        "total_tokens": 590
+      },
+      "films_seconds": 6.001,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 849
+      },
+      "films_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 849,
+        "total_tokens": 899
+      }
+    },
+    {
+      "studio": "Metro-Goldwyn-Mayer",
+      "title": "Casablanca",
+      "year": 1942,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.999,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 280
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 280,
+        "total_tokens": 326
+      },
+      "films_seconds": 6.001,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 849
+      },
+      "films_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 849,
+        "total_tokens": 899
+      }
+    },
+    {
+      "studio": "Metro-Goldwyn-Mayer",
+      "title": "Mutiny on the Bounty",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 7.563,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 49,
+        "cache_n": 0,
+        "predicted_n": 1072
+      },
+      "year_usage": {
+        "prompt_tokens": 49,
+        "completion_tokens": 1072,
+        "total_tokens": 1121
+      },
+      "films_seconds": 6.001,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 849
+      },
+      "films_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 849,
+        "total_tokens": 899
+      }
+    },
+    {
+      "studio": "Metro-Goldwyn-Mayer",
+      "title": "The Philadelphia Story",
+      "year": 1940,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.899,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 265
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 265,
+        "total_tokens": 310
+      },
+      "films_seconds": 6.001,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 849
+      },
+      "films_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 849,
+        "total_tokens": 899
+      }
+    },
+    {
+      "studio": "Metro-Goldwyn-Mayer",
+      "title": "The King and I",
+      "year": 1956,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.011,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 282
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 282,
+        "total_tokens": 328
+      },
+      "films_seconds": 6.001,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 849
+      },
+      "films_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 849,
+        "total_tokens": 899
+      }
+    },
+    {
+      "studio": "Legendary Entertainment",
+      "title": "X-Men: Days of Future Past",
+      "year": 2020,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.831,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 255
+      },
+      "year_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 255,
+        "total_tokens": 305
+      },
+      "films_seconds": 5.331,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 754
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 754,
+        "total_tokens": 801
+      }
+    },
+    {
+      "studio": "Legendary Entertainment",
+      "title": "Furious 7",
+      "year": 2015,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.616,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 224
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 224,
+        "total_tokens": 270
+      },
+      "films_seconds": 5.331,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 754
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 754,
+        "total_tokens": 801
+      }
+    },
+    {
+      "studio": "Legendary Entertainment",
+      "title": "The Suicide Squad",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.643,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 229
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 229,
+        "total_tokens": 275
+      },
+      "films_seconds": 5.331,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 754
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 754,
+        "total_tokens": 801
+      }
+    },
+    {
+      "studio": "Legendary Entertainment",
+      "title": "The Hobbit: The Desolation of Smaug",
+      "year": 2013,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.787,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 52,
+        "cache_n": 0,
+        "predicted_n": 249
+      },
+      "year_usage": {
+        "prompt_tokens": 52,
+        "completion_tokens": 249,
+        "total_tokens": 301
+      },
+      "films_seconds": 5.331,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 754
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 754,
+        "total_tokens": 801
+      }
+    },
+    {
+      "studio": "Legendary Entertainment",
+      "title": "The Avengers: Age of Ultron",
+      "year": 2015,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.225,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 312
+      },
+      "year_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 312,
+        "total_tokens": 362
+      },
+      "films_seconds": 5.331,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 754
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 754,
+        "total_tokens": 801
+      }
+    },
+    {
+      "studio": "New Line Cinema",
+      "title": "Fight Club",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.548,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 214
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 214,
+        "total_tokens": 259
+      },
+      "films_seconds": 7.714,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1092
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1092,
+        "total_tokens": 1139
+      }
+    },
+    {
+      "studio": "New Line Cinema",
+      "title": "The Big Lebowski",
+      "year": 1998,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.753,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 245
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 245,
+        "total_tokens": 291
+      },
+      "films_seconds": 7.714,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1092
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1092,
+        "total_tokens": 1139
+      }
+    },
+    {
+      "studio": "New Line Cinema",
+      "title": "The Departed",
+      "year": 2006,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.195,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 308
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 308,
+        "total_tokens": 353
+      },
+      "films_seconds": 7.714,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1092
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1092,
+        "total_tokens": 1139
+      }
+    },
+    {
+      "studio": "New Line Cinema",
+      "title": "Pirates of the Caribbean: The Curse of the Black Pearl",
+      "year": 2003,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.895,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 56,
+        "cache_n": 0,
+        "predicted_n": 265
+      },
+      "year_usage": {
+        "prompt_tokens": 56,
+        "completion_tokens": 265,
+        "total_tokens": 321
+      },
+      "films_seconds": 7.714,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1092
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1092,
+        "total_tokens": 1139
+      }
+    },
+    {
+      "studio": "New Line Cinema",
+      "title": "Memento",
+      "year": 2000,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.625,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 226
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 226,
+        "total_tokens": 271
+      },
+      "films_seconds": 7.714,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1092
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1092,
+        "total_tokens": 1139
+      }
+    },
+    {
+      "studio": "New Line Cinema",
+      "title": "The Social Network",
+      "year": 2010,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.689,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 236
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 236,
+        "total_tokens": 281
+      },
+      "films_seconds": 7.714,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 1092
+      },
+      "films_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 1092,
+        "total_tokens": 1139
+      }
+    },
+    {
+      "studio": "Studio Ghibli",
+      "title": "My Neighbor Totoro",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.54,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 213
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 213,
+        "total_tokens": 260
+      },
+      "films_seconds": 5.365,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 759
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 759,
+        "total_tokens": 807
+      }
+    },
+    {
+      "studio": "Studio Ghibli",
+      "title": "Kiki's Delivery Service",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.263,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 317
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 317,
+        "total_tokens": 364
+      },
+      "films_seconds": 5.365,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 759
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 759,
+        "total_tokens": 807
+      }
+    },
+    {
+      "studio": "Studio Ghibli",
+      "title": "Princess Mononoke",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.213,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 168
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 168,
+        "total_tokens": 216
+      },
+      "films_seconds": 5.365,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 759
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 759,
+        "total_tokens": 807
+      }
+    },
+    {
+      "studio": "Studio Ghibli",
+      "title": "Spirited Away",
+      "year": 2001,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.809,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 396
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 396,
+        "total_tokens": 442
+      },
+      "films_seconds": 5.365,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 759
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 759,
+        "total_tokens": 807
+      }
+    },
+    {
+      "studio": "Studio Ghibli",
+      "title": "Howl's Moving Castle",
+      "year": 1988,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 5.609,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 794
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 794,
+        "total_tokens": 841
+      },
+      "films_seconds": 5.365,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 759
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 759,
+        "total_tokens": 807
+      }
+    },
+    {
+      "studio": "Studio Ghibli",
+      "title": "The Wind Rises",
+      "year": 2013,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.349,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 328
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 328,
+        "total_tokens": 374
+      },
+      "films_seconds": 5.365,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 759
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 759,
+        "total_tokens": 807
+      }
+    },
+    {
+      "studio": "Studio Ghibli",
+      "title": "Ponyo",
+      "year": 2008,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.879,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 263
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 263,
+        "total_tokens": 308
+      },
+      "films_seconds": 5.365,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 759
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 759,
+        "total_tokens": 807
+      }
+    },
+    {
+      "studio": "Studio Ghibli",
+      "title": "The Secret World of Arrietty",
+      "year": 2010,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.691,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 49,
+        "cache_n": 0,
+        "predicted_n": 236
+      },
+      "year_usage": {
+        "prompt_tokens": 49,
+        "completion_tokens": 236,
+        "total_tokens": 285
+      },
+      "films_seconds": 5.365,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 759
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 759,
+        "total_tokens": 807
+      }
+    },
+    {
+      "studio": "Studio Ghibli",
+      "title": "The Tale of the Princess Kaguya",
+      "year": 2013,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.757,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 245
+      },
+      "year_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 245,
+        "total_tokens": 295
+      },
+      "films_seconds": 5.365,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 759
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 759,
+        "total_tokens": 807
+      }
+    },
+    {
+      "studio": "Studio Ghibli",
+      "title": "From Up on Poppy Hill",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.766,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 246
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 246,
+        "total_tokens": 294
+      },
+      "films_seconds": 5.365,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 759
+      },
+      "films_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 759,
+        "total_tokens": 807
+      }
+    },
+    {
+      "studio": "Focus Features",
+      "title": "The Last Samurai",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.308,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 323
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 323,
+        "total_tokens": 369
+      },
+      "films_seconds": 8.405,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1191
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1191,
+        "total_tokens": 1237
+      }
+    },
+    {
+      "studio": "Focus Features",
+      "title": "The Mummy",
+      "year": 1999,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.792,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 251
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 251,
+        "total_tokens": 296
+      },
+      "films_seconds": 8.405,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1191
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1191,
+        "total_tokens": 1237
+      }
+    },
+    {
+      "studio": "Focus Features",
+      "title": "The Great Gatsby",
+      "year": 2013,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.11,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 439
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 439,
+        "total_tokens": 486
+      },
+      "films_seconds": 8.405,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1191
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1191,
+        "total_tokens": 1237
+      }
+    },
+    {
+      "studio": "Focus Features",
+      "title": "The Martian",
+      "year": 2015,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.626,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 226
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 226,
+        "total_tokens": 270
+      },
+      "films_seconds": 8.405,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1191
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1191,
+        "total_tokens": 1237
+      }
+    },
+    {
+      "studio": "Focus Features",
+      "title": "The Incredible Burt Wonderstone",
+      "year": 2013,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.971,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 276
+      },
+      "year_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 276,
+        "total_tokens": 326
+      },
+      "films_seconds": 8.405,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1191
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1191,
+        "total_tokens": 1237
+      }
+    },
+    {
+      "studio": "Focus Features",
+      "title": "The Adventures of Tintin",
+      "year": 1995,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.986,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 48,
+        "cache_n": 0,
+        "predicted_n": 277
+      },
+      "year_usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 277,
+        "total_tokens": 325
+      },
+      "films_seconds": 8.405,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1191
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1191,
+        "total_tokens": 1237
+      }
+    },
+    {
+      "studio": "Focus Features",
+      "title": "The Chronicles of Narnia: The Lion, the Witch and the Wardrobe",
+      "year": 2005,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.31,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 59,
+        "cache_n": 0,
+        "predicted_n": 464
+      },
+      "year_usage": {
+        "prompt_tokens": 59,
+        "completion_tokens": 464,
+        "total_tokens": 523
+      },
+      "films_seconds": 8.405,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1191
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1191,
+        "total_tokens": 1237
+      }
+    },
+    {
+      "studio": "Focus Features",
+      "title": "The Hobbit: An Unexpected Journey",
+      "year": 2012,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.0,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 50,
+        "cache_n": 0,
+        "predicted_n": 280
+      },
+      "year_usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 280,
+        "total_tokens": 330
+      },
+      "films_seconds": 8.405,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1191
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1191,
+        "total_tokens": 1237
+      }
+    },
+    {
+      "studio": "Focus Features",
+      "title": "The Secret Life of Walter Mitty",
+      "year": 2013,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.336,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 49,
+        "cache_n": 0,
+        "predicted_n": 471
+      },
+      "year_usage": {
+        "prompt_tokens": 49,
+        "completion_tokens": 471,
+        "total_tokens": 520
+      },
+      "films_seconds": 8.405,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 1191
+      },
+      "films_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 1191,
+        "total_tokens": 1237
+      }
+    },
+    {
+      "studio": "Searchlight Pictures",
+      "title": "Sully",
+      "year": 2016,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.823,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 254
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 254,
+        "total_tokens": 299
+      },
+      "films_seconds": 7.656,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 1082
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 1082,
+        "total_tokens": 1133
+      }
+    },
+    {
+      "studio": "Searchlight Pictures",
+      "title": "Dunkirk",
+      "year": 2017,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.572,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 217
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 217,
+        "total_tokens": 262
+      },
+      "films_seconds": 7.656,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 1082
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 1082,
+        "total_tokens": 1133
+      }
+    },
+    {
+      "studio": "Searchlight Pictures",
+      "title": "The Imitation Game",
+      "year": 2014,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 3.024,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 427
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 427,
+        "total_tokens": 473
+      },
+      "films_seconds": 7.656,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 1082
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 1082,
+        "total_tokens": 1133
+      }
+    },
+    {
+      "studio": "Searchlight Pictures",
+      "title": "The Big Short",
+      "year": 2015,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.537,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 214
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 214,
+        "total_tokens": 259
+      },
+      "films_seconds": 7.656,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 51,
+        "cache_n": 0,
+        "predicted_n": 1082
+      },
+      "films_usage": {
+        "prompt_tokens": 51,
+        "completion_tokens": 1082,
+        "total_tokens": 1133
+      }
+    },
+    {
+      "studio": "Netflix",
+      "title": "The Irishman",
+      "year": 2019,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.532,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 213
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 213,
+        "total_tokens": 258
+      },
+      "films_seconds": 4.674,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 661
+      },
+      "films_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 661,
+        "total_tokens": 706
+      }
+    },
+    {
+      "studio": "Netflix",
+      "title": "Roma",
+      "year": 2018,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.701,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 44,
+        "cache_n": 0,
+        "predicted_n": 238
+      },
+      "year_usage": {
+        "prompt_tokens": 44,
+        "completion_tokens": 238,
+        "total_tokens": 282
+      },
+      "films_seconds": 4.674,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 661
+      },
+      "films_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 661,
+        "total_tokens": 706
+      }
+    },
+    {
+      "studio": "Netflix",
+      "title": "Bird Box",
+      "year": 2018,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.967,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 275
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 275,
+        "total_tokens": 320
+      },
+      "films_seconds": 4.674,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 661
+      },
+      "films_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 661,
+        "total_tokens": 706
+      }
+    },
+    {
+      "studio": "Netflix",
+      "title": "The Gray Man",
+      "year": 2022,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.844,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 258
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 258,
+        "total_tokens": 303
+      },
+      "films_seconds": 4.674,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 661
+      },
+      "films_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 661,
+        "total_tokens": 706
+      }
+    },
+    {
+      "studio": "Netflix",
+      "title": "The Old Guard",
+      "year": 2017,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.794,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 251
+      },
+      "year_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 251,
+        "total_tokens": 296
+      },
+      "films_seconds": 4.674,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 661
+      },
+      "films_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 661,
+        "total_tokens": 706
+      }
+    },
+    {
+      "studio": "Netflix",
+      "title": "Don't Look Up",
+      "year": 2021,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.615,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 225
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 225,
+        "total_tokens": 271
+      },
+      "films_seconds": 4.674,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 661
+      },
+      "films_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 661,
+        "total_tokens": 706
+      }
+    },
+    {
+      "studio": "Netflix",
+      "title": "The Power of the Dog",
+      "year": 2021,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 1.925,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 47,
+        "cache_n": 0,
+        "predicted_n": 269
+      },
+      "year_usage": {
+        "prompt_tokens": 47,
+        "completion_tokens": 269,
+        "total_tokens": 316
+      },
+      "films_seconds": 4.674,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 661
+      },
+      "films_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 661,
+        "total_tokens": 706
+      }
+    },
+    {
+      "studio": "Netflix",
+      "title": "The Fabelmans",
+      "year": 2022,
+      "year_valid": true,
+      "ok": true,
+      "error": null,
+      "year_seconds": 2.39,
+      "year_cache_regime": "litellm-redis-miss",
+      "year_timings": {
+        "prompt_n": 46,
+        "cache_n": 0,
+        "predicted_n": 336
+      },
+      "year_usage": {
+        "prompt_tokens": 46,
+        "completion_tokens": 336,
+        "total_tokens": 382
+      },
+      "films_seconds": 4.674,
+      "films_cache_regime": "litellm-redis-miss",
+      "films_timings": {
+        "prompt_n": 45,
+        "cache_n": 0,
+        "predicted_n": 661
+      },
+      "films_usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 661,
+        "total_tokens": 706
+      }
+    }
+  ]
+}
