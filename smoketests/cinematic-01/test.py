@@ -92,13 +92,14 @@ def parse_model(text, schema):
         return None
 
 
-def query_schema(content, schema, max_tokens, reasoning):
+def query_schema(content, schema, max_tokens, reasoning, run_name=None):
     """Schema answer with retries; returns (model, text, seconds, resp).
 
     Retries prepend a reminder so a cached empty/truncated answer for the
     original prompt is bypassed, not replayed. Empty completions degrade to a
     miss instead of failing the run. Guided decoding is skipped for vLLM
     (returns empty completions); parse-then-retry covers it instead.
+    Every attempt's Phoenix generation span is named run_name.
     """
     guided = "vllm" not in llm.MODEL
     last_resp = None
@@ -111,6 +112,7 @@ def query_schema(content, schema, max_tokens, reasoning):
             response_format=schema,
             reasoning=reasoning,
             guided=guided,
+            run_name=run_name,
         )
         if resp is None:
             continue
@@ -163,8 +165,9 @@ def scenario_studio_recall(sample, args, executor):
             f'Which studio produced the movie "{row["film"]}"? Reply with only a '
             'JSON object shaped like {"studios": ["Studio Name"]}.'
         )
+        run_name = f"{args.run_id} recall {row['film']}"
         parsed, text, seconds, resp = query_schema(
-            prompt, StudioList, args.max_tokens, args.reasoning
+            prompt, StudioList, args.max_tokens, args.reasoning, run_name
         )
         guess = parsed.studios[0] if parsed else None
         correct = guess is not None and normalize(guess) == normalize(row["studio"])
@@ -178,6 +181,8 @@ def scenario_studio_recall(sample, args, executor):
             "reasoning": reasoning_content(resp),
             "seconds": round(seconds, 3),
             "usage": usage_fields(resp),
+            "run_name": run_name,
+            "resp_id": getattr(resp, "id", None),
         }
 
     rows = list(executor.map(one, sample))
@@ -201,8 +206,9 @@ def scenario_year_match(sample, args, executor):
             f'In what year was the movie "{row["film"]}" released? Reply with '
             'only a JSON object shaped like {"title": "Title", "year": 1995}.'
         )
+        run_name = f"{args.run_id} year {row['film']}"
         parsed, text, seconds, resp = query_schema(
-            prompt, YearAnswer, args.max_tokens, args.reasoning
+            prompt, YearAnswer, args.max_tokens, args.reasoning, run_name
         )
         year = parsed.year if parsed else None
         ok = year is not None and abs(year - row["year"]) <= YEAR_TOLERANCE
@@ -217,6 +223,8 @@ def scenario_year_match(sample, args, executor):
             "reasoning": reasoning_content(resp),
             "seconds": round(seconds, 3),
             "usage": usage_fields(resp),
+            "run_name": run_name,
+            "resp_id": getattr(resp, "id", None),
         }
 
     rows = [r for r in executor.map(one, sample) if r is not None]
@@ -240,8 +248,9 @@ def scenario_year_repeat(sample, args, threshold, executor):
             f'{REMINDER} what year was the movie "{row["film"]}" released? '
             'Reply with only a JSON object shaped like {"title": "Title", "year": 1995}.'
         )
+        run_name = f"{args.run_id} repeat {row['film']}"
         parsed, text, seconds, resp = query_schema(
-            prompt, YearAnswer, args.max_tokens, args.reasoning
+            prompt, YearAnswer, args.max_tokens, args.reasoning, run_name
         )
         year = parsed.year if parsed else None
         predicted = str(year) if year is not None else ""
@@ -268,6 +277,8 @@ def scenario_year_repeat(sample, args, threshold, executor):
             "reasoning": reasoning_content(resp),
             "seconds": round(seconds, 3),
             "usage": usage_fields(resp),
+            "run_name": run_name,
+            "resp_id": getattr(resp, "id", None),
         }
 
     rows = [r for r in executor.map(one, sample) if r is not None]
@@ -294,6 +305,7 @@ def ctdemo_rows(calls, mode, args):
             cache_mode=mode,
             retries=1,
             model=args.model,
+            run_name=f"{args.run_id} demo {mode} {spec['call']}",
         )
         regime = cache_regime(resp)
         row = {
@@ -396,6 +408,67 @@ def default_run_id(model_alias):
     return f"run-{time.strftime('%Y%m%d-%H%M%S')}-{model_alias}"
 
 
+def annotate_eval_links(args, scenario_rows):
+    """Best-effort Phoenix span annotations (`eval` = ok/miss) for scored rows.
+
+    Resolves each row's run-named span via its response id inside
+    `attributes.output.value`, then writes a CODE annotation; any failure only
+    prints a warning so the smoke test never depends on Phoenix being up.
+    """
+    if args.no_annotate:
+        return
+    links = []
+    for kind, rows in scenario_rows:
+        for row in rows:
+            run_name = row.get("run_name")
+            resp_id = row.get("resp_id")
+            if not run_name or not resp_id:
+                continue
+            ok = row["metric_score"] == 1.0 if kind == "repeat" else row["correct"]
+            links.append((run_name, resp_id, ok))
+    if not links:
+        return
+    try:
+        from phoenix.client import Client
+
+        client = Client()
+        wanted = {run_name for run_name, _, _ in links}
+        resolved = {}
+        for wait in (2, 3, 5, 5):
+            time.sleep(wait)
+            df = client.spans.get_spans_dataframe(project_identifier="default")
+            if df is None or df.empty:
+                continue
+            named = df[df["name"].isin(wanted)]
+            for span_id, span in named.iterrows():
+                output = str(span.get("attributes.output.value", ""))
+                for link in links:
+                    if link[0] == span["name"] and link[1] in output:
+                        resolved[(link[0], link[1])] = span_id
+            if len(resolved) == len(links):
+                break
+        for run_name, resp_id, ok in links:
+            span_id = resolved.get((run_name, resp_id))
+            if span_id is None:
+                continue
+            client.spans.add_span_annotation(
+                span_id=span_id,
+                annotation_name="eval",
+                annotator_kind="CODE",
+                label="ok" if ok else "miss",
+                score=1.0 if ok else 0.0,
+                sync=True,
+            )
+        print(
+            f"phoenix annotations: {len(resolved)} written, "
+            f"{len(links) - len(resolved)} span(s) not found"
+        )
+    except ImportError:
+        print("warning: phoenix client not available; span annotations skipped")
+    except Exception as exc:  # noqa: BLE001 - annotations are best-effort
+        print(f"warning: span annotations skipped: {type(exc).__name__}: {str(exc)[:200]}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run the cinematic-01 smoke test.")
     parser.add_argument("--csv", default=DEFAULT_CSV, help="dataset CSV path")
@@ -438,6 +511,11 @@ def main():
         help="cache demo mode: 1level (default) | 2level | no-cache | both",
     )
     parser.add_argument("--skip-health", action="store_true", help="skip health probes")
+    parser.add_argument(
+        "--no-annotate",
+        action="store_true",
+        help="skip Phoenix span annotations",
+    )
     args = parser.parse_args()
     llm.MODEL = args.model  # chat() defaults to MODEL when no model kwarg given
 
@@ -454,6 +532,7 @@ def main():
     print(f"gateway {args.base_url} healthy; dataset {args.csv}")
 
     run_id = args.run_id or default_run_id(args.model)
+    args.run_id = run_id
 
     run_dir = os.path.join(RUNS_DIR, run_id)
     run_results = os.path.join(run_dir, "results.json")
@@ -535,6 +614,15 @@ def main():
             "passed": exact_passed,
         },
     }
+    annotate_rows = (
+        ("recall", [dict(row) for row in recall]),
+        ("year", [dict(row) for row in year_match]),
+        ("repeat", [dict(row) for row in year_repeat]),
+    )
+    for rows in (recall, year_match, year_repeat):
+        for row in rows:
+            row.pop("run_name", None)
+            row.pop("resp_id", None)
     os.makedirs(run_dir, exist_ok=True)
     for path, payload in ((run_results, results), (run_eval, eval_summary)):
         with open(path, "w", encoding="utf-8") as fh:
@@ -549,6 +637,7 @@ def main():
             )
     print(f"wrote {run_results} and {run_eval}")
     print(f"latest copies at {RESULTS_PATH} and {EVAL_PATH}")
+    annotate_eval_links(args, annotate_rows)
 
 
 if __name__ == "__main__":
