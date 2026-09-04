@@ -1,0 +1,43 @@
+# Editor / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# Docker
+.env
+.env.*
+!.env.example
+*.log
+models/*.gguf
+models/hf-cache/
+docker/models/**/*.gguf
+docker/models/hf-cache/
+pgdata/
+postgres-data/
+redis-data/
+# scratch / tmp
+scratch/*
+!scratch/.gitkeep
+
+# pixi environments
+.pixi/*
+!.pixi/config.toml
