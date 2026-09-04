@@ -8,7 +8,7 @@ services:
     runtime: nvidia
     command:
       - "-m"
-      - "/models/Q8/LFM2.5-2.6B-Q8_0.gguf"
+      - "/models/LFM2.5-2.6B-Q8_0.gguf"
       - "--host"
       - "0.0.0.0"
       - "--port"

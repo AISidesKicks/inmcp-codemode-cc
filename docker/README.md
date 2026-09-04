@@ -14,19 +14,12 @@ and LiteLLM keeps everything in-memory.
 
 ## Setup
 
-1. Download the GGUF checkpoint into `docker/models/Q8/` (the container mounts
-   `./models:/models:ro`, so it lands at `/models/Q8/`):
+1. Download the GGUF checkpoint into `docker/models/` (the container mounts
+   `./models:/models:ro`, so it lands at `/models/`):
 
    ```sh
-   curl -L -o docker/models/Q8/LFM2.5-2.6B-Q8_0.gguf \
+   curl -fL --retry 3 -o docker/models/LFM2.5-2.6B-Q8_0.gguf \
      https://huggingface.co/LiquidAI/LFM2.5-2.6B-GGUF/resolve/main/LFM2.5-2.6B-Q8_0.gguf
-   ```
-
-   or via the HF CLI:
-
-   ```sh
-   huggingface-cli download LiquidAI/LFM2.5-2.6B-GGUF \
-     LFM2.5-2.6B-Q8_0.gguf --local-dir docker/models/Q8/
    ```
 
    `docker/models/**/*.gguf` is gitignored.
