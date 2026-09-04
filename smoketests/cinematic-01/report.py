@@ -29,8 +29,8 @@ RUNS_DIR = os.path.join(REPO_ROOT, "datasets", "cinematic-01", "runs")
 
 MODEL_ALIASES = {
     "local-gguf": "LFM2.5-2.6B Q8_0 GGUF (LocalAI llama.cpp, retired)",
-    "local-judge": "LFM2.5-2.6B Q4_K_M GGUF (LocalAI llama.cpp)",
-    "local-thinking": "LFM2.5-1.2B-Thinking Q4_K_XL GGUF (unsloth llama.cpp)",
+    "local-judge": "granite-4.0-h-tiny Q4_K_XL GGUF (unsloth llama.cpp)",
+    "local-thinking": "LFM2.5-2.6B Q4_K_M GGUF (LocalAI llama.cpp)",
     "local-llama": "LFM2.5-2.6B W8A16 (vLLM)",
     "local-vllm": "LFM2.5-2.6B W8A16 (vLLM)",
     "local-sglang": "LFM2.5-2.6B W8A16 (SGLang)",
@@ -38,8 +38,8 @@ MODEL_ALIASES = {
 
 ENGINE_BY_ALIAS = {
     "local-gguf": "llama.cpp (Q8_0, retired)",
-    "local-judge": "llama.cpp (Q4_K_M)",
-    "local-thinking": "llama.cpp (Q4_K_XL)",
+    "local-judge": "llama.cpp (Q4_K_XL)",
+    "local-thinking": "llama.cpp (Q4_K_M)",
     "local-llama": "vLLM (W8A16, prefix cache)",
     "local-vllm": "vLLM (W8A16, prefix cache)",
     "local-sglang": "SGLang (W8A16)",
