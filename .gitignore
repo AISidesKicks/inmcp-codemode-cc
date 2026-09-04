@@ -30,7 +30,6 @@ htmlcov/
 models/*.gguf
 models/hf-cache/
 docker/models/**/*.gguf
-docker/models/hf-cache/
 pgdata/
 postgres-data/
 redis-data/
