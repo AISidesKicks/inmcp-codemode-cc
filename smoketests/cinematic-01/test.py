@@ -37,7 +37,6 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from llm import (
     DEFAULT_BASE_URL,
-    MODEL,
     StudioList,
     YearAnswer,
     cache_regime,
@@ -76,11 +75,18 @@ def parse_model(text, schema):
     """Best-effort schema parse; None on malformed output.
 
     vLLM's unguided completions often wrap JSON in Markdown code fences, so a
-    fenced block is stripped before validation.
+    fenced block is stripped before validation. The 1.2B-Thinking llama.cpp
+    build keeps its `<think>` block inline in `message.content` (unlike the
+    2.6B, whose reasoning lands in `reasoning_content`), so a closed think
+    block is dropped and an unclosed one counts as a miss.
     """
     if not text:
         return None
     stripped = text.strip()
+    if "</think>" in stripped:
+        stripped = stripped.split("</think>", 1)[1].strip()
+    elif stripped.startswith("<think>"):
+        return None
     if stripped.startswith("```"):
         first_nl = stripped.find("\n")
         last = stripped.rfind("```")
@@ -499,10 +505,12 @@ def main():
     parser.add_argument(
         "--run-id",
         default=None,
-        help="run identifier, defaults to timestamp+model (e.g. run-20260822-120000-local-gguf)",
+        help="run identifier, defaults to timestamp+model (e.g. run-20260822-120000-local-thinking)",
     )
     parser.add_argument(
-        "--model", default=MODEL, help="gateway model alias (default local-gguf)"
+        "--model",
+        default="local-thinking",
+        help="gateway model alias (default local-thinking)",
     )
     parser.add_argument(
         "--cache-mode",

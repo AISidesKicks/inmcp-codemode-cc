@@ -3,7 +3,7 @@
 
 The 20 studio names are seeded ground truth (see design.md); film titles and
 release years are produced by the llama.cpp-backed LFM2.5-2.6B through the
-LiteLLM gateway (alias `local-gguf`) using schema-validated structured output.
+LiteLLM gateway (alias `local-judge`) using schema-validated structured output.
 The dataset lands in a QUOTE_ALL CSV at datasets/cinematic-01/dataset.csv;
 per-call cache regime, seconds and llama.cpp timings are checkpointed to
 datasets/cinematic-01/generate.json after every studio.

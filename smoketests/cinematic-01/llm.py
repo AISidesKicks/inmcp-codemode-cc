@@ -3,7 +3,7 @@
 
 Resolves the gateway master key at runtime (env var, then docker/.env, else a
 demo placeholder that is never the real key), wraps the verified
-`litellm.completion` call against the `local-gguf` alias, and defines the
+`litellm.completion` call against the `local-judge` alias, and defines the
 Pydantic response schemas the generator and the test both use: StudioList,
 FilmList, YearAnswer.
 """
@@ -17,7 +17,7 @@ import urllib.request
 import litellm
 from pydantic import BaseModel
 
-MODEL = "local-gguf"
+MODEL = "local-judge"
 DEFAULT_BASE_URL = "http://localhost:4000"
 DEFAULT_MAX_TOKENS = 256
 DEFAULT_REASONING = {"enabled": False}

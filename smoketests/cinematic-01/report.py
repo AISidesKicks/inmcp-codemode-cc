@@ -28,14 +28,18 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 RUNS_DIR = os.path.join(REPO_ROOT, "datasets", "cinematic-01", "runs")
 
 MODEL_ALIASES = {
-    "local-gguf": "LFM2.5-2.6B Q8_0 GGUF (LocalAI llama.cpp)",
+    "local-gguf": "LFM2.5-2.6B Q8_0 GGUF (LocalAI llama.cpp, retired)",
+    "local-judge": "LFM2.5-2.6B Q4_K_M GGUF (LocalAI llama.cpp)",
+    "local-thinking": "LFM2.5-1.2B-Thinking Q4_K_XL GGUF (unsloth llama.cpp)",
     "local-llama": "LFM2.5-2.6B W8A16 (vLLM)",
     "local-vllm": "LFM2.5-2.6B W8A16 (vLLM)",
     "local-sglang": "LFM2.5-2.6B W8A16 (SGLang)",
 }
 
 ENGINE_BY_ALIAS = {
-    "local-gguf": "llama.cpp (Q8_0)",
+    "local-gguf": "llama.cpp (Q8_0, retired)",
+    "local-judge": "llama.cpp (Q4_K_M)",
+    "local-thinking": "llama.cpp (Q4_K_XL)",
     "local-llama": "vLLM (W8A16, prefix cache)",
     "local-vllm": "vLLM (W8A16, prefix cache)",
     "local-sglang": "SGLang (W8A16)",
@@ -80,7 +84,7 @@ def avg(values):
 
 def render(results, eval_summary, run_id):
     meta = results["meta"]
-    model_alias = meta.get("model_alias", "local-gguf")
+    model_alias = meta.get("model_alias", "local-judge")
     model_hw = MODEL_ALIASES.get(model_alias, model_alias)
 
     lines = []
