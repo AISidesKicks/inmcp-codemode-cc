@@ -8,18 +8,13 @@ services:
     runtime: nvidia
     command:
       - "-m"
-      - "/models/LFM2.5-2.6B-Q4_K_M.gguf"
+      - "/models/granite-4.0-h-tiny-UD-Q4_K_XL.gguf"
       - "--host"
       - "0.0.0.0"
       - "--port"
       - "8080"
       - "-ngl"
       - "99"
-      - "--reasoning"
-      - "on"
-      - "--reasoning-format"
-      - "deepseek"
-      - "--reasoning-preserve"
       - "--metrics"
       - "--ctx-size"
       - "65536"
@@ -45,7 +40,7 @@ services:
     runtime: nvidia
     command:
       - "-m"
-      - "/models/LFM2.5-1.2B-Thinking-UD-Q4_K_XL.gguf"
+      - "/models/LFM2.5-2.6B-Q4_K_M.gguf"
       - "--host"
       - "0.0.0.0"
       - "--port"

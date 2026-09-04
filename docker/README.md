@@ -6,11 +6,15 @@ All resources carry the `cmod-` prefix (project rule). No Postgres, no Redis,
 no cache, no exporters, no monitoring sidecars — Phoenix falls back to SQLite
 and LiteLLM keeps everything in-memory.
 
-The model split: `cmod-llama` hosts the judge (`LiquidAI/LFM2.5-2.6B`
-Q4_K_M, 64K ctx) and `cmod-llama-thinking` hosts the tested model
-(`LiquidAI/LFM2.5-1.2B-Thinking` UD-Q4_K_XL via unsloth, 32K ctx). Only the
-tested model is routed through LiteLLM (and thus traced in Phoenix); the
-judge is called directly on its port — no gateway, no trace.
+The model split: `cmod-llama` hosts the judge (`ibm-granite/granite-4.0-h-tiny`
+UD-Q4_K_XL via unsloth, 64K ctx — non-thinking, so its whole budget goes to
+reflection/JSON text) and `cmod-llama-thinking` hosts the tested model
+(`LiquidAI/LFM2.5-2.6B` Q4_K_M, 32K ctx — it thinks, and llama.cpp splits its
+reasoning cleanly). Both models are routable through LiteLLM — the tested
+model as `local-thinking`, the judge as `local-judge` — and sweep traffic tags
+its calls with `metadata.generation_name`, so Phoenix spans land as
+`<run_id> <opt> eval` / `<run_id> <opt> judge`. Direct :8080 stays for ad-hoc
+probes and the WebUI (untraced).
 
 ## Prerequisites
 
@@ -25,11 +29,11 @@ judge is called directly on its port — no gateway, no trace.
    `./models:/models:ro`, so they land at `/models/`):
 
    ```sh
+   curl -fL --retry 3 -o docker/models/granite-4.0-h-tiny-UD-Q4_K_XL.gguf \
+     https://huggingface.co/unsloth/granite-4.0-h-tiny-GGUF/resolve/main/granite-4.0-h-tiny-UD-Q4_K_XL.gguf
+
    curl -fL --retry 3 -o docker/models/LFM2.5-2.6B-Q4_K_M.gguf \
      https://huggingface.co/LiquidAI/LFM2.5-2.6B-GGUF/resolve/main/LFM2.5-2.6B-Q4_K_M.gguf
-
-   curl -fL --retry 3 -o docker/models/LFM2.5-1.2B-Thinking-UD-Q4_K_XL.gguf \
-     https://huggingface.co/unsloth/LFM2.5-1.2B-Thinking-GGUF/resolve/main/LFM2.5-1.2B-Thinking-UD-Q4_K_XL.gguf
    ```
 
    `docker/models/**/*.gguf` is gitignored.
@@ -67,10 +71,10 @@ docker compose -f docker/docker-compose.yml down -v   # wipes the Phoenix volume
 ## WebUI
 
 Both llama-servers ship a built-in WebUI — with the `lab` profile up, open
-http://localhost:8080 (judge, `LiquidAI/LFM2.5-2.6B` Q4_K_M GGUF, 64K ctx,
-single slot) or http://localhost:8081 (tested, `LiquidAI/LFM2.5-1.2B-Thinking`
-UD-Q4_K_XL GGUF, 32K ctx, single slot). The UIs serve at `/` and the
-OpenAI-compatible API at `/v1`.
+http://localhost:8080 (judge, `ibm-granite/granite-4.0-h-tiny` UD-Q4_K_XL GGUF,
+64K ctx, single slot) or http://localhost:8081 (tested,
+`LiquidAI/LFM2.5-2.6B` Q4_K_M GGUF, 32K ctx, single slot). The UIs serve at
+`/` and the OpenAI-compatible API at `/v1`.
 
 Chatting there hits the engines directly — no LiteLLM metering, no Phoenix
 trace. Route via the gateway on 4000 (`local-judge` / `local-thinking`) for
@@ -81,8 +85,8 @@ that; see Traces.
 | Port | Service            | Notes                                            |
 |------|--------------------|--------------------------------------------------|
 | 4000 | LiteLLM            | OpenAI-compatible gateway                        |
-| 8080 | llama.cpp (judge)  | API + WebUI at `/`, 2.6B Q4_K_M, 64K ctx, single slot, `lab` profile |
-| 8081 | llama.cpp (tested) | API + WebUI at `/`, 1.2B-Thinking Q4_K_XL, 32K ctx, single slot, `lab` profile |
+| 8080 | llama.cpp (judge)  | API + WebUI at `/`, granite-4.0-h-tiny Q4_K_XL, 64K ctx, single slot, `lab` profile |
+| 8081 | llama.cpp (tested) | API + WebUI at `/`, 2.6B Q4_K_M, 32K ctx, single slot, `lab` profile |
 | 6006 | Phoenix            | UI + OTLP HTTP (`/v1/traces`) + MCP (`/mcp`), `lab` + `phoenix` profiles |
 
 Heads-up: the pixi env also ships a native `litellm` package — a native
@@ -93,8 +97,8 @@ llama-server would clash on 8080. Run one or the other.
 
 | Alias           | Backend            | Notes                                        |
 |-----------------|--------------------|----------------------------------------------|
-| `local-judge`   | llama.cpp (8080)   | judge, serves `LiquidAI/LFM2.5-2.6B` Q4_K_M  |
-| `local-thinking`| llama.cpp (8081)   | tested, serves `LiquidAI/LFM2.5-1.2B-Thinking` Q4_K_XL |
+| `local-judge`   | llama.cpp (8080)   | judge, serves `ibm-granite/granite-4.0-h-tiny` Q4_K_XL |
+| `local-thinking`| llama.cpp (8081)   | tested, serves `LiquidAI/LFM2.5-2.6B` Q4_K_M |
 
 ## Traces
 
@@ -102,7 +106,10 @@ LiteLLM is wired for OpenTelemetry in `litellm_config.yaml`
 (`callbacks: ["otel"]`, `otel: true`) plus the `OTEL_EXPORTER_OTLP_*` env in
 the compose file — every request through the gateway lands as a trace in
 Phoenix: litellm → OTLP HTTP → `http://cmod-phoenix:6006/v1/traces` →
-Phoenix UI at http://localhost:6006. Phoenix MCP is used directly at
+Phoenix UI at http://localhost:6006. Calls that send
+`metadata.generation_name` (the sweep does via `extra_body={"metadata": ...}`)
+get it as the Phoenix span name — `<run_id> <opt> eval` for the tested model,
+`<run_id> <opt> judge` for the judge. Phoenix MCP is used directly at
 `http://localhost:6006/mcp` (not proxied through LiteLLM). Chatting via the
 llama-server WebUI on 8080 bypasses the gateway — no metering, no Phoenix
 trace; route via 4000 (`local-judge` / `local-thinking`) for that.
@@ -113,9 +120,13 @@ trace; route via 4000 (`local-judge` / `local-thinking`) for that.
 - No `--cache-ram` / `--cache-reuse` / multi-slot: two single-slot instances
   (judge 64K ctx, tested 32K ctx) stay independent — separate lifecycle,
   healthchecks and ctx budgets, and both fit the card with headroom
-- Judge bypasses the gateway entirely: reflection calls are chatty and
-  uninteresting as traces; direct `localhost:8080` calls keep Phoenix
-  scoped to tested-model runs
+- Non-thinking granite judge (mamba-attention hybrid arch): 64K ctx is cheap
+  (linear-scaling KV) and the no-think template puts the whole budget into
+  reflection/JSON text instead of reasoning tokens
+- Judge via the gateway for tagged sweep traffic only: reflection calls are
+  chatty, so sweeps send `metadata.generation_name` and Phoenix shows compact
+  `<run_id> <opt> judge` spans; ad-hoc probes / the WebUI stay on direct
+  `localhost:8080`, untraced
 - No exporters / VictoriaMetrics: the lab's focus is execution traces
 - No `mcp_servers` section in the LiteLLM config: Phoenix MCP is reached
   directly
