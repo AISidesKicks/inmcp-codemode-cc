@@ -61,7 +61,6 @@ arize-phoenix-evals = ">=2.0.0,<3"
 ## Arize Phoenix LLM anchor
 https://arize.com/docs/phoenix/llms.txt
 
-
 ## Arize Phoenix CLI
 https://arize.com/docs/phoenix/sdk-api-reference/typescript/arizeai-phoenix-cli
 
@@ -75,9 +74,9 @@ https://arize-phoenix.readthedocs.io/projects/client/
 https://arize-phoenix.readthedocs.io/projects/evals/
 
 ## Arize Phoenix API
-
+https://arize.com/docs/phoenix/sdk-api-reference/rest-api/overview
+https://arize.com/docs/phoenix/sdk-api-reference/rest-api/api-reference
 
 ## monty
 Special note: codemode uses monty (a Python derivative) https://github.com/pydantic/monty/
-
-
+https://arize.com/docs/phoenix/sdk-api-reference/rest-api/api-reference
