@@ -74,6 +74,38 @@ No caching tier anywhere in this lab, by design:
 Per-call results therefore carry no cache fields: the `usage` token counts
 plus `seconds` are the metering signals.
 
+## Optimizer runs
+
+`optimize.py` (+ `optimize_common.py`) formalizes the prompt-optimizer sweep
+that was proven in `scratch/` — which stays the playground for new optimizer
+experiments. Each optimizer rewrites/recovers the studio-recall prompt, scored
+by normalized exact match (`eval_text`). Two stages (`--stage`, default all):
+
+- **sweep** — the micro 6/4 split (fixed seed, `TASK_MAX_TOKENS = 1536`) for
+  the 9 kept optimizers (`--optimizer all`: `gepa`, 4×`depeval-*`,
+  3×`dspy-*`, `adalflow-tgd`). The rewrite-only `refiner` baseline is explicit
+  opt-in only, never part of `all`.
+- **films** — every best prompt over the corpus slice (`--csv`, `--films N`,
+  0 = all rows) at `FILMS_MAX_TOKENS = 8192` (INTENT §3 films budget), one
+  Phoenix span per film.
+
+Serial by construction: both engines run `--parallel 1`, so the films legs
+score strictly sequentially — no worker flag here, wall time is the accepted
+cost (~25 min for the full sweep plus hours for full-corpus legs). Tagging
+rides the proven gateway `metadata.generation_name` path: spans land as
+`<run_id> <opt> eval` / `<run_id> <opt> judge` / `<run_id> <opt> films`, and
+`health_all()` gates the run on gateway + both llama servers.
+
+Each result records the `render` kind its best prompt needs for the films leg
+(`system` for gepa/dspy instructions that expect the film as the user message,
+`filled` for `{film}` placeholder templates). Artifacts per run (`--run-id`
+required): the out json (`datasets/cinematic-01/runs/<run-id>-optimize.json`,
+sweep results + best prompts + films summaries) and one films json per
+optimizer (`<run-id>-<opt>-films.json`, meta + per-film score/feedback).
+Resume-safe: `--optimizer all` skips optimizers already recorded in the out
+json (sweep) or already carrying a films entry (films legs); an explicit
+`--optimizer <name>` always re-runs.
+
 ## Layout
 
 ```
