@@ -65,7 +65,7 @@ docker compose -f docker/docker-compose.yml down -v   # wipes the Phoenix volume
 | Port | Service    | Notes                                            |
 |------|------------|--------------------------------------------------|
 | 4000 | LiteLLM    | OpenAI-compatible gateway                        |
-| 8080 | llama.cpp  | API-only (`--no-webui`), single slot, `lab` profile |
+| 8080 | llama.cpp  | API + built-in WebUI at `/`, 64K ctx, single slot, `lab` profile |
 | 6006 | Phoenix    | UI + OTLP HTTP (`/v1/traces`) + MCP (`/mcp`), `lab` + `phoenix` profiles |
 
 Heads-up: the pixi env also ships a native `litellm` package — a native
@@ -85,13 +85,15 @@ LiteLLM is wired for OpenTelemetry in `litellm_config.yaml`
 the compose file — every request through the gateway lands as a trace in
 Phoenix: litellm → OTLP HTTP → `http://cmod-phoenix:6006/v1/traces` →
 Phoenix UI at http://localhost:6006. Phoenix MCP is used directly at
-`http://localhost:6006/mcp` (not proxied through LiteLLM).
+`http://localhost:6006/mcp` (not proxied through LiteLLM). Chatting via the
+llama-server WebUI on 8080 bypasses the gateway — no metering, no Phoenix
+trace; route via 4000 (`local-gguf`) for that.
 
 ## Lean choices (deliberate)
 
 - No Postgres / Redis: LiteLLM runs in-memory, Phoenix on SQLite
-- No `--cache-ram` / `--cache-reuse` / multi-slot on llama.cpp:
-  `--ctx-size 8192 --parallel 1` keeps VRAM a non-issue
+- No `--cache-ram` / `--cache-reuse` / multi-slot on llama.cpp: single slot
+  with 64K ctx, KV buffer ~1 GiB f16 — fits the card fine
 - No exporters / VictoriaMetrics: the lab's focus is execution traces
 - No `mcp_servers` section in the LiteLLM config: Phoenix MCP is reached
   directly

@@ -22,10 +22,9 @@ services:
       - "--reasoning-preserve"
       - "--metrics"
       - "--ctx-size"
-      - "8192"
+      - "65536"
       - "--parallel"
       - "1"
-      - "--no-webui"
     volumes:
       - ./models:/models:ro
     ports:
