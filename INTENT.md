@@ -80,3 +80,6 @@ https://arize.com/docs/phoenix/sdk-api-reference/rest-api/api-reference
 ## monty
 Special note: codemode uses monty (a Python derivative) https://github.com/pydantic/monty/
 https://arize.com/docs/phoenix/sdk-api-reference/rest-api/api-reference
+
+# Inspiration
+[Anthropic Claude: The AI-Native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook)
