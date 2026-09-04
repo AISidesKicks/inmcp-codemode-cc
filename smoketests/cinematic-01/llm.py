@@ -132,6 +132,14 @@ def chat(
         kwargs["response_format"] = response_format
         kwargs["enable_json_schema_validation"] = True
     kwargs.update(kv)
+    if reasoning is None or (
+        isinstance(reasoning, dict) and not reasoning.get("enabled")
+    ):
+        extra_body = kwargs.pop("extra_body", None)
+        if not isinstance(extra_body, dict):
+            extra_body = {}
+        extra_body.setdefault("reasoning_budget_tokens", 0)
+        kwargs["extra_body"] = extra_body
     t0 = time.perf_counter()
     for attempt in range(1, retries + 1):
         if attempt > 1:
