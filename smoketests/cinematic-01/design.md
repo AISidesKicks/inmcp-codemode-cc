@@ -5,9 +5,13 @@ Field-decision notes for the `cinematic-01` micro dataset. Written down so the
 
 ## Motivation
 
-The lab is about *metering* and *billing* inference: tokens, cache hits, KV
-reuse. The cinematic-01 dataset gives the smoke pipeline a small, fun, stable
-set of studio->film->year triplets to run generate/test cycles against.
+The lab is about *metering* local inference in a lean stack: token counts,
+per-call latency and Phoenix execution traces from llama.cpp + LiteLLM +
+Phoenix, with no external databases. The cinematic-01 dataset gives the smoke
+pipeline a small, fun, stable set of studio->film->year triplets to run
+generate/test cycles against. (The caching-tier demos of the original lab live
+in [localai.isnot.cheap](https://localai.isnot.cheap); this lab runs
+caching-free — see "Caching is disabled" below.)
 
 ## Model output as ground truth
 
@@ -24,7 +28,7 @@ Consequence: the CSV is *de facto* ground truth for the test step, even though
 years/titles are model-produced. `test.py` therefore evaluates **consistency**
 (re-asking yields the same studio, the same year within +/-2, exact year on a
 reworded prompt) rather than correctness against an external curated list.
-That is exactly what we care about for cache/eval demos, and it is honest about
+That is exactly what we care about for the eval runs, and it is honest about
 the model's limitations.
 
 ## Structured output
@@ -42,13 +46,11 @@ uses the same always-on reasoning.
 
 ## Concurrency
 
-The `test.py` step runs its three scenarios (studio recall, year match, year
-repeat) through a `ThreadPoolExecutor` with `--workers` (default 4), matching
-the engines' 4 parallel slots (llama.cpp `--parallel 4`, vLLM
-`--max-num-seqs 4`, SGLang `--max-running-requests 4`) and the 128K contexts.
-Row order stays deterministic (`executor.map`); each call resolves its own
-master key per thread. The cache demo stays sequential so Q2 can observe Q1's
-Redis hit. Run mode is recorded in `meta` (`reasoning: enabled`,
+Both engines run single-slot (`--parallel 1` on both containers in
+`docker/docker-compose.yml`), so `test.py --workers` (default 4) bounds
+client-side concurrency only — extra requests just queue in llama.cpp. Row
+order stays deterministic (`executor.map`); each call resolves its own master
+key per thread. Run mode is recorded in `meta` (`reasoning: enabled`,
 `workers`) and shown in the rendered report.
 
 ## Dedup and the year guard
@@ -60,13 +62,17 @@ Redis hit. Run mode is recorded in `meta` (`reasoning: enabled`,
   the run log (`year_valid: false`) and **excluded from the CSV** so the
   dataset stays clean and testable.
 
-## Caching regime is part of the data
+## Caching is disabled
 
-Each call passes `cache={}` (LiteLLM Redis caching on; boolean `True` regresses
-with 400s). The run log keeps per-call `cache_regime`
-(`litellm-redis-hit`/`miss` from the hidden `x-litellm-cache-key` header) and
-llama.cpp `timings` (`prompt_n`, `cache_n`, `predicted_n` from `model_extra`)
-so an eval can show cost-to-serve per prompt.
+No caching tier anywhere in this lab, by design:
+
+- the stack has no Redis, and `docker/litellm_config.yaml` defines no cache
+  section, so LiteLLM request caching is off;
+- both engines run `--parallel 1` without `--cache-ram`/`--cache-reuse`, so
+  the engine prefix caches stay idle too.
+
+Per-call results therefore carry no cache fields: the `usage` token counts
+plus `seconds` are the metering signals.
 
 ## Layout
 
@@ -75,13 +81,30 @@ datasets/cinematic-01/dataset.csv     QUOTE_ALL dataset (studio name, film name,
 datasets/cinematic-01/generate.json   per-call run log/checkpoint from generate.py
 datasets/cinematic-01/runs/<run-id>/results.json   raw rows from one test.py run
 datasets/cinematic-01/runs/<run-id>/eval.json      scored scenarios from one test.py run
+datasets/cinematic-01/runs/<run-id>/report.md      rendered report (report.py, no live calls)
 datasets/cinematic-01/results.json    "latest" copy of runs/<run-id>/results.json
 datasets/cinematic-01/eval.json       "latest" copy of runs/<run-id>/eval.json
 ```
 
 `<run-id>` defaults to `run-<YYYYMMDD-HHMMSS>-<model_alias>` (see `--run-id` in
-test.py) and is tracked, so each run's numbers stay reviewable in history. The
-root-level `results.json`/`eval.json` copies are refreshed on every run so tools
-that read the old fixed paths keep working.
+test.py); each run's artifacts stay on disk, so its numbers stay reviewable.
+The root-level `results.json`/`eval.json` copies are refreshed on every run so
+tools that read the old fixed paths keep working.
+
+### results.json shape
+
+- `meta`: `name`, `test`, `run_id`, `run_at`, `model_alias`, `base_url`,
+  `dataset`, `sample`, `year_tolerance`, `reasoning` (`"enabled"`), `workers`.
+- one block per scenario (`scenario_1_studio_recall`, `scenario_2_year_match`,
+  `scenario_3_year_repeat`), each with a `score` string and `rows`. A row
+  carries its scenario fields (`guess`, `expected`, `predicted`,
+  `metric_score`) plus `answer`, `correct`, `reasoning` (thinking snippet),
+  `seconds` and `usage` (`prompt_tokens`/`completion_tokens`/`total_tokens`).
+  `run_name`/`resp_id` exist only in-process for the Phoenix span annotation
+  and are popped before the artifacts are written.
+- `eval.json` mirrors `meta` plus per-scenario metric/score/fraction summaries.
+
+For observed values see a tracked run dir, e.g.
+`datasets/cinematic-01/runs/temp02-cache-strip/`.
 
 Mirrors `smoketests/cinematic-01/` so the dataset dir scopes the `cinematic-01` prefix.
