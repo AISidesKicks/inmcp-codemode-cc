@@ -8,7 +8,7 @@ services:
     runtime: nvidia
     command:
       - "-m"
-      - "/models/LFM2.5-2.6B-Q8_0.gguf"
+      - "/models/LFM2.5-2.6B-Q4_K_M.gguf"
       - "--host"
       - "0.0.0.0"
       - "--port"
@@ -38,6 +38,43 @@ services:
     networks:
       - cmod-net
 
+  cmod-llama-thinking:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda13
+    container_name: cmod-llama-thinking
+    profiles: ["lab"]
+    runtime: nvidia
+    command:
+      - "-m"
+      - "/models/LFM2.5-1.2B-Thinking-UD-Q4_K_XL.gguf"
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "8080"
+      - "-ngl"
+      - "99"
+      - "--reasoning"
+      - "on"
+      - "--reasoning-format"
+      - "deepseek"
+      - "--reasoning-preserve"
+      - "--metrics"
+      - "--ctx-size"
+      - "32768"
+      - "--parallel"
+      - "1"
+    volumes:
+      - ./models:/models:ro
+    ports:
+      - "8081:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - cmod-net
+
   cmod-litellm:
     image: ghcr.io/berriai/litellm:main-latest
     container_name: cmod-litellm
@@ -54,6 +91,8 @@ services:
       - "4000:4000"
     depends_on:
       cmod-llama:
+        condition: service_healthy
+      cmod-llama-thinking:
         condition: service_healthy
       cmod-phoenix:
         condition: service_healthy

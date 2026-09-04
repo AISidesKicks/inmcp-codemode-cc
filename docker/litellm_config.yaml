@@ -1,8 +1,14 @@
 model_list:
-  - model_name: local-gguf
+  - model_name: local-judge
     litellm_params:
       model: openai/LiquidAI/LFM2.5-2.6B
       api_base: http://cmod-llama:8080/v1
+      api_key: dummy
+
+  - model_name: local-thinking
+    litellm_params:
+      model: openai/LiquidAI/LFM2.5-1.2B-Thinking
+      api_base: http://cmod-llama-thinking:8080/v1
       api_key: dummy
 
 litellm_settings:
