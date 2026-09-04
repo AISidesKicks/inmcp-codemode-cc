@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@arizeai/phoenix-cli": "^1.17.0"
+  }
+}
