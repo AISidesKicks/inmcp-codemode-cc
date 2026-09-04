@@ -21,19 +21,6 @@ MODEL = "local-judge"
 DEFAULT_BASE_URL = "http://localhost:4000"
 DEFAULT_MAX_TOKENS = 256
 DEFAULT_REASONING = {"enabled": True}
-CACHE_PARAM = {}  # LiteLLM Redis caching; boolean True regresses with 400s
-
-# Cache-mode presets passed per call as the litellm `cache` kwarg.
-#   1level  - bypass Redis reads entirely; the engine prefix-cache tier does the
-#             reuse (distinct +1/+2/+3 suffixes share a common prefix).
-#   2level  - legacy two-level wiring: LiteLLM Redis reuses identical prompts.
-#   no-cache- same per-request skip as 1level but with fully cold prompts so
-#             no tier (Redis or engine prefix) can reuse anything.
-CACHE_MODES = {
-    "1level": {"no-cache": True},
-    "2level": {},
-    "no-cache": {"no-cache": True},
-}
 DEMO_KEY = "sk-1234-master-key-4321"
 TIMEOUT_S = 120
 
@@ -104,7 +91,7 @@ def chat(
     run_name: str | None = None,
     **kv,
 ):
-    """Cache-enabled completion via the LiteLLM SDK; returns (resp, seconds).
+    """Completion via the LiteLLM SDK; returns (resp, seconds).
 
     On schema validation errors (empty/truncated completions), re-asks with a
     prefixed prompt and a higher generation budget until retries are spent,
@@ -113,11 +100,7 @@ def chat(
     W8A16) return empty completions under guided decoding, so callers may pass
     `guided=False` and rely on schema-parse-then-retry instead.
     """
-    cache_mode = kv.pop("cache_mode", None)
     model = kv.pop("model", None) or MODEL
-    cache_param = CACHE_MODES.get(
-        str(cache_mode) if cache_mode is not None else "", CACHE_PARAM
-    )
     # Reasoning is always on: LFM2.5 is a pure reasoning model, the old
     # budget-0 off-switch fought the template. Callers may override the dict.
     kwargs = {
@@ -125,7 +108,6 @@ def chat(
         "base_url": base_url,
         "custom_llm_provider": "openai",
         "api_key": get_master_key(),
-        "cache": dict(cache_param),
         "messages": [{"role": "user", "content": content}],
         "max_tokens": max_tokens,
         "reasoning": reasoning or dict(DEFAULT_REASONING),
@@ -205,17 +187,6 @@ def reasoning_content(resp, limit=400):
     return text
 
 
-def cache_regime(resp):
-    """litellm-redis-hit iff hidden params carry the x-litellm-cache-key header."""
-    hidden = getattr(resp, "_hidden_params", None) or {}
-    headers = hidden.get("additional_headers") or {}
-    items = headers.items() if isinstance(headers, dict) else headers
-    for key, _ in items:
-        if "x-litellm-cache-key" in str(key).lower():
-            return "litellm-redis-hit"
-    return "litellm-redis-miss"
-
-
 def usage_fields(resp):
     """Token counts from the response usage block."""
     usage = getattr(resp, "usage", None)
@@ -227,94 +198,3 @@ def usage_fields(resp):
         "total_tokens": getattr(usage, "total_tokens", None),
     }
 
-
-def cached_tokens(resp):
-    """Engine-prefix-reuse tokens from the response, or None.
-
-    vLLM reports `usage.prompt_tokens_details.cached_tokens` first-class; the
-    no-cache/1level routes never hit LiteLLM Redis, so this is the only signal
-    that the engine's prefix cache actually replayed tokens. Falls back to the
-    same field under `model_extra` for providers that stuff it there.
-    """
-    usage = getattr(resp, "usage", None)
-    details = (
-        getattr(usage, "prompt_tokens_details", None) if usage is not None else None
-    )
-    value = None
-    if details is not None:
-        value = getattr(details, "cached_tokens", None)
-    if value is None:
-        extra = getattr(usage, "model_extra", None) if usage is not None else None
-        details = (
-            (extra or {}).get("prompt_tokens_details")
-            if isinstance(extra, dict)
-            else None
-        )
-        if isinstance(details, dict):
-            value = details.get("cached_tokens")
-    if isinstance(value, int) and not isinstance(value, bool):
-        return value
-    return None
-
-
-def vllm_prefix_metrics(base_url="http://localhost:8000"):
-    """Snapshot of vLLM's kernel prefix-cache counters, or None if unreachable.
-
-    vLLM 0.27 serves prompt reuse only through `/metrics`
-    (`vllm:prefix_cache_hits_total` / `vllm:prefix_cache_queries_total`); the
-    per-request `usage.prompt_tokens_details.cached_tokens` field is absent in
-    this build. Returns {"hits": int, "queries": int} so a demo can delta two
-    snapshots and prove the engine's prefix tier replayed tokens.
-    """
-    try:
-        with urllib.request.urlopen(base_url + "/metrics", timeout=10) as resp:
-            text = resp.read().decode("utf-8", "replace")
-    except (OSError, urllib.error.URLError):
-        return None
-    counts = {}
-    for line in text.splitlines():
-        if line.startswith("vllm:prefix_cache_hits_total{"):
-            counts["hits"] = int(float(line.rsplit(" ", 1)[-1]))
-        elif line.startswith("vllm:prefix_cache_queries_total{"):
-            counts["queries"] = int(float(line.rsplit(" ", 1)[-1]))
-    return counts if {"hits", "queries"} <= counts.keys() else None
-
-
-def sglang_prefix_metrics(base_url="http://localhost:30000"):
-    """Snapshot of SGLang's KV-prefix-cache counters, or None if unreachable.
-
-    SGLang serves token reuse through `/metrics` Prometheus gauges: a cache hit
-    rate (`sglang:cache_hit_rate`) and the KV cache memory resident in GB
-    (`sglang:kv_cache_memory_usage_gb`). Unlike vLLM's absolute hit/query
-    counters, these are rates/gauge snapshots, so a demo records them at the
-    wall-clock moment of the probe rather than as a cumulative delta. Returns
-    {"hits": float, "queries": float} (as the hit rate and KV-cache GB) so the
-    cache-demo row stays the same shape.
-    """
-    try:
-        with urllib.request.urlopen(base_url + "/metrics", timeout=10) as resp:
-            text = resp.read().decode("utf-8", "replace")
-    except (OSError, urllib.error.URLError):
-        return None
-    counts = {}
-    for line in text.splitlines():
-        if line.startswith("sglang:cache_hit_rate{"):
-            counts["hits"] = float(line.rsplit(" ", 1)[-1])
-        elif line.startswith("sglang:kv_cache_memory_usage_gb{"):
-            counts["queries"] = float(line.rsplit(" ", 1)[-1])
-    return counts if {"hits", "queries"} <= counts.keys() else None
-
-
-def timings(resp):
-    """llama.cpp prompt/cache timings; live in model_extra, not usage, here."""
-    extra = getattr(resp, "model_extra", None) or {}
-    if not isinstance(extra, dict):
-        return {}
-    t = extra.get("timings") or {}
-    if not isinstance(t, dict):
-        return {}
-    return {
-        "prompt_n": t.get("prompt_n"),
-        "cache_n": t.get("cache_n"),
-        "predicted_n": t.get("predicted_n"),
-    }

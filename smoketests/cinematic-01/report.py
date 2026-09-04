@@ -40,15 +40,9 @@ ENGINE_BY_ALIAS = {
     "local-gguf": "llama.cpp (Q8_0, retired)",
     "local-judge": "llama.cpp (Q4_K_XL)",
     "local-thinking": "llama.cpp (Q4_K_M)",
-    "local-llama": "vLLM (W8A16, prefix cache)",
-    "local-vllm": "vLLM (W8A16, prefix cache)",
+    "local-llama": "vLLM (W8A16)",
+    "local-vllm": "vLLM (W8A16)",
     "local-sglang": "SGLang (W8A16)",
-}
-CACHE_MODE_LABELS = {
-    "1level": "engine-prefix tier only (LiteLLM Redis bypassed)",
-    "2level": "LiteLLM Redis tier enabled",
-    "no-cache": "cold at every tier",
-    "both": "all modes",
 }
 
 
@@ -71,13 +65,6 @@ def latest_run_id():
     return max(runs)[1]
 
 
-def cache_counts(rows):
-    return (
-        sum(1 for r in rows if r.get("cache_regime") == "litellm-redis-hit"),
-        sum(1 for r in rows if r.get("cache_regime") == "litellm-redis-miss"),
-    )
-
-
 def avg(values):
     return sum(values) / len(values) if values else 0.0
 
@@ -93,12 +80,7 @@ def render(results, eval_summary, run_id):
     a("")
     a(f"- **model**: `{model_alias}` — {model_hw}")
     engine = ENGINE_BY_ALIAS.get(model_alias, "llama.cpp engine")
-    a(f"- **gateway**: `{meta['base_url']}` (LiteLLM + Redis cache, {engine})")
-    if meta.get("cache_mode"):
-        a(
-            f"- **cache mode**: `{meta['cache_mode']}` — "
-            f"{CACHE_MODE_LABELS.get(meta['cache_mode'], '')}"
-        )
+    a(f"- **gateway**: `{meta['base_url']}` (LiteLLM, {engine})")
     a(f"- **dataset**: `{meta['dataset']}`")
     a(f"- **sample**: `{meta['sample']}` rows (round-robin across studios)")
     a(
@@ -131,9 +113,6 @@ def render(results, eval_summary, run_id):
     rows1 = results["scenario_1_studio_recall"]["rows"]
     rows2 = results["scenario_2_year_match"]["rows"]
     rows3 = results["scenario_3_year_repeat"]["rows"]
-    hits1, miss1 = cache_counts(rows1)
-    hits2, miss2 = cache_counts(rows2)
-    hits3, miss3 = cache_counts(rows3)
     tok1 = sum((r["usage"].get("total_tokens") or 0) for r in rows1)
     tok2 = sum((r["usage"].get("total_tokens") or 0) for r in rows2)
     tok3 = sum((r["usage"].get("total_tokens") or 0) for r in rows3)
@@ -143,50 +122,11 @@ def render(results, eval_summary, run_id):
 
     a("## Observations")
     a("")
-    a("| Scenario | Calls | Redis hits | Redis misses | Total tokens | Avg latency |")
-    a("|----------|-------|------------|--------------|--------------|-------------|")
-    a(f"| 1 | {len(rows1)} | {hits1} | {miss1} | {tok1} | {t1:.2f}s |")
-    a(f"| 2 | {len(rows2)} | {hits2} | {miss2} | {tok2} | {t2:.2f}s |")
-    a(f"| 3 | {len(rows3)} | {hits3} | {miss3} | {tok3} | {t3:.2f}s |")
-    a("")
-
-    demo = results["cache_demo"]["rows"]
-    a("## Cache demo — per-mode prefix/Redis reuse")
-    a("")
-    a("| Mode | Call | Prompt | Regime | Latency | engine cached_tokens |")
-    a("|------|------|--------|--------|---------|---------------------|")
-    for r in demo:
-        if r.get("call") == "engine":
-            continue
-        a(
-            f"| {r.get('mode', '—')} | {r['call']} | "
-            f"{'base' if r['base_only'] else 'variant'} | `{r['observed_regime']}` | "
-            f"{r['seconds']:.4f}s | {r.get('cached_tokens') or '—'} |"
-        )
-    a("")
-    engine_rows = [
-        r for r in demo if r.get("call") == "engine" and r.get("prefix_cache_delta")
-    ]
-    if engine_rows:
-        if "sglang" in model_alias:
-            a("| Mode | SGLang cache-hit rate | KV-cache memory (GB) |")
-            a("|------|-----------------------|----------------------|")
-            for r in engine_rows:
-                d = r["prefix_cache_delta"]
-                a(f"| {r['mode']} | {d['hits']:.3f} | {d['queries']:.3f} |")
-        else:
-            a("| Mode | vLLM prefix-cache Δ hits | Δ queries |")
-            a("|------|--------------------------|-----------|")
-            for r in engine_rows:
-                d = r["prefix_cache_delta"]
-                a(f"| {r['mode']} | {d['hits']} | {d['queries']} |")
-        a("")
-    a(
-        "In 2level, call Q2 reuses the Q1 response from Redis — the engine "
-        "does no work. In 1level (LiteLLM bypassed) and no-cache, the "
-        "`engine cached_tokens` column shows how many prompt tokens the "
-        "engine replayed from its prefix cache (vLLM) or recomputed."
-    )
+    a("| Scenario | Calls | Total tokens | Avg latency |")
+    a("|----------|-------|--------------|-------------|")
+    a(f"| 1 | {len(rows1)} | {tok1} | {t1:.2f}s |")
+    a(f"| 2 | {len(rows2)} | {tok2} | {t2:.2f}s |")
+    a(f"| 3 | {len(rows3)} | {tok3} | {t3:.2f}s |")
     a("")
 
     misses = [r for r in rows1 if not r["correct"]]
@@ -202,7 +142,7 @@ def render(results, eval_summary, run_id):
     a("")
     a("```sh")
     a(
-        f"pixi run cinematic-01-test -- --model {model_alias} --cache-mode {meta.get('cache_mode', '1level')}"
+        f"pixi run cinematic-01-test -- --model {model_alias}"
     )
     a("pixi run cinematic-01-report")
     a("```")

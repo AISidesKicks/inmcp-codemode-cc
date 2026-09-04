@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""cinematic-01 smoke test: studio recall, film+year match, year repeat + cache demo.
+"""cinematic-01 smoke test: studio recall, film+year match, year repeat.
 
 Reads the generated CSV (datasets/cinematic-01/dataset.csv) as ground truth
 (studio names seeded, films/years model-generated — see design.md) and evaluates
@@ -8,12 +8,8 @@ the model against it:
 1. studio recall   — which studio produced a film (schema answer via StudioList)
   2. film+year match — model's year for a film within +/-2 of the dataset year
   3. year repeat     — deepeval ExactMatchMetric (threshold 0.8) over reworded
-                       year prompts, so fresh Redis misses instead of hits
-  + the cache demo in three modes (`--model` routes through the gateway):
-      1level   — distinct +1/+2/+3 suffixes, LiteLLM bypassed per request
-                 (`cache={"no-cache": True}`), engine prefix cache does reuse
-      2level   — Q1/Q2/Q3 identical-prompt legacy demo, Q2 Redis hit
-      no-cache — noise-prefixed prompts, cold at every tier
+                       year prompts
+   (`--model` routes through the gateway)
 
 Writes per-run datasets/cinematic-01/runs/<run-id>/results.json (raw rows) and
 datasets/cinematic-01/runs/<run-id>/eval.json (scored scenarios), plus refreshed
@@ -39,26 +35,17 @@ from llm import (
     DEFAULT_BASE_URL,
     StudioList,
     YearAnswer,
-    cache_regime,
-    cached_tokens,
     chat,
     completion_text,
     get_repo_root,
     health,
     reasoning_content,
-    sglang_prefix_metrics,
-    timings,
     usage_fields,
-    vllm_prefix_metrics,
 )
 
 YEAR_TOLERANCE = 2
 REMINDER = "Please answer again:"
 MAX_TRIES = 3
-CACHE_MODES = ("1level", "2level", "no-cache", "both")
-
-BASE_PROMPT = "Give me a short summary about Marvel Cinematic Universe."
-Q3_SUFFIX = " - 3rd repeat"
 
 DEFAULT_CSV = os.path.join(get_repo_root(), "datasets", "cinematic-01", "dataset.csv")
 RUNS_DIR = os.path.join(get_repo_root(), "datasets", "cinematic-01", "runs")
@@ -101,10 +88,10 @@ def parse_model(text, schema):
 def query_schema(content, schema, max_tokens, reasoning, run_name=None):
     """Schema answer with retries; returns (model, text, seconds, resp).
 
-    Retries prepend a reminder so a cached empty/truncated answer for the
-    original prompt is bypassed, not replayed. Empty completions degrade to a
-    miss instead of failing the run. Guided decoding is skipped for vLLM
-    (returns empty completions); parse-then-retry covers it instead.
+    Retries prepend a reminder so a failed empty/truncated generation for the
+    original prompt is regenerated, not repeated verbatim. Empty completions
+    degrade to a miss instead of failing the run. Guided decoding is skipped
+    for vLLM (returns empty completions); parse-then-retry covers it instead.
     Every attempt's Phoenix generation span is named run_name.
     """
     guided = "vllm" not in llm.MODEL
@@ -183,7 +170,6 @@ def scenario_studio_recall(sample, args, executor):
             "guess": guess,
             "answer": text[:200],
             "correct": correct,
-            "cache_regime": cache_regime(resp),
             "reasoning": reasoning_content(resp),
             "seconds": round(seconds, 3),
             "usage": usage_fields(resp),
@@ -225,7 +211,6 @@ def scenario_year_match(sample, args, executor):
             "predicted": year,
             "correct": ok,
             "answer": text[:200],
-            "cache_regime": cache_regime(resp),
             "reasoning": reasoning_content(resp),
             "seconds": round(seconds, 3),
             "usage": usage_fields(resp),
@@ -279,7 +264,6 @@ def scenario_year_repeat(sample, args, threshold, executor):
             "predicted": predicted,
             "metric_score": metric_score,
             "answer": text[:200],
-            "cache_regime": cache_regime(resp),
             "reasoning": reasoning_content(resp),
             "seconds": round(seconds, 3),
             "usage": usage_fields(resp),
@@ -296,117 +280,6 @@ def scenario_year_repeat(sample, args, threshold, executor):
         )
     score = sum(r["metric_score"] for r in rows) / len(rows) if rows else 0.0
     return rows, score, score >= threshold
-
-
-def ctdemo_rows(calls, mode, args):
-    """Run one cache-demo variant; retries are capped at one attempt so a
-    re-ask never mutates the prompt mid-demo and breaks the suffix/prefix
-    reuse invariants."""
-    rows = []
-    for spec in calls:
-        resp, seconds = chat(
-            spec["content"],
-            max_tokens=1536,
-            reasoning=args.reasoning,
-            cache_mode=mode,
-            retries=1,
-            model=args.model,
-            run_name=f"{args.run_id} demo {mode} {spec['call']}",
-        )
-        regime = cache_regime(resp)
-        row = {
-            "mode": mode,
-            "call": spec["call"],
-            "observed_regime": regime,
-            "prompt": spec["content"],
-            "base_only": spec["content"] == BASE_PROMPT,
-            "reasoning": reasoning_content(resp),
-            "seconds": round(seconds, 4),
-            "usage": usage_fields(resp),
-            "cached_tokens": cached_tokens(resp),
-            "timings": timings(resp),
-            "content_head": completion_text(resp)[:160],
-        }
-        rows.append(row)
-        print(
-            f"  [{mode:<8}] {row['call']} {regime:<20} {round(seconds, 4):>8.4f}s "
-            f"cached={row['cached_tokens']} "
-            f"cache_n={row['timings'].get('cache_n')}",
-            flush=True,
-        )
-    return rows
-
-
-def cache_demo(args, mode):
-    """Per-mode three-call demo. `both` runs each of the three modes in turn."""
-    if mode == "both":
-        rows = []
-        for m in CACHE_MODES[:3]:
-            rows.extend(cache_demo(args, m)[0])
-        return rows, "both"
-
-    def prefix_metrics():
-        if "sglang" in llm.MODEL:
-            return sglang_prefix_metrics("http://localhost:30000")
-        return vllm_prefix_metrics(args.base_url.replace(":4000", ":8000"))
-
-    pre = prefix_metrics() or {}
-    if mode == "1level":
-        calls = [
-            {"call": "base 1", "content": BASE_PROMPT + " - 1"},
-            {"call": "base 2", "content": BASE_PROMPT + " - 2"},
-            {"call": "base 3", "content": BASE_PROMPT + " - 3"},
-        ]
-    elif mode == "2level":
-        calls = [
-            {"call": "Q1", "content": BASE_PROMPT},
-            {"call": "Q2", "content": BASE_PROMPT},
-            {"call": "Q3", "content": BASE_PROMPT + Q3_SUFFIX},
-        ]
-    else:  # no-cache
-        calls = [
-            {
-                "call": "N1",
-                "content": "Tell me about the Marvel Cinematic Universe film history.",
-            },
-            {
-                "call": "N2",
-                "content": "List some details from the Marvel Cinematic Universe movies.",
-            },
-            {
-                "call": "N3",
-                "content": "Provide a summary covering the Marvel Cinematic Universe.",
-            },
-        ]
-    print(f"cache demo: {mode}", flush=True)
-    rows = ctdemo_rows(calls, mode, args)
-    post = prefix_metrics() or {}
-    if pre and post:
-        rows.append(
-            {
-                "mode": mode,
-                "call": "engine",
-                "observed_regime": "",
-                "prompt": "",
-                "base_only": False,
-                "reasoning": None,
-                "seconds": 0.0,
-                "usage": {},
-                "cached_tokens": None,
-                "timings": {},
-                "content_head": "",
-                "prefix_cache_delta": {
-                    "hits": post["hits"] - pre["hits"],
-                    "queries": post["queries"] - pre["queries"],
-                },
-            }
-        )
-        print(
-            f"  [{mode:<8}] engine prefix-cache Δ hits={post['hits'] - pre['hits']} "
-            f"queries={post['queries'] - pre['queries']}",
-            flush=True,
-        )
-    return rows, mode
 
 
 def default_run_id(model_alias):
@@ -489,7 +362,7 @@ def main():
         "--workers",
         type=int,
         default=4,
-        help="max concurrent calls (matches the engines' 4 parallel slots)",
+        help="client-side concurrency bound only (single-slot engines queue requests)",
     )
     parser.add_argument(
         "--threshold", type=float, default=0.8, help="ExactMatchMetric threshold"
@@ -506,12 +379,6 @@ def main():
         "--model",
         default="local-thinking",
         help="gateway model alias (default local-thinking)",
-    )
-    parser.add_argument(
-        "--cache-mode",
-        default="1level",
-        choices=CACHE_MODES,
-        help="cache demo mode: 1level (default) | 2level | no-cache | both",
     )
     parser.add_argument("--skip-health", action="store_true", help="skip health probes")
     parser.add_argument(
@@ -563,16 +430,12 @@ def main():
             f"({'PASS' if exact_passed else 'FAIL'})"
         )
 
-    demo, demo_mode = cache_demo(args, args.cache_mode)
-    print(f"cache demo {demo_mode} done")
-
     meta = {
         "name": "cinematic-01",
         "test": "smoketests/cinematic-01/test.py",
         "run_id": run_id,
         "run_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "model_alias": args.model,
-        "cache_mode": demo_mode,
         "base_url": args.base_url,
         "dataset": args.csv,
         "sample": len(sample),
@@ -594,7 +457,6 @@ def main():
             "score": f"{exact_score:.2f}",
             "rows": year_repeat,
         },
-        "cache_demo": {"rows": demo},
     }
     eval_summary = {
         "meta": meta,

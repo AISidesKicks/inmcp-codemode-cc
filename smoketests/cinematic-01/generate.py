@@ -5,7 +5,7 @@ The 20 studio names are seeded ground truth (see design.md); film titles and
 release years are produced by the llama.cpp-backed LFM2.5-2.6B through the
 LiteLLM gateway (alias `local-judge`) using schema-validated structured output.
 The dataset lands in a QUOTE_ALL CSV at datasets/cinematic-01/dataset.csv;
-per-call cache regime, seconds and llama.cpp timings are checkpointed to
+per-call seconds and token usage are checkpointed to
 datasets/cinematic-01/generate.json after every studio.
 
 Same title across studios is deduped exactly on the normalized title; years are
@@ -27,12 +27,10 @@ from llm import (
     MODEL,
     FilmList,
     YearAnswer,
-    cache_regime,
     chat,
     completion_text,
     get_repo_root,
     health,
-    timings,
     usage_fields,
 )
 
@@ -91,8 +89,8 @@ def year_prompt(title):
 def ask_json(content, schema, max_tokens, reasoning):
     """Schema-validated completion, retried; returns (model, text, seconds, resp).
 
-    Retries vary the prompt (suffix) so they skip any Redis entry that cached a
-    failed empty/truncated answer for the original prompt.
+    Retries vary the prompt (suffix) so a failed empty/truncated generation for
+    the original prompt is regenerated, not repeated verbatim.
     """
     last_err = None
     for attempt in range(1, MAX_TRIES + 1):
@@ -226,8 +224,6 @@ def main():
         fl_ok = parsed is not None
         fl_details = {
             "films_seconds": round(fl_seconds, 3),
-            "films_cache_regime": cache_regime(fresp) if fl_ok else None,
-            "films_timings": timings(fresp) if fl_ok else {},
             "films_usage": usage_fields(fresp) if fl_ok else {},
         }
         if not fl_ok:
@@ -262,8 +258,6 @@ def main():
                 "ok": bool(ya),
                 "error": yresp if not ya else None,
                 "year_seconds": round(y_seconds, 3),
-                "year_cache_regime": cache_regime(yresp) if ya else None,
-                "year_timings": timings(yresp) if ya else {},
                 "year_usage": usage_fields(yresp) if ya else {},
                 **fl_details,
             }
