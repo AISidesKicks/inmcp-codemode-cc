@@ -101,6 +101,7 @@ def chat(
     reasoning=None,
     retries=3,
     guided=True,
+    run_name: str | None = None,
     **kv,
 ):
     """Cache-enabled completion via the LiteLLM SDK; returns (resp, seconds).
@@ -139,6 +140,16 @@ def chat(
         if not isinstance(extra_body, dict):
             extra_body = {}
         extra_body.setdefault("reasoning_budget_tokens", 0)
+        kwargs["extra_body"] = extra_body
+    if run_name:
+        metadata = kwargs.pop("metadata", None)
+        if not isinstance(metadata, dict):
+            metadata = {}
+        metadata.setdefault("generation_name", str(run_name))
+        extra_body = kwargs.pop("extra_body", None)
+        if not isinstance(extra_body, dict):
+            extra_body = {}
+        extra_body.setdefault("metadata", metadata)
         kwargs["extra_body"] = extra_body
     t0 = time.perf_counter()
     for attempt in range(1, retries + 1):
