@@ -20,7 +20,7 @@ from pydantic import BaseModel
 MODEL = "local-judge"
 DEFAULT_BASE_URL = "http://localhost:4000"
 DEFAULT_MAX_TOKENS = 256
-DEFAULT_REASONING = {"enabled": False}
+DEFAULT_REASONING = {"enabled": True}
 CACHE_PARAM = {}  # LiteLLM Redis caching; boolean True regresses with 400s
 
 # Cache-mode presets passed per call as the litellm `cache` kwarg.
@@ -118,6 +118,8 @@ def chat(
     cache_param = CACHE_MODES.get(
         str(cache_mode) if cache_mode is not None else "", CACHE_PARAM
     )
+    # Reasoning is always on: LFM2.5 is a pure reasoning model, the old
+    # budget-0 off-switch fought the template. Callers may override the dict.
     kwargs = {
         "model": model,
         "base_url": base_url,
@@ -126,21 +128,12 @@ def chat(
         "cache": dict(cache_param),
         "messages": [{"role": "user", "content": content}],
         "max_tokens": max_tokens,
+        "reasoning": reasoning or dict(DEFAULT_REASONING),
     }
-    if reasoning is not None:
-        kwargs["reasoning"] = reasoning
     if response_format is not None and guided:
         kwargs["response_format"] = response_format
         kwargs["enable_json_schema_validation"] = True
     kwargs.update(kv)
-    if reasoning is None or (
-        isinstance(reasoning, dict) and not reasoning.get("enabled")
-    ):
-        extra_body = kwargs.pop("extra_body", None)
-        if not isinstance(extra_body, dict):
-            extra_body = {}
-        extra_body.setdefault("reasoning_budget_tokens", 0)
-        kwargs["extra_body"] = extra_body
     if run_name:
         metadata = kwargs.pop("metadata", None)
         if not isinstance(metadata, dict):

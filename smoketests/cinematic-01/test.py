@@ -306,7 +306,7 @@ def ctdemo_rows(calls, mode, args):
     for spec in calls:
         resp, seconds = chat(
             spec["content"],
-            max_tokens=256,
+            max_tokens=1536,
             reasoning=args.reasoning,
             cache_mode=mode,
             retries=1,
@@ -486,11 +486,6 @@ def main():
     )
     parser.add_argument("--max-tokens", type=int, default=None)
     parser.add_argument(
-        "--reasoning",
-        action="store_true",
-        help="let the model reason first (slower, larger token budget)",
-    )
-    parser.add_argument(
         "--workers",
         type=int,
         default=4,
@@ -527,11 +522,9 @@ def main():
     args = parser.parse_args()
     llm.MODEL = args.model  # chat() defaults to MODEL when no model kwarg given
 
-    if args.reasoning and args.max_tokens is None:
-        args.max_tokens = 1536
     if args.max_tokens is None:
-        args.max_tokens = 512
-    args.reasoning = {"enabled": True} if args.reasoning else {"enabled": False}
+        args.max_tokens = 1536  # thinking always on needs the headroom
+    args.reasoning = {"enabled": True}
     if args.workers < 1:
         sys.exit("--workers must be >= 1")
 
@@ -584,7 +577,7 @@ def main():
         "dataset": args.csv,
         "sample": len(sample),
         "year_tolerance": YEAR_TOLERANCE,
-        "reasoning": "enabled" if args.reasoning["enabled"] else "disabled",
+        "reasoning": "enabled",
         "workers": args.workers,
     }
     results = {

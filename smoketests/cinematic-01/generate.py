@@ -158,7 +158,7 @@ def build_meta(target_studios, args, entries, t_start):
         "studios": len(target_studios),
         "max_films": args.max_films,
         "skip_year": args.skip_year,
-        "reasoning": "enabled" if args.reasoning else "disabled",
+        "reasoning": "enabled",
         "year_guard": [YEAR_MIN, YEAR_MAX],
         "entries": len(entries),
         "ok": ok,
@@ -187,9 +187,6 @@ def main():
     )
     parser.add_argument("--max-tokens", type=int, default=1536)
     parser.add_argument(
-        "--reasoning", action="store_true", help="let the model reason first (slower)"
-    )
-    parser.add_argument(
         "--base-url", default=DEFAULT_BASE_URL, help="LiteLLM gateway URL"
     )
     parser.add_argument("--output", default=DEFAULT_CSV, help="dataset CSV path")
@@ -197,7 +194,7 @@ def main():
     parser.add_argument("--skip-health", action="store_true", help="skip health probes")
     args = parser.parse_args()
 
-    reasoning = {"enabled": True} if args.reasoning else {"enabled": False}
+    reasoning = {"enabled": True}  # LFM2.5 always thinks
     target_studios = STUDIOS[: args.studios]
 
     if not args.skip_health:
@@ -212,7 +209,7 @@ def main():
             sys.exit(f"llama.cpp engine not ready at {engine}/health")
     print(
         f"gateway {args.base_url} healthy; generating {len(target_studios)}x"
-        f"{args.max_films} films (reasoning {'on' if args.reasoning else 'off'})"
+        f"{args.max_films} films (reasoning on)"
     )
 
     seen = set()
