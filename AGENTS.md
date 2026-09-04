@@ -26,10 +26,13 @@ The tone for documenting lab steps is informal.
 
 - `README.md` - main documentation
 - `docs/` - landing page (`index.html`), GitHub Pages `CNAME` - web home for this project.
+- `docker` - minimal lab stack (llama.cpp + LiteLLM + Phoenix), see docker/README.md
+- `datasets` - cinematic-01 micro dataset inputs (mirrored from localai.isnot.cheap)
 - `LICENSE`
 - `eduailab` - lab guide as 01- 02- 03- markdown docs
 - `setup` - setup.md instructions and scripts
 - `skills` - set of skills for each lab mode
+- `smoketests` - python smoketest harnesses (mirrored), pair with datasets/
 - `scratch` - temp stuff (persists across restarts)
 
 ## CMOD python environment (isolated with pixi `cmod`)
