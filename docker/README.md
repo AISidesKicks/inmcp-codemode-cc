@@ -100,6 +100,31 @@ llama-server would clash on 8080. Run one or the other.
 | `local-judge`   | llama.cpp (8080)   | judge, serves `ibm-granite/granite-4.0-h-tiny` Q4_K_XL |
 | `local-thinking`| llama.cpp (8081)   | tested, serves `LiquidAI/LFM2.5-2.6B` Q4_K_M |
 
+## Sampling parameters (engine defaults)
+
+Sampling is controlled **only** by llama.cpp engine flags in
+`docker-compose.yml` — no lab client (smoketests, sweep, WebUI) sends a
+`temperature`, and the LiteLLM config sets no sampling defaults, so whatever
+the engine pins governs all traffic through the gateway:
+
+| Service               | Flags                                                   | Source |
+|-----------------------|---------------------------------------------------------|--------|
+| `cmod-llama-thinking` (tested) | `--temp 0.1 --top-k 50 --repeat-penalty 1.1`   | LiquidAI LFM2.5-2.6B model card generation trio |
+| `cmod-llama` (judge)  | `--temp 0.1 --top-p 0.9`                                | lab research (granite card publishes no sampling spec) |
+
+The judge engine keeps llama.cpp's default `top_p 0.95` — the granite card
+specifies none — while the tested engine keeps default `top_p 0.95` (vendor
+specifies only temp/top-k/repeat-penalty).
+
+Reasoning is **on only** for the tested engine: it starts with
+`--reasoning on --reasoning-format deepseek --reasoning-preserve` and lab code
+sends `reasoning: {"enabled": True}` on every call. LFM2.5-2.6B is a pure
+reasoning model (its template hardcodes the think-open), so the old
+budget-0 `reasoning_budget_tokens: 0` off-switch was removed from
+`llm.py` — always-on needs the larger `max_tokens` budgets (1536) the
+smoketests now default to. The judge (granite) is non-thinking and runs its
+whole budget on reflection/JSON text.
+
 ## Traces
 
 LiteLLM is wired for OpenTelemetry in `litellm_config.yaml`
