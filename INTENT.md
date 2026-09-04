@@ -24,24 +24,89 @@ Ideally we want also to ship BACKUP of observability data - so MCP part of lab c
 
 We also want to demonstrate ZTA (Zero Token Architecture) - create report strips in Python using SDK (installed)
 
-## AI Harness
+# The EDU AI LAB
+
+## 1. AI Harness
 
 - opencode compatible harness, we use **kilo cli**
 
 The goal of the lab is to create /skills for 3 modes in 3 dirs, can be switched together with MCPs by opencode config.
 
-## MCP providers
+## 2. MCP provider
 
-- Arize Phoenix: Built-in MCP with LLM and codemode / 
+- Arize Phoenix: Built-in MCP with LLM and codemode
 
-## Lab environment
+## 3. Lab environment
  - litellm + small llm in llama-server + Arize Phoenix
 
 **Note:** As leaner setup as possible (no external DBs - main focus on execution traces ONLY!)
 
-Docker variant of the lab env lives in `docker/` — llama.cpp server (Q8_0 GGUF,
-64K ctx, built-in WebUI) + LiteLLM gateway + Arize Phoenix, profiles `lab` /
-`phoenix`. See `docker/README.md`.
+Docker variant of the lab env lives in `docker/` — two llama.cpp servers
+(non-thinking granite judge @ 64K ctx + thinking LFM2.5-2.6B tested model
+@ 32K ctx, Q4 GGUFs, built-in WebUI) + LiteLLM gateway + Arize Phoenix,
+profiles `lab` / `phoenix`. See `docker/README.md`.
+
+## 3. Generating traces in Phoenix
+
+ a. Run naive script
+  - 100 films with reasoning (reasoning 8192 budget)
+
+ Tested prompt optimizers (scratch sweep, cinematic-01 micro-set, 6 train /
+ 4 val fixed split, LLM-as-judge):
+
+ b. gepa (standalone, DefaultAdapter) — reflection-guided prompt evolution
+ - optimize -> trace runs
+
+ c. deepeval GEPA — same genetic-pareto idea inside the deepeval optimizer
+ - optimize -> trace runs
+
+ d. deepeval MIPROV2 — bayesian instruction/demos proposals
+ (needs optuna: `pixi add --pypi optuna`)
+ - optimize -> trace runs
+
+ e. deepeval COPRO — coordinate ascent over instruction candidates
+ - optimize -> trace runs
+
+ f. promptrefiner `BaseStrategy.refine` — rewrite-only baseline
+ - optimize -> trace runs
+
+ g. dspy BootstrapFewShot (3.3.1) — cheapest: bootstrapped demos, no LLM
+  proposal calls (judge-as-teacher via teacher_settings; demos live inside
+  the dspy program, prompt-only eval never sees them)
+ - optimize -> trace runs
+
+ h. dspy SIMBA (3.3.1) — introspective mini-batch ascent; compile asserts
+  len(trainset) >= bsize, so bsize <= 6 on our 6-row split; rollout LMs
+  library-copied at temp 1.0 (rest governed by engine flags)
+ - optimize -> trace runs
+
+ i. dspy MIPROv2 (3.3.1) — bayesian instruction/demos proposals; auto=None
+  + trimmed num_candidates/num_trials
+ - optimize -> trace runs
+
+ j. deepeval SIMBA (4.2.1) — same PromptOptimizer wiring as copro/miprov2
+ - optimize -> trace runs
+
+ k. adalflow TGDOptimizer (1.1.3) — text-grad via EvalFnToTextLoss +
+  BackwardEngine over the gateway (AdalComponent/Trainer path deliberately
+  skipped); needs workarounds: BackwardEngine(**kwargs) only, LazyImport
+  forbids subclassing, loss forward wants id= per row
+ - optimize -> trace runs
+
+ Ruled out: promptimal (hardcoded gpt-4o). Kept: all of the above.
+
+ Sweep experience (2026-09-04, 1.2B-Thinking pair):
+ - think-block stays inline in content on llama.cpp regardless of
+   auto/deepseek/`--special` template kwargs -> evaluator strips it
+   (LFM2.5-2.6B splits reasoning cleanly instead)
+ - chatty small thinkers as judge need a 4096-token budget (2048 starved
+   reflections into empty content)
+ - deepeval diagnosis/rewrite schemas need json_repair + list->string coercion
+ - task/judge call counts: gepa 28/2, deepeval gepa 34/4, miprov2 25/4,
+   copro 18/1, refiner 8/1
+ - val deltas are noise at n=4 with weak 1.2B recall
+ - spans labelled `<run_id> <opt> eval` (tested) + `<run_id> <opt> judge`
+   via gateway OTEL tagging (`metadata.generation_name`)
 
 # Installed tools
 
