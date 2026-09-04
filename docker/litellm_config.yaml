@@ -1,0 +1,14 @@
+model_list:
+  - model_name: local-gguf
+    litellm_params:
+      model: openai/LiquidAI/LFM2.5-2.6B
+      api_base: http://cmod-llama:8080/v1
+      api_key: dummy
+
+litellm_settings:
+  drop_params: true
+  callbacks: ["otel"]
+  otel: true
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
