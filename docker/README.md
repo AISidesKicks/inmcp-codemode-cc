@@ -60,6 +60,15 @@ docker compose -f docker/docker-compose.yml down
 docker compose -f docker/docker-compose.yml down -v   # wipes the Phoenix volume too
 ```
 
+## WebUI
+
+llama-server ships a built-in WebUI — with the `lab` profile up, open
+http://localhost:8080. The UI serves at `/` and the OpenAI-compatible API at
+`/v1`. Loaded model: `LiquidAI/LFM2.5-2.6B` (Q8_0 GGUF), 64K ctx, single slot.
+
+Chatting there hits the engine directly — no LiteLLM metering, no Phoenix
+trace. Route via the gateway on 4000 (`local-gguf`) for that; see Traces.
+
 ## Port map
 
 | Port | Service    | Notes                                            |
