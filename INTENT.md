@@ -39,6 +39,10 @@ The goal of the lab is to create /skills for 3 modes in 3 dirs, can be switched 
 
 **Note:** As leaner setup as possible (no external DBs - main focus on execution traces ONLY!)
 
+Docker variant of the lab env lives in `docker/` — llama.cpp server (Q8_0 GGUF,
+64K ctx, built-in WebUI) + LiteLLM gateway + Arize Phoenix, profiles `lab` /
+`phoenix`. See `docker/README.md`.
+
 # Installed tools
 
 ## Arize Phoenix CLI
