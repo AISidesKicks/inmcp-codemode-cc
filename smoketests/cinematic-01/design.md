@@ -106,6 +106,40 @@ Resume-safe: `--optimizer all` skips optimizers already recorded in the out
 json (sweep) or already carrying a films entry (films legs); an explicit
 `--optimizer <name>` always re-runs.
 
+### opt-scale-20260904 results
+
+First formalized full run (2026-09-04), landed as a fresh Phoenix trace set
+after the manual wipe: sweep ~19 min + 9 films legs (154 films each,
+`FILMS_MAX_TOKENS = 8192`) ~2h04m, all 18 legs ok, no resume needed.
+
+| optimizer        | sweep before → after | films | task | judge | sweep s | films s |
+|------------------|---------------------:|------:|-----:|------:|--------:|--------:|
+| gepa             | 0.00 → 0.00          | 0.344 | 24   | 2     | 110.5   | 870.2   |
+| depeval-gepa     | 0.00 → 0.00          | 0.351 | 34   | 4     | 110.7   | 669.3   |
+| depeval-miprov2  | 0.00 → 0.00          | 0.338 | 25   | 4     | 115.0   | 1029.2  |
+| depeval-copro    | 0.00 → 0.00          | 0.357 | 18   | 1     | 52.1    | 777.1   |
+| dspy-bootstrap   | 0.25 → 0.25          | 0.377 | 8    | 1     | 33.6    | 1043.9  |
+| depeval-simba    | 0.00 → 0.25          | 0.364 | 68   | 1     | 252.0   | 632.5   |
+| dspy-simba       | 0.00 → 0.25          | 0.344 | 81   | 0     | 251.0   | 1016.2  |
+| dspy-miprov2     | 0.25 → 0.00          | 0.357 | 26   | 9     | 100.6   | 766.0   |
+| adalflow-tgd     | 0.25 → 0.25          | 0.338 | 24   | 12    | 101.0   | 647.9   |
+
+(task/judge = sweep leg call counts; each films leg adds exactly 154 task
+calls and 0 judge calls. Micro-split before/after stays noisy at 4 films —
+the corpus legs are the honest comparison, and there the spread is tight:
+0.338–0.377 with dspy-bootstrap on top.)
+
+Phoenix readback: 3422 spans labelled `opt-scale-20260904 ...` (43 unique
+names), 44 judge-labelled spans across all 7 sweep judge legs, zero
+judge-model leakage in non-judge run spans — check semantics PASS. Note for
+future runs: `scratch/promptopt_phoenix_check.py`'s unbounded fetch only
+reaches the most recent 1000 spans, which at this run size are all films
+spans — bound the fetch by the run's time window (or raise the limit) to see
+the sweep-stage judge spans.
+
+Artifacts: `datasets/cinematic-01/runs/opt-scale-20260904-optimize.json` plus
+one `opt-scale-20260904-<opt>-films.json` per optimizer.
+
 ## Layout
 
 ```
