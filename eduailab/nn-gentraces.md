@@ -11,7 +11,8 @@ Time warning up front: the full run takes **~2.5 h wall** — ~19 min sweep +
 9 films legs of ~10.5–17.5 min each (154 films at the 8192-token reasoning
 budget, [INTENT.md §3](../INTENT.md)). In a hurry? Add `--films 20`: ~2 min
 per films leg, coffee-break scale, and the trace shapes are identical (just
-fewer films spans).
+fewer films spans). For per-test-type client vs trace timing methodology
+(probes / smoke / one optimizer leg) see [test-timing.md](test-timing.md).
 
 ## Prereqs
 
