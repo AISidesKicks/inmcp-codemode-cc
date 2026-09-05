@@ -58,49 +58,49 @@ profiles `lab` / `phoenix`. See `docker/README.md`.
 ## 3. Generating traces in Phoenix
 
  a. Run naive script
-  - 100 films with reasoning (reasoning 8192 budget)
+  - 154 films with reasoning (reasoning 8192 budget)
 
  Tested prompt optimizers (scratch sweep, cinematic-01 micro-set, 6 train /
  4 val fixed split, LLM-as-judge):
 
  b. gepa (standalone, DefaultAdapter) — reflection-guided prompt evolution
- - optimize -> trace runs
+ - optimize -> 154 films -> trace runs
 
  c. deepeval GEPA — same genetic-pareto idea inside the deepeval optimizer
- - optimize -> trace runs
+ - optimize -> 154 films -> trace runs
 
  d. deepeval MIPROV2 — bayesian instruction/demos proposals
  (needs optuna: `pixi add --pypi optuna`)
- - optimize -> trace runs
+ - optimize -> 154 films -> trace runs
 
  e. deepeval COPRO — coordinate ascent over instruction candidates
- - optimize -> trace runs
+ - optimize -> 154 films -> trace runs
 
  f. promptrefiner `BaseStrategy.refine` — rewrite-only baseline
- - optimize -> trace runs
+ - optimize -> 154 films -> trace runs
 
  g. dspy BootstrapFewShot (3.3.1) — cheapest: bootstrapped demos, no LLM
   proposal calls (judge-as-teacher via teacher_settings; demos live inside
   the dspy program, prompt-only eval never sees them)
- - optimize -> trace runs
+ - optimize -> 154 films -> trace runs
 
  h. dspy SIMBA (3.3.1) — introspective mini-batch ascent; compile asserts
   len(trainset) >= bsize, so bsize <= 6 on our 6-row split; rollout LMs
   library-copied at temp 1.0 (rest governed by engine flags)
- - optimize -> trace runs
+ - optimize -> 154 films -> trace runs
 
  i. dspy MIPROv2 (3.3.1) — bayesian instruction/demos proposals; auto=None
   + trimmed num_candidates/num_trials
- - optimize -> trace runs
+ - optimize -> 154 films -> trace runs
 
  j. deepeval SIMBA (4.2.1) — same PromptOptimizer wiring as copro/miprov2
- - optimize -> trace runs
+ - optimize -> 154 films -> trace runs
 
  k. adalflow TGDOptimizer (1.1.3) — text-grad via EvalFnToTextLoss +
   BackwardEngine over the gateway (AdalComponent/Trainer path deliberately
   skipped); needs workarounds: BackwardEngine(**kwargs) only, LazyImport
   forbids subclassing, loss forward wants id= per row
- - optimize -> trace runs
+ - optimize -> 154 films -> trace runs
 
  Ruled out: promptimal (hardcoded gpt-4o). Kept: all of the above.
 
