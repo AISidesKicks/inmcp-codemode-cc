@@ -31,6 +31,8 @@ We also want to demonstrate ZTA (Zero Token Architecture) - report strips in Pyt
 
 Contrast & compare punchline: `text-to-graphql-mcp` is the anti-ZTA - an LLM writes the graphQL for you (gpt-4o via LangGraph). Same data, nonzero token bill.
 
+Status: dockerized in the lab as `cmod-text-to-graphql` (judge as generator via LiteLLM) and harness-tested 2026-09-05 — granite needs the connection pattern named in the prompt; howto in `eduailab/text-to-graphql.md`.
+
 # The EDU AI LAB
 
 ## 1. AI Harness
