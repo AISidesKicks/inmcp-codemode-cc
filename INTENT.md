@@ -95,18 +95,26 @@ profiles `lab` / `phoenix`. See `docker/README.md`.
 
  Ruled out: promptimal (hardcoded gpt-4o). Kept: all of the above.
 
- Sweep experience (2026-09-04, 1.2B-Thinking pair):
- - think-block stays inline in content on llama.cpp regardless of
-   auto/deepseek/`--special` template kwargs -> evaluator strips it
-   (LFM2.5-2.6B splits reasoning cleanly instead)
- - chatty small thinkers as judge need a 4096-token budget (2048 starved
-   reflections into empty content)
+ Sweep experience (2026-09-04 opt-scale-20260904 full run on the current
+ pair — non-thinking granite-4.0-h-tiny judge (`local-judge`) + thinking
+ LFM2.5-2.6B tested (`local-thinking`); formalized in
+ `smoketests/cinematic-01/optimize.py`, user howto in
+ `eduailab/nn-gentraces.md`):
+ - LFM2.5-2.6B splits its reasoning into `reasoning_content` on llama.cpp;
+   the evaluator still drops a closed inline `</think>` block defensively
+   (an unclosed one counts as a miss)
+ - judge budget stays 4096 tokens (`JUDGE_MAX_TOKENS`) — smaller budgets
+   starved reflections into empty content in early probes
  - deepeval diagnosis/rewrite schemas need json_repair + list->string coercion
- - task/judge call counts: gepa 28/2, deepeval gepa 34/4, miprov2 25/4,
-   copro 18/1, refiner 8/1
- - val deltas are noise at n=4 with weak 1.2B recall
+   (`optimize_common.LocalLLM`)
+ - val deltas are noise at n=4 — the 154-film corpus legs are the honest
+   comparison (films 0.338–0.377, dspy-bootstrap on top)
+ - sweep call counts: cheapest dspy-bootstrap 8 task / 1 judge, heaviest
+   dspy-simba 81 / 0 and adalflow-tgd 24 / 12; full per-optimizer table
+   (films scores + wall seconds) in `smoketests/cinematic-01/design.md`
  - spans labelled `<run_id> <opt> eval` (tested) + `<run_id> <opt> judge`
-   via gateway OTEL tagging (`metadata.generation_name`)
+   (judge) via gateway OTEL tagging (`metadata.generation_name`); artifacts
+   in `datasets/cinematic-01/runs/opt-scale-20260904-*`
 
 # Installed tools
 
