@@ -12,6 +12,7 @@ from opentelemetry.sdk.trace import ReadableSpan, Span, SpanProcessor
 
 _ROOT_SPAN_NAME = "Received Proxy Server Request"
 _INTERNAL_SPAN_NAMES = frozenset({"auth", "proxy_pre_call", "router", "self", _ROOT_SPAN_NAME})
+_DEFAULT_SPAN_NAMES = frozenset({"litellm_request", "raw_gen_ai_request"})
 _KIND_KEY = "openinference.span.kind"
 
 _attached = False
@@ -46,6 +47,9 @@ class SpanKindStamper(CustomLogger, SpanProcessor):
                 span.set_attribute(_KIND_KEY, "CHAIN")
             elif span.name not in _INTERNAL_SPAN_NAMES:
                 span.set_attribute(_KIND_KEY, "LLM")
+                if span.name not in _DEFAULT_SPAN_NAMES:
+                    span.set_attribute("metadata.generation_name", span.name)
+                    span.set_attribute("metadata.run_id", span.name.split(" ", 1)[0])
         except Exception:  # noqa: BLE001, S110 - never break the request path
             pass
 
