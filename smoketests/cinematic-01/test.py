@@ -62,10 +62,10 @@ def parse_model(text, schema):
     """Best-effort schema parse; None on malformed output.
 
     vLLM's unguided completions often wrap JSON in Markdown code fences, so a
-    fenced block is stripped before validation. The 1.2B-Thinking llama.cpp
-    build keeps its `<think>` block inline in `message.content` (unlike the
-    2.6B, whose reasoning lands in `reasoning_content`), so a closed think
-    block is dropped and an unclosed one counts as a miss.
+    fenced block is stripped before validation. The tested LFM2.5-2.6B splits
+    its reasoning into `reasoning_content` on llama.cpp; a closed inline
+    `</think>` block is still dropped defensively and an unclosed one counts
+    as a miss.
     """
     if not text:
         return None
