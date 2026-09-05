@@ -151,6 +151,35 @@ def chat(
     raise RuntimeError("unreachable")
 
 
+def echo_verdict(run_name, status, *, base_url=DEFAULT_BASE_URL, model=None):
+    """Fire a tiny verdict-echo call so the status lands in Phoenix as a named
+    trace (`<run_name> PASS|FAIL`); the gateway stamper derives the filterable
+    `metadata.test_status` attribute from the name token.
+
+    Best-effort: any failure prints a warning and returns None so status
+    stamping never breaks the smoke test.
+    """
+    name = f"{run_name} {status}"
+    try:
+        resp, _ = chat(
+            f"Echo back to me: TEST {status}",
+            base_url=base_url,
+            max_tokens=8,
+            reasoning={"enabled": False},
+            retries=1,
+            run_name=name,
+            model=model,
+        )
+    except Exception as exc:  # noqa: BLE001 - status stamping is best-effort
+        print(
+            f"warning: echo_verdict({name!r}) skipped: "
+            f"{type(exc).__name__}: {str(exc)[:160]}",
+            file=sys.stderr,
+        )
+        return None
+    return completion_text(resp)
+
+
 def completion_text(resp):
     """Primary answer text from a completion response."""
     try:

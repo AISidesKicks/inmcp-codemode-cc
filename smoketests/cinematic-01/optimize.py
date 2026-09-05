@@ -137,7 +137,7 @@ def run_gepa(val, run_id, out):
     common.set_judge_tag(f"{run_id} gepa judge")
     try:
         before, _ = common.score_val(
-            val, render_system(GEPA_SEED), f"{run_id} gepa before"
+            val, render_system(GEPA_SEED), f"{run_id} gepa before", echo=True
         )
 
         def task_lm(messages):
@@ -160,7 +160,7 @@ def run_gepa(val, run_id, out):
         )
         best = result.best_candidate["studio_prompt"]
         after, _ = common.score_val(
-            val, render_system(best), f"{run_id} gepa after"
+            val, render_system(best), f"{run_id} gepa after", echo=True
         )
         record(out, name, t0, before, after, best)
     except Exception as exc:  # noqa: BLE001 - findings, not aborts
@@ -180,7 +180,7 @@ def run_deepeval(val, run_id, out, algo_name, algorithm):
     common.set_judge_tag(f"{run_id} {name} judge")
     try:
         before, _ = common.score_val(
-            val, render_filled(common.SEED_PROMPT), f"{run_id} {name} before"
+            val, render_filled(common.SEED_PROMPT), f"{run_id} {name} before", echo=True
         )
         judge_llm = common.LocalLLM()
         optimizer = PromptOptimizer(
@@ -197,7 +197,7 @@ def run_deepeval(val, run_id, out, algo_name, algorithm):
         )
         template = common.ensure_placeholder(best_prompt.text_template)
         after, _ = common.score_val(
-            val, render_filled(template), f"{run_id} {name} after"
+            val, render_filled(template), f"{run_id} {name} after", echo=True
         )
         record(out, name, t0, before, after, template)
     except Exception as exc:  # noqa: BLE001 - findings, not aborts
@@ -233,7 +233,7 @@ def run_dspy(val, run_id, out, name, make_opt):
     common.set_judge_tag(f"{run_id} {name} judge")
     try:
         before, _ = common.score_val(
-            val, render_system(DSPY_SEED), f"{run_id} {name} before"
+            val, render_system(DSPY_SEED), f"{run_id} {name} before", echo=True
         )
         task_lm, judge_lm = common.dspy_lms(run_id, name)
         optimizer, compile_kwargs, teacher = make_opt(task_lm, judge_lm, StudioProg)
@@ -246,7 +246,7 @@ def run_dspy(val, run_id, out, name, make_opt):
             )
         instruction = compiled.predict.signature.instructions
         after, _ = common.score_val(
-            val, render_system(instruction), f"{run_id} {name} after"
+            val, render_system(instruction), f"{run_id} {name} after", echo=True
         )
         record(out, name, t0, before, after, instruction)
     except Exception as exc:  # noqa: BLE001 - findings, not aborts
@@ -364,7 +364,7 @@ def run_adalflow(val, run_id, out):
                 )
 
         before, _ = common.score_val(
-            val, render_filled(common.SEED_PROMPT), f"{run_id} {name} before"
+            val, render_filled(common.SEED_PROMPT), f"{run_id} {name} before", echo=True
         )
         judge_kwargs = {
             "model": common.JUDGE_MODEL,
@@ -449,6 +449,7 @@ def run_adalflow(val, run_id, out):
                 val,
                 render_filled(prompt_param.data),
                 f"{run_id} {name} proposal-{step_idx}",
+                echo=True,
             )
             optimizer.add_score_to_params(proposal_score)
             if proposal_score > best_score:
@@ -481,7 +482,7 @@ def run_refiner(val, run_id, out):
     common.set_judge_tag(f"{run_id} refiner judge")
     try:
         before, _ = common.score_val(
-            val, render_filled(common.SEED_PROMPT), f"{run_id} refiner before"
+            val, render_filled(common.SEED_PROMPT), f"{run_id} refiner before", echo=True
         )
         strategy = _PlainRefiner(
             llm_client=lambda system, user: common.judge_chat(f"{system}\n\n{user}")
@@ -489,7 +490,7 @@ def run_refiner(val, run_id, out):
         refined = strategy.refine(common.SEED_PROMPT)
         template = common.ensure_placeholder(refined)
         after, _ = common.score_val(
-            val, render_filled(template), f"{run_id} refiner after"
+            val, render_filled(template), f"{run_id} refiner after", echo=True
         )
         record(out, name, t0, before, after, template)
     except Exception as exc:  # noqa: BLE001 - findings, not aborts
@@ -552,7 +553,7 @@ def run_films_leg(corpus, name, entry, run_id):
     try:
         render = render_system(template) if kind == "system" else render_filled(template)
         score, rows = common.score_rows(
-            corpus, render, f"{run_id} {name} films", common.FILMS_MAX_TOKENS
+            corpus, render, f"{run_id} {name} films", common.FILMS_MAX_TOKENS, echo=True
         )
         stats = common.stats_snapshot()
         path = films_path(run_id, name)

@@ -348,6 +348,25 @@ def annotate_eval_links(args, scenario_rows):
         print(f"warning: span annotations skipped: {type(exc).__name__}: {str(exc)[:200]}")
 
 
+def echo_verdicts(args, scenario_rows):
+    """Best-effort Phoenix status stamping: one tiny echo call per scored row
+    (`<run_name> PASS|FAIL`), so the gateway stamper derives the filterable
+    `metadata.test_status` attribute. Never fails the run.
+    """
+    if args.no_echo:
+        return
+    fired = 0
+    for kind, rows in scenario_rows:
+        for row in rows:
+            run_name = row.get("run_name")
+            if not run_name:
+                continue
+            ok = row["metric_score"] == 1.0 if kind == "repeat" else row["correct"]
+            if llm.echo_verdict(run_name, "PASS" if ok else "FAIL") is not None:
+                fired += 1
+    print(f"echo verdicts: {fired} stamped")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run the cinematic-01 smoke test.")
     parser.add_argument("--csv", default=DEFAULT_CSV, help="dataset CSV path")
@@ -385,6 +404,11 @@ def main():
         "--no-annotate",
         action="store_true",
         help="skip Phoenix span annotations",
+    )
+    parser.add_argument(
+        "--no-echo",
+        action="store_true",
+        help="skip Phoenix verdict-echo status stamping",
     )
     args = parser.parse_args()
     llm.MODEL = args.model  # chat() defaults to MODEL when no model kwarg given
@@ -500,6 +524,7 @@ def main():
             )
     print(f"wrote {run_results} and {run_eval}")
     print(f"latest copies at {RESULTS_PATH} and {EVAL_PATH}")
+    echo_verdicts(args, annotate_rows)
     annotate_eval_links(args, annotate_rows)
 
 

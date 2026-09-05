@@ -255,21 +255,33 @@ def health_all():
         sys.exit("lab stack not fully healthy; aborting sweep")
 
 
-def score_rows(rows, render, run_name, max_tokens):
+def echo_score_rows(base_run_name, scored):
+    """Best-effort Phoenix status stamping: one tiny echo call per scored row
+    (`<base_run_name> <film> PASS|FAIL`), so the gateway stamper derives the
+    filterable `metadata.test_status` attribute. Never raises."""
+    for row in scored:
+        status = "PASS" if row["score"] == 1.0 else "FAIL"
+        llm.echo_verdict(f"{base_run_name} {row['film']}", status)
+
+
+def score_rows(rows, render, run_name, max_tokens, echo=False):
     """Mean score + per-row results; render(row) builds the full prompt and
-    max_tokens sets the per-call generation budget (sweep vs films legs)."""
+    max_tokens sets the per-call generation budget (sweep vs films legs).
+    echo=True additionally stamps per-row PASS/FAIL into Phoenix."""
     scored = []
     for row in rows:
         text = task_text(render(row), run_name=run_name, max_tokens=max_tokens)
         score, feedback = eval_text(row, text)
         scored.append({"film": row["film"], "score": score, "feedback": feedback})
     mean = sum(r["score"] for r in scored) / len(scored) if scored else 0.0
+    if echo:
+        echo_score_rows(run_name, scored)
     return mean, scored
 
 
-def score_val(val, render, run_name):
+def score_val(val, render, run_name, echo=False):
     """Micro 6/4 split leg at the sweep task budget (score_rows wrapper)."""
-    return score_rows(val, render, run_name, TASK_MAX_TOKENS)
+    return score_rows(val, render, run_name, TASK_MAX_TOKENS, echo=echo)
 
 
 def deepeval_goldens(rows):
