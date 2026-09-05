@@ -22,7 +22,14 @@ Ideally lab will also deliver screenshots of observability GUIs - so newcomers c
 
 Ideally we want also to ship BACKUP of observability data - so MCP part of lab can be executed without painful LLM runs.
 
-We also want to demonstrate ZTA (Zero Token Architecture) - create report strips in Python using SDK (installed)
+We also want to demonstrate ZTA (Zero Token Architecture) - report strips in Python, zero LLM tokens. Three direct interfaces against the running Phoenix (no MCP, no harness):
+
+- SDK: `arize-phoenix-client` (installed) - spans / traces / annotations / experiments helpers
+- REST API: plain `requests` against `http://localhost:6006/v1/...`
+- graphQL: POST `http://localhost:6006/graphql` - same endpoint the Phoenix UI itself uses; one query, one round trip, project stats included:
+  `{ projects(first: 3) { edges { node { name traceCount tokenCountTotal } } } }` (verified live on Phoenix 20.7); mutations too (`createProject`, `transferTracesToProject`, Phoenix 11.9+)
+
+Contrast & compare punchline: `text-to-graphql-mcp` is the anti-ZTA - an LLM writes the graphQL for you (gpt-4o via LangGraph). Same data, nonzero token bill.
 
 # The EDU AI LAB
 
@@ -150,9 +157,17 @@ https://arize.com/docs/phoenix/sdk-api-reference
 https://arize-phoenix.readthedocs.io/projects/client/
 https://arize-phoenix.readthedocs.io/projects/evals/
 
-## Arize Phoenix API
+## Arize Phoenix REST API
 https://arize.com/docs/phoenix/sdk-api-reference/rest-api/overview
 https://arize.com/docs/phoenix/sdk-api-reference/rest-api/api-reference
+https://github.com/AISidesKicks/tutorials_python
+
+## Arize Phoenix graphql
+https://arize.com/docs/ax/graphql-reference
+https://github.com/AISidesKicks/graphql-api-examples
+https://arize.com/blog/text-to-graphql-mcp-server/
+https://github.com/Arize-ai/text-to-graphql-mcp
+https://colab.research.google.com/github/Arize-ai/tutorials_python/blob/main/Arize_Tutorials/GraphQL/Create_Performance_Monitors_Use_Case.ipynb
 
 ## monty
 Special note: codemode uses monty (a Python derivative) https://github.com/pydantic/monty/
