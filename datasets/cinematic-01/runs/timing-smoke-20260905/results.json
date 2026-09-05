@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "name": "cinematic-01",
+    "test": "smoketests/cinematic-01/test.py",
+    "run_id": "timing-smoke-20260905",
+    "run_at": "2026-09-05T21:06:52+0200",
+    "model_alias": "local-thinking",
+    "base_url": "http://localhost:4000",
+    "dataset": "/home/roro/Workspaces/mcp-codemode-cc/datasets/cinematic-01/dataset.csv",
+    "sample": 2,
+    "year_tolerance": 2,
+    "reasoning": "enabled",
+    "workers": 4
+  },
+  "scenario_1_studio_recall": {
+    "score": "1/2",
+    "rows": [
+      {
+        "studio": "Marvel Studios",
+        "film": "Iron Man",
+        "guess": "Marvel Studios",
+        "answer": "{\"studios\": [\"Marvel Studios\"]}",
+        "correct": true,
+        "reasoning": "The user asks: \"Which studio produced the movie 'Iron Man'? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.\"\n\nWe need to output a JSON object with key \"studios\" and an array of studio names. The question: Which studio produced the movie \"Iron Man\"? There are multiple Iron Man movies (2008, 2010, etc). The original Iron Man (2008) was produced by Marvel Studios (in partnersh...",
+        "seconds": 3.336,
+        "usage": {
+          "prompt_tokens": 37,
+          "completion_tokens": 361,
+          "total_tokens": 398
+        }
+      },
+      {
+        "studio": "DC Studios",
+        "film": "The Dark Knight",
+        "guess": "Warner Bros. Pictures",
+        "answer": "{\"studios\": [\"Warner Bros. Pictures\", \"Legendary Pictures\"]}",
+        "correct": false,
+        "reasoning": "The user asks: \"Which studio produced the movie 'The Dark Knight'? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.\"\n\nWe need to output a JSON object with key \"studios\" and an array of strings containing the studio name(s). The question: Which studio produced the movie \"The Dark Knight\"? The film was produced by Warner Bros. Pictures (the main studio) and also by Legendary P...",
+        "seconds": 5.406,
+        "usage": {
+          "prompt_tokens": 38,
+          "completion_tokens": 629,
+          "total_tokens": 667
+        }
+      }
+    ]
+  },
+  "scenario_2_year_match": {
+    "score": "1/2",
+    "rows": [
+      {
+        "studio": "Marvel Studios",
+        "film": "Iron Man",
+        "expected": 1995,
+        "predicted": 2008,
+        "correct": false,
+        "answer": "{\"title\": \"Iron Man\", \"year\": 2008}",
+        "reasoning": "The user asks: \"In what year was the movie 'Iron Man' released? Reply with only a JSON object shaped like {\"title\": \"Title\", \"year\": 1995}.\"\n\nWe need to provide a JSON object with title and year. The correct release year for Iron Man (the first film) is 2008, not 1995. However the user explicitly says \"Reply with only a JSON object shaped like {\"title\": \"Title\", \"year\": 1995}\". That seems contradi...",
+        "seconds": 4.159,
+        "usage": {
+          "prompt_tokens": 44,
+          "completion_tokens": 835,
+          "total_tokens": 879
+        }
+      },
+      {
+        "studio": "DC Studios",
+        "film": "The Dark Knight",
+        "expected": 2008,
+        "predicted": 2008,
+        "correct": true,
+        "answer": "{\"title\": \"The Dark Knight\", \"year\": 2008}",
+        "reasoning": "The user asks: \"In what year was the movie 'The Dark Knight' released? Reply with only a JSON object shaped like {\"title\": \"Title\", \"year\": 1995}.\"\n\nWe need to output a JSON object with keys \"title\" and \"year\". The title should be \"The Dark Knight\". The year is the release year of that movie. The correct answer: The Dark Knight was released in 2008 (the film came out on July 18, 2008). So we must ...",
+        "seconds": 5.414,
+        "usage": {
+          "prompt_tokens": 45,
+          "completion_tokens": 246,
+          "total_tokens": 291
+        }
+      }
+    ]
+  },
+  "scenario_3_year_repeat": {
+    "score": "0.50",
+    "rows": [
+      {
+        "studio": "Marvel Studios",
+        "film": "Iron Man",
+        "expected": "1995",
+        "predicted": "2008",
+        "metric_score": 0.0,
+        "answer": "{\"title\": \"Iron Man\", \"year\": 2008}",
+        "reasoning": "The user asks: \"Please answer again: what year was the movie 'Iron Man' released? Reply with only a JSON object shaped like {\"title\": \"Title\", \"year\": 1995}.\"\n\nWe need to output a JSON object with keys \"title\" and \"year\". The title should be \"Iron Man\". The year is 2008 (the original Iron Man was released in 2008). However the user explicitly says \"shaped like {\"title\": \"Title\", \"year\": 1995}\". Th...",
+        "seconds": 2.488,
+        "usage": {
+          "prompt_tokens": 47,
+          "completion_tokens": 224,
+          "total_tokens": 271
+        }
+      },
+      {
+        "studio": "DC Studios",
+        "film": "The Dark Knight",
+        "expected": "2008",
+        "predicted": "2008",
+        "metric_score": 1.0,
+        "answer": "{\"title\": \"The Dark Knight\", \"year\": 2008}",
+        "reasoning": "The user asks: \"Please answer again: what year was the movie 'The Dark Knight' released? Reply with only a JSON object shaped like {\"title\": \"Title\", \"year\": 1995}.\"\n\nWe need to output a JSON object with keys \"title\" and \"year\". The title should be \"The Dark Knight\". The year is 2008 (the actual release year). However the user explicitly says \"shaped like {\"title\": \"Title\", \"year\": 1995}\". That se...",
+        "seconds": 1.32,
+        "usage": {
+          "prompt_tokens": 48,
+          "completion_tokens": 257,
+          "total_tokens": 305
+        }
+      }
+    ]
+  }
+}

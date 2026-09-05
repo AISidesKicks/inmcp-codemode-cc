@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "run_id": "echo-stamp-rerun-20260905",
+    "tested_model": "local-thinking",
+    "judge_model": "local-judge",
+    "task_max_tokens": 1536,
+    "films_max_tokens": 8192,
+    "seed_prompt": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+    "gepa_seed": "You will receive a movie title as the user message. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+    "dspy_seed": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+    "train_films": [
+      "The Princess and the Frog",
+      "The Fast & Furious 7",
+      "Dunkirk",
+      "Home Alone",
+      "The Big Lebowski",
+      "Singin' in the Rain"
+    ],
+    "val_films": [
+      "The Super Mario Bros. Movie",
+      "Justice League",
+      "Frozen",
+      "The Suicide Squad"
+    ]
+  },
+  "results": {
+    "refiner": {
+      "status": "ok",
+      "wall_seconds": 25.5,
+      "val_score_before": 0.25,
+      "val_score_after": 0.25,
+      "task_calls": 8,
+      "judge_calls": 1,
+      "render": "filled",
+      "best_prompt": "Which studio produced the movie \"{film}\"? Please respond with a JSON object formatted as {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "Which studio produced the movie \"{film}\"? Please respond with a JSON object formatted as {\"studios\": [\"Studio Name\"]}.",
+      "error": null
+    }
+  }
+}
