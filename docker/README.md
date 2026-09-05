@@ -129,16 +129,29 @@ whole budget on reflection/JSON text.
 ## Traces
 
 LiteLLM is wired for OpenTelemetry in `litellm_config.yaml`
-(`callbacks: ["otel"]`, `otel: true`) plus the `OTEL_EXPORTER_OTLP_*` env in
-the compose file — every request through the gateway lands as a trace in
-Phoenix: litellm → OTLP HTTP → `http://cmod-phoenix:6006/v1/traces` →
-Phoenix UI at http://localhost:6006. Calls that send
-`metadata.generation_name` (the sweep does via `extra_body={"metadata": ...}`)
-get it as the Phoenix span name — `<run_id> <opt> eval` for the tested model,
-`<run_id> <opt> judge` for the judge. Phoenix MCP is used directly at
-`http://localhost:6006/mcp` (not proxied through LiteLLM). Chatting via the
-llama-server WebUI on 8080 bypasses the gateway — no metering, no Phoenix
-trace; route via 4000 (`local-judge` / `local-thinking`) for that.
+(`callbacks: ["otel", "otel_kind_stamper.span_kind_stamper"]`, `otel: true`)
+plus the `OTEL_EXPORTER_OTLP_*` env in the compose file — every request
+through the gateway lands as a trace in Phoenix: litellm → OTLP HTTP →
+`http://cmod-phoenix:6006/v1/traces` → Phoenix UI at http://localhost:6006.
+Calls that send `metadata.generation_name` (the sweep does via
+`extra_body={"metadata": ...}`) get it as the Phoenix span name —
+`<run_id> <opt> eval` for the tested model, `<run_id> <opt> judge` for the
+judge. Phoenix MCP is used directly at `http://localhost:6006/mcp` (not
+proxied through LiteLLM). Chatting via the llama-server WebUI on 8080
+bypasses the gateway — no metering, no Phoenix trace; route via 4000
+(`local-judge` / `local-thinking`) for that.
+
+Span kinds: the v1 `otel` path leaves Phoenix's `span_kind` as UNKNOWN, so a
+tiny mounted callback (`otel_kind_stamper.py` → `/app/otel_kind_stamper.py`,
+second entry in `callbacks`) stamps OpenInference kinds onto the global
+TracerProvider on first request — CHAIN on the `Received Proxy Server
+Request` root, LLM on model-call spans (`litellm_request`,
+`raw_gen_ai_request`, generation_name-named ones), leaving internal child
+spans (`auth`, `proxy_pre_call`, `router`, `self`) untouched. The v2
+`arize_phoenix` callback stamps kinds natively but hard-names spans
+`chat <model>` (probed 2026-09-05: `generation_name` is neither promoted nor
+kept as an attribute), which the sweep tooling and Phoenix checks rely on —
+hence v1 + stamper.
 
 ## Text-to-GraphQL MCP (anti-ZTA demo)
 
