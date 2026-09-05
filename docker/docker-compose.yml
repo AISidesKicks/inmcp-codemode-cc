@@ -92,6 +92,7 @@ services:
       OTEL_SERVICE_NAME: cmod-litellm
     volumes:
       - ./litellm_config.yaml:/app/config.yaml:ro
+      - ./otel_kind_stamper.py:/app/otel_kind_stamper.py:ro
     ports:
       - "4000:4000"
     depends_on:
