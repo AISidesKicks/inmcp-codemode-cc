@@ -157,13 +157,21 @@ always sends a temperature), and `GRAPHQL_ENDPOINT` points at Phoenix's own
 container layer. Every generation attempt lands as a Phoenix trace, so the
 token bill of the anti-ZTA path is visible in the UI.
 
-Lab status (2026-09-05, granite-4.0-h-tiny as generator): the pipeline works
-end-to-end (introspection → options → construct → validate → optimize ×3 →
-execute), but the judge oscillates between near-miss queries — it produced the
-right `projects(first: 3) { edges { node { ... } } }` shape once, then invented
-invalid `TimeRange` args or skipped `edges`/`node` on retries. Model-bound, not
-stack-bound (the original demo runs on gpt-4o). Registered in `opencode.json`
-as the `text-to-graphql` remote MCP (`http://localhost:8000/mcp`, 120s timeout).
+Lab status (2026-09-05, granite-4.0-h-tiny as generator): pipeline verified
+end-to-end from the harness — with the connection pattern named in the prompt
+("Traverse the connection pattern exactly: projects { edges { node { ... } } }"),
+the generator produced a valid `projects(first: 3) { edges { node { name
+traceCount } } }` and `execute_graphql_query` returned SUCCESS (project
+`default`, traceCount 1754 at test time) plus a data_grid viz. Without that
+hint granite doesn't rediscover `edges`/`node` from introspection alone — it
+invented invalid `TimeRange` args or dropped the connection on retries.
+Model-bound, not stack-bound (the original demo runs on gpt-4o); prompt shape
+is the lever, `MODEL_NAME=local-thinking` is the next experiment. Upstream
+quirk: the `validate_graphql_query` MCP tool crashes on `main`
+(`GraphQLAgent.validate_query() missing 1 required positional argument:
+'session_id'`). Full walkthrough: `eduailab/text-to-graphql.md`. Registered in
+`opencode.json` as the `text-to-graphql` remote MCP (`http://localhost:8000/mcp`,
+120s timeout).
 
 ## Lean choices (deliberate)
 
