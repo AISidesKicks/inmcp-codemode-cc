@@ -151,7 +151,11 @@ spans (`auth`, `proxy_pre_call`, `router`, `self`) untouched. Custom-named
 (generation_name-tagged) model spans also get `metadata.generation_name` plus
 `metadata.run_id` (first whitespace token) as real attributes — filterable
 natively in Phoenix UI and via MCP `getSpans` `attribute: ["metadata.run_id:<tag>"]`;
-default-named spans (`litellm_request`, `raw_gen_ai_request`) are excluded. The v2
+default-named spans (`litellm_request`, `raw_gen_ai_request`) are excluded. Names
+carrying an uppercase `PASS`/`FAIL` token also get a filterable
+`metadata.test_status` attribute — that is how the smoketests stamp per-scenario
+verdicts (tiny "echo back to me: TEST PASS|FAIL" calls, see
+`smoketests/cinematic-01/llm.py echo_verdict`). The v2
 `arize_phoenix` callback stamps kinds natively but hard-names spans
 `chat <model>` (probed 2026-09-05: `generation_name` is neither promoted nor
 kept as an attribute), which the sweep tooling and Phoenix checks rely on —
