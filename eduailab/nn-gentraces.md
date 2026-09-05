@@ -3,9 +3,9 @@
 Howto for a lab user driving an AI harness (Kilo/opencode MCP) who wants a
 fresh, attributable set of Phoenix execution traces: one `optimize.py` run
 sweeps 9 prompt optimizers over the cinematic-01 studio-recall task and lands
-**~3.4k run-labelled spans** (task evals + judge reflections + films corpus
-legs) in the Phoenix `default` project — every span carries your `--run-id`
-prefix, so the whole set stays one query away.
+**~10k run-labelled spans** (task evals + judge reflections + verdict-echo
+stamps + films corpus legs) in the Phoenix `default` project — every span
+carries your `--run-id` prefix, so the whole set stays one query away.
 
 Time warning up front: the full run takes **~2.5 h wall** — ~19 min sweep +
 9 films legs of ~10.5–17.5 min each (154 films at the 8192-token reasoning
@@ -113,6 +113,38 @@ micro-split before/after columns as a ranking — 4 val films is noisy; the
 corpus legs are the honest comparison, and there the spread is tight:
 0.338–0.377 with dspy-bootstrap on top. Full table + notes live in
 [design.md "Optimizer runs"](../smoketests/cinematic-01/design.md).
+
+## Fresh rerun (opt-scale-20260905, echo stamping on)
+
+Second full run (2026-09-05) after the verdict-echo stamping fix — INTENT §3
+re-executed end-to-end: naive `test.py` at 154 films × 3 scenarios (8192
+budget) + all 10 optimizers (the 9 `--optimizer all` legs plus `refiner` as
+explicit opt-in), every films leg the full 154-film corpus. Naive scored
+recall 51/154, year match 121/154, repeat ExactMatch 0.79 (FAIL vs 0.8) and
+stamped **462 echo verdicts**; per-optimizer:
+
+| optimizer        | sweep before → after | films | task | judge | sweep s | films s |
+|------------------|---------------------:|------:|-----:|------:|--------:|--------:|
+| gepa             | 0.00 → 0.00          | 0.338 | 28   | 2     | 115.0   | 713.0   |
+| depeval-gepa     | 0.00 → 0.00          | 0.338 | 34   | 4     | 124.8   | 631.1   |
+| depeval-miprov2  | 0.25 → 0.00          | 0.299 | 25   | 4     | 102.1   | 873.6   |
+| depeval-copro    | 0.25 → 0.00          | 0.351 | 18   | 1     | 69.2    | 604.2   |
+| dspy-bootstrap   | 0.00 → 0.25          | 0.344 | 8    | 1     | 41.0    | 856.0   |
+| depeval-simba    | 0.00 → 0.25          | 0.403 | 68   | 1     | 241.9   | 492.9   |
+| dspy-simba       | 0.00 → 0.00          | 0.338 | 89   | 1     | 253.1   | 879.4   |
+| dspy-miprov2     | 0.25 → 0.00          | 0.390 | 26   | 8     | 103.7   | 873.7   |
+| adalflow-tgd     | 0.25 → 0.25          | 0.344 | 24   | 14    | 105.5   | 588.4   |
+| refiner          | 0.00 → 0.00          | 0.364 | 8    | 1     | 24.2    | 571.6   |
+
+Totals: sweep legs 24.2–253.1 s ≈ **~19 min**; films legs 492.9–879.4 s
+(10 × 154 task calls, zero judge calls) ≈ **~1h55m**. depeval-simba tops the
+corpus at 0.403 (0.299–0.403 spread — wider than the 0904 run). Verified via
+Phoenix MCP: all 10 films names at 154 films ×2, judge spans granite-modelled
+(adalflow-tgd judge calls stay untagged — BackwardEngine path), films spans
+strictly on the tested model, `metadata.test_status` PASS/FAIL stamped on
+echo spans (echo calls ride `local-judge` at max_tokens=8 by design). Note:
+the gateway exports every call **twice** (same as the 0904 healthy-run
+numbers), so raw run-labelled span counts are 2× the unique calls.
 
 ## Verify your traces
 
