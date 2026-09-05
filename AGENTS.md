@@ -27,7 +27,7 @@ The tone for documenting lab steps is informal.
 - `README.md` - main documentation
 - `docs/` - landing page (`index.html`), GitHub Pages `CNAME` - web home for this project.
 - `docker` - minimal lab stack (llama.cpp + LiteLLM + Phoenix), see docker/README.md
-- `datasets` - cinematic-01 micro dataset inputs (mirrored from localai.isnot.cheap)
+- `datasets` - cinematic-01 micro dataset inputs (mirrored from localai.isnot.cheap); `runs/` artifacts are lab history — commit them together with the lab work
 - `LICENSE`
 - `eduailab` - lab guide as 01- 02- 03- markdown docs
 - `setup` - setup.md instructions and scripts
