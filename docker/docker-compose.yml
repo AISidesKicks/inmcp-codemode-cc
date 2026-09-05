@@ -131,6 +131,33 @@ services:
     networks:
       - cmod-net
 
+  cmod-text-to-graphql:
+    build: ./text-to-graphql
+    container_name: cmod-text-to-graphql
+    profiles: ["lab"]
+    command: ["python", "-c", "from text_to_graphql_mcp.mcp_server import mcp; mcp.run(transport='http', host='0.0.0.0', port=8000)"]
+    environment:
+      OPENAI_BASE_URL: http://cmod-litellm:4000/v1
+      OPENAI_API_KEY: ${LITELLM_MASTER_KEY:-sk-cmod-lab-81f4e2d7c9a5-master-key}
+      MODEL_NAME: local-judge
+      MODEL_TEMPERATURE: "0"
+      GRAPHQL_ENDPOINT: http://cmod-phoenix:6006/graphql
+    ports:
+      - "8000:8000"
+    depends_on:
+      cmod-litellm:
+        condition: service_healthy
+      cmod-phoenix:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import socket; socket.create_connection(('localhost', 8000), 3).close()\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    networks:
+      - cmod-net
+
 networks:
   cmod-net:
     name: cmod-net

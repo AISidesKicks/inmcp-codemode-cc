@@ -1,7 +1,7 @@
 # Minimal docker lab stack
 
-Lean 4-service lab env: two llama.cpp servers (tested model + judge) +
-LiteLLM gateway + Arize Phoenix.
+Lean 5-service lab env: two llama.cpp servers (tested model + judge) +
+LiteLLM gateway + Arize Phoenix + text-to-graphql MCP.
 All resources carry the `cmod-` prefix (project rule). No Postgres, no Redis,
 no cache, no exporters, no monitoring sidecars — Phoenix falls back to SQLite
 and LiteLLM keeps everything in-memory.
@@ -88,6 +88,7 @@ that; see Traces.
 | 8080 | llama.cpp (judge)  | API + WebUI at `/`, granite-4.0-h-tiny Q4_K_XL, 64K ctx, single slot, `lab` profile |
 | 8081 | llama.cpp (tested) | API + WebUI at `/`, 2.6B Q4_K_M, 32K ctx, single slot, `lab` profile |
 | 6006 | Phoenix            | UI + OTLP HTTP (`/v1/traces`) + MCP (`/mcp`), `lab` + `phoenix` profiles |
+| 8000 | text-to-graphql    | streamable HTTP MCP (`/mcp`), generator = judge via gateway, `lab` profile |
 
 Heads-up: the pixi env also ships a native `litellm` package — a native
 `litellm --port 4000` run clashes with the container port, and a native
@@ -138,6 +139,31 @@ get it as the Phoenix span name — `<run_id> <opt> eval` for the tested model,
 `http://localhost:6006/mcp` (not proxied through LiteLLM). Chatting via the
 llama-server WebUI on 8080 bypasses the gateway — no metering, no Phoenix
 trace; route via 4000 (`local-judge` / `local-thinking`) for that.
+
+## Text-to-GraphQL MCP (anti-ZTA demo)
+
+Fifth service `cmod-text-to-graphql` (`lab` profile): Arize's
+[text-to-graphql-mcp](https://github.com/Arize-ai/text-to-graphql-mcp) — an LLM
+writes Phoenix GraphQL for you, the anti-ZTA counterpart to the SDK/REST/graphQL
+report strips. Built from GitHub `main` (the PyPI 0.1.3 wheel still imports the
+dead `langchain.prompts`); the compose `command` flips FastMCP from stdio to
+streamable HTTP on :8000 (`/mcp`) — no code changes.
+
+Wiring: the generator LLM is the judge through the gateway
+(`MODEL_NAME=local-judge`, `OPENAI_BASE_URL` → LiteLLM :4000, `MODEL_TEMPERATURE=0`
+— the one deliberate break of the engine-only sampling rule, a LangGraph agent
+always sends a temperature), and `GRAPHQL_ENDPOINT` points at Phoenix's own
+`http://cmod-phoenix:6006/graphql` — introspected on first call, cached in the
+container layer. Every generation attempt lands as a Phoenix trace, so the
+token bill of the anti-ZTA path is visible in the UI.
+
+Lab status (2026-09-05, granite-4.0-h-tiny as generator): the pipeline works
+end-to-end (introspection → options → construct → validate → optimize ×3 →
+execute), but the judge oscillates between near-miss queries — it produced the
+right `projects(first: 3) { edges { node { ... } } }` shape once, then invented
+invalid `TimeRange` args or skipped `edges`/`node` on retries. Model-bound, not
+stack-bound (the original demo runs on gpt-4o). Registered in `opencode.json`
+as the `text-to-graphql` remote MCP (`http://localhost:8000/mcp`, 120s timeout).
 
 ## Lean choices (deliberate)
 
