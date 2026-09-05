@@ -104,7 +104,9 @@ sweep results + best prompts + films summaries) and one films json per
 optimizer (`<run-id>-<opt>-films.json`, meta + per-film score/feedback).
 Resume-safe: `--optimizer all` skips optimizers already recorded in the out
 json (sweep) or already carrying a films entry (films legs); an explicit
-`--optimizer <name>` always re-runs.
+`--optimizer <name>` always re-runs. For the user-facing howto (prereqs,
+per-optimizer one-liners, trace verification, resume) see
+[eduailab/nn-gentraces.md](../../eduailab/nn-gentraces.md).
 
 ### opt-scale-20260904 results
 
