@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "run_id": "opt-probe-20260904",
+    "optimizer": "refiner",
+    "render": "filled",
+    "max_tokens": 8192,
+    "run_name": "opt-probe-20260904 refiner films",
+    "tested_model": "local-thinking",
+    "judge_model": "local-judge"
+  },
+  "score": 1.0,
+  "rows": [
+    {
+      "film": "Iron Man",
+      "score": 1.0,
+      "feedback": "correct"
+    }
+  ]
+}

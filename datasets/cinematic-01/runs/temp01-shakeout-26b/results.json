@@ -1,0 +1,192 @@
+{
+  "meta": {
+    "name": "cinematic-01",
+    "test": "smoketests/cinematic-01/test.py",
+    "run_id": "temp01-shakeout-26b",
+    "run_at": "2026-09-04T16:50:39+0200",
+    "model_alias": "local-thinking",
+    "cache_mode": "1level",
+    "base_url": "http://localhost:4000",
+    "dataset": "/home/roro/Workspaces/mcp-codemode-cc/datasets/cinematic-01/dataset.csv",
+    "sample": 2,
+    "year_tolerance": 2,
+    "reasoning": "enabled",
+    "workers": 2
+  },
+  "scenario_1_studio_recall": {
+    "score": "1/2",
+    "rows": [
+      {
+        "studio": "Marvel Studios",
+        "film": "Iron Man",
+        "guess": "Marvel Studios",
+        "answer": "{\"studios\": [\"Marvel Studios\"]}",
+        "correct": true,
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": "The user asks: \"Which studio produced the movie 'Iron Man'? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.\"\n\nWe need to output a JSON object with key \"studios\" and an array of studio names. The question: Which studio produced the movie \"Iron Man\"? There are multiple Iron Man movies (2008, 2010, etc). The original Iron Man (2008) was produced by Marvel Studios (in partnersh...",
+        "seconds": 10.941,
+        "usage": {
+          "prompt_tokens": 37,
+          "completion_tokens": 462,
+          "total_tokens": 499
+        }
+      },
+      {
+        "studio": "DC Studios",
+        "film": "The Dark Knight",
+        "guess": "Warner Bros. Pictures",
+        "answer": "{\"studios\": [\"Warner Bros. Pictures\"]}",
+        "correct": false,
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": "The user asks: \"Please answer again: Which studio produced the movie 'The Dark Knight'? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.\"\n\nWe need to output a JSON object with key \"studios\" and an array of studio names. The question: which studio produced the movie \"The Dark Knight\"? The film was produced by Warner Bros. Pictures (the main studio). Also, it's often credited ...",
+        "seconds": 11.799,
+        "usage": {
+          "prompt_tokens": 42,
+          "completion_tokens": 160,
+          "total_tokens": 202
+        }
+      }
+    ]
+  },
+  "scenario_2_year_match": {
+    "score": "1/2",
+    "rows": [
+      {
+        "studio": "Marvel Studios",
+        "film": "Iron Man",
+        "expected": 1995,
+        "predicted": 2008,
+        "correct": false,
+        "answer": "{\"title\": \"Iron Man\", \"year\": 2008}",
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": "The user asks: \"In what year was the movie 'Iron Man' released? Reply with only a JSON object shaped like {\"title\": \"Title\", \"year\": 1995}.\"\n\nWe need to provide a JSON object with keys \"title\" and \"year\". The title should be \"Iron Man\". The year is the release year of Iron Man. However, note that there are multiple Iron Man movies: the first one (2008) starring Robert Downey Jr., titled \"Iron Man\"...",
+        "seconds": 5.3,
+        "usage": {
+          "prompt_tokens": 44,
+          "completion_tokens": 675,
+          "total_tokens": 719
+        }
+      },
+      {
+        "studio": "DC Studios",
+        "film": "The Dark Knight",
+        "expected": 2008,
+        "predicted": 2008,
+        "correct": true,
+        "answer": "{\"title\": \"The Dark Knight\", \"year\": 2008}",
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": "The user asks: \"In what year was the movie 'The Dark Knight' released? Reply with only a JSON object shaped like {\"title\": \"Title\", \"year\": 1995}.\"\n\nWe need to output a JSON object with keys \"title\" and \"year\". The title should be \"The Dark Knight\". The year is 2008 (the actual release year). However the user explicitly says \"Reply with only a JSON object shaped like {\"title\": \"Title\", \"year\": 199...",
+        "seconds": 1.678,
+        "usage": {
+          "prompt_tokens": 45,
+          "completion_tokens": 308,
+          "total_tokens": 353
+        }
+      }
+    ]
+  },
+  "scenario_3_year_repeat": {
+    "score": "0.50",
+    "rows": [
+      {
+        "studio": "Marvel Studios",
+        "film": "Iron Man",
+        "expected": "1995",
+        "predicted": "2008",
+        "metric_score": 0.0,
+        "answer": "{\n  \"title\": \"Iron Man\",\n  \"year\": 2008\n}",
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": "The user asks: \"Please answer again: what year was the movie 'Iron Man' released? Reply with only a JSON object shaped like {\"title\": \"Title\", \"year\": 1995}.\"\n\nWe need to output a JSON object with keys \"title\" and \"year\". The title should be \"Iron Man\". The year is 2008 (the original Iron Man was released in 2008). However the user explicitly says \"shaped like {\"title\": \"Title\", \"year\": 1995}\". Th...",
+        "seconds": 2.009,
+        "usage": {
+          "prompt_tokens": 47,
+          "completion_tokens": 367,
+          "total_tokens": 414
+        }
+      },
+      {
+        "studio": "DC Studios",
+        "film": "The Dark Knight",
+        "expected": "2008",
+        "predicted": "2008",
+        "metric_score": 1.0,
+        "answer": "{\n  \"title\": \"The Dark Knight\",\n  \"year\": 2008\n}",
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": "The user is asking for the release year of the movie \"The Dark Knight\". I need to provide this information in a specific JSON format: {\"title\": \"Title\", \"year\": 1995}. Wait, but The Dark Knight was released in 2008, not 1995. The user's example shows \"year\": 1995, which is incorrect for The Dark Knight. However, the instruction says to reply with only a JSON object shaped like that. But if I put t...",
+        "seconds": 4.693,
+        "usage": {
+          "prompt_tokens": 48,
+          "completion_tokens": 495,
+          "total_tokens": 543
+        }
+      }
+    ]
+  },
+  "cache_demo": {
+    "rows": [
+      {
+        "mode": "1level",
+        "call": "base 1",
+        "observed_regime": "litellm-redis-miss",
+        "prompt": "Give me a short summary about Marvel Cinematic Universe. - 1",
+        "base_only": false,
+        "reasoning": "The user wants a short summary of the Marvel Cinematic Universe (MCU).\nThe constraint is \"- 1\", which likely means \"one paragraph\" or \"a single point/list item\". Given the phrasing \"short summary... - 1\", it's most probable they want a concise, single-paragraph response.\n\nKey elements to include in an MCU summary:\n- Origin: Started with *Iron Man* (2008).\n- Scope: A shared universe connecting mult...",
+        "seconds": 3.6456,
+        "usage": {
+          "prompt_tokens": 24,
+          "completion_tokens": 686,
+          "total_tokens": 710
+        },
+        "cached_tokens": 0,
+        "timings": {
+          "prompt_n": 24,
+          "cache_n": 0,
+          "predicted_n": 686
+        },
+        "content_head": "The Marvel Cinematic Universe (MCU) is a shared cinematic universe created by Marvel Studios that began in 2008 with *Iron Man*. It connects a series of interco"
+      },
+      {
+        "mode": "1level",
+        "call": "base 2",
+        "observed_regime": "litellm-redis-miss",
+        "prompt": "Give me a short summary about Marvel Cinematic Universe. - 2",
+        "base_only": false,
+        "reasoning": "The user wants a short summary of the Marvel Cinematic Universe (MCU).\nThere is a constraint: \"- 2\". This likely means they want two bullet points or just two sentences/paragraphs. Given the phrasing \"short summary... - 2\", it's most probable that they want exactly two distinct sections or points covering the topic.\n\nPlan:\n1.  Identify the core subject: Marvel Cinematic Universe (MCU).\n2.  Draft a...",
+        "seconds": 4.0772,
+        "usage": {
+          "prompt_tokens": 24,
+          "completion_tokens": 764,
+          "total_tokens": 788
+        },
+        "cached_tokens": 0,
+        "timings": {
+          "prompt_n": 24,
+          "cache_n": 0,
+          "predicted_n": 764
+        },
+        "content_head": "Here is a short summary of the Marvel Cinematic Universe (MCU):\n\n*   **Origin and Scope:** The MCU is a shared cinematic continuity created by Marvel Studios th"
+      },
+      {
+        "mode": "1level",
+        "call": "base 3",
+        "observed_regime": "litellm-redis-miss",
+        "prompt": "Give me a short summary about Marvel Cinematic Universe. - 3",
+        "base_only": false,
+        "reasoning": "The user wants a short summary of the Marvel Cinematic Universe (MCU).\nThe constraint is \"3\". This likely means they want three bullet points or three sentences/paragraphs summarizing it.\n\n**Key elements to include:**\n1.  **Origin:** Started with *Iron Man* (2008), created by Kevin Feige.\n2.  **Scope:** It's a shared universe connecting multiple franchises (Spider-Man, Doctor Strange, etc.).\n3.  *...",
+        "seconds": 3.8568,
+        "usage": {
+          "prompt_tokens": 24,
+          "completion_tokens": 721,
+          "total_tokens": 745
+        },
+        "cached_tokens": 0,
+        "timings": {
+          "prompt_n": 24,
+          "cache_n": 0,
+          "predicted_n": 721
+        },
+        "content_head": "Here is a short summary of the Marvel Cinematic Universe (MCU) in three points:\n\n1.  **Origin:** The MCU launched in 2008 with *Iron Man*, created by Kevin Feig"
+      }
+    ]
+  }
+}

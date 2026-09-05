@@ -1,0 +1,192 @@
+{
+  "meta": {
+    "name": "cinematic-01",
+    "test": "smoketests/cinematic-01/test.py",
+    "run_id": "runname-eval-check",
+    "run_at": "2026-09-04T12:54:42+0200",
+    "model_alias": "local-gguf",
+    "cache_mode": "1level",
+    "base_url": "http://localhost:4000",
+    "dataset": "/home/roro/Workspaces/mcp-codemode-cc/datasets/cinematic-01/dataset.csv",
+    "sample": 2,
+    "year_tolerance": 2,
+    "reasoning": "disabled",
+    "workers": 2
+  },
+  "scenario_1_studio_recall": {
+    "score": "1/2",
+    "rows": [
+      {
+        "studio": "Marvel Studios",
+        "film": "Iron Man",
+        "guess": "Marvel Studios",
+        "answer": "{\n  \"studios\": [\n    \"Marvel Studios\"\n  ]\n}",
+        "correct": true,
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": null,
+        "seconds": 1.259,
+        "usage": {
+          "prompt_tokens": 37,
+          "completion_tokens": 18,
+          "total_tokens": 55
+        }
+      },
+      {
+        "studio": "DC Studios",
+        "film": "The Dark Knight",
+        "guess": "Warner Bros.",
+        "answer": "{\n  \"studios\": [\n    \"Warner Bros.\"\n  ]\n}",
+        "correct": false,
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": null,
+        "seconds": 1.253,
+        "usage": {
+          "prompt_tokens": 38,
+          "completion_tokens": 18,
+          "total_tokens": 56
+        }
+      }
+    ]
+  },
+  "scenario_2_year_match": {
+    "score": "1/2",
+    "rows": [
+      {
+        "studio": "Marvel Studios",
+        "film": "Iron Man",
+        "expected": 1995,
+        "predicted": 2008,
+        "correct": false,
+        "answer": "{\"title\": \"Iron Man\", \"year\": 2008}",
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": null,
+        "seconds": 0.281,
+        "usage": {
+          "prompt_tokens": 44,
+          "completion_tokens": 16,
+          "total_tokens": 60
+        }
+      },
+      {
+        "studio": "DC Studios",
+        "film": "The Dark Knight",
+        "expected": 2008,
+        "predicted": 2008,
+        "correct": true,
+        "answer": "{ \"title\": \"The Dark Knight\", \"year\": 2008 }",
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": null,
+        "seconds": 0.156,
+        "usage": {
+          "prompt_tokens": 45,
+          "completion_tokens": 18,
+          "total_tokens": 63
+        }
+      }
+    ]
+  },
+  "scenario_3_year_repeat": {
+    "score": "0.50",
+    "rows": [
+      {
+        "studio": "Marvel Studios",
+        "film": "Iron Man",
+        "expected": "1995",
+        "predicted": "2008",
+        "metric_score": 0.0,
+        "answer": "{\n  \"title\": \"Iron Man\",\n  \"year\": 2008\n}",
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": null,
+        "seconds": 0.328,
+        "usage": {
+          "prompt_tokens": 47,
+          "completion_tokens": 20,
+          "total_tokens": 67
+        }
+      },
+      {
+        "studio": "DC Studios",
+        "film": "The Dark Knight",
+        "expected": "2008",
+        "predicted": "2008",
+        "metric_score": 1.0,
+        "answer": "{\n  \"title\": \"The Dark Knight\",\n  \"year\": 2008\n}",
+        "cache_regime": "litellm-redis-miss",
+        "reasoning": null,
+        "seconds": 0.176,
+        "usage": {
+          "prompt_tokens": 48,
+          "completion_tokens": 21,
+          "total_tokens": 69
+        }
+      }
+    ]
+  },
+  "cache_demo": {
+    "rows": [
+      {
+        "mode": "1level",
+        "call": "base 1",
+        "observed_regime": "litellm-redis-miss",
+        "prompt": "Give me a short summary about Marvel Cinematic Universe. - 1",
+        "base_only": false,
+        "reasoning": null,
+        "seconds": 1.0697,
+        "usage": {
+          "prompt_tokens": 24,
+          "completion_tokens": 151,
+          "total_tokens": 175
+        },
+        "cached_tokens": 0,
+        "timings": {
+          "prompt_n": 24,
+          "cache_n": 0,
+          "predicted_n": 151
+        },
+        "content_head": "The Marvel Cinematic Universe (MCU) is a shared cinematic franchise that began with *Iron Man* (2008) and has since expanded into 27+ films and numerous TV show"
+      },
+      {
+        "mode": "1level",
+        "call": "base 2",
+        "observed_regime": "litellm-redis-miss",
+        "prompt": "Give me a short summary about Marvel Cinematic Universe. - 2",
+        "base_only": false,
+        "reasoning": null,
+        "seconds": 1.4984,
+        "usage": {
+          "prompt_tokens": 24,
+          "completion_tokens": 214,
+          "total_tokens": 238
+        },
+        "cached_tokens": 0,
+        "timings": {
+          "prompt_n": 24,
+          "cache_n": 0,
+          "predicted_n": 214
+        },
+        "content_head": "The Marvel Cinematic Universe (MCU) is a shared cinematic franchise that began with *Iron Man* (2008) and has expanded into 27+ films and numerous TV shows. It "
+      },
+      {
+        "mode": "1level",
+        "call": "base 3",
+        "observed_regime": "litellm-redis-miss",
+        "prompt": "Give me a short summary about Marvel Cinematic Universe. - 3",
+        "base_only": false,
+        "reasoning": null,
+        "seconds": 1.0569,
+        "usage": {
+          "prompt_tokens": 24,
+          "completion_tokens": 150,
+          "total_tokens": 174
+        },
+        "cached_tokens": 0,
+        "timings": {
+          "prompt_n": 24,
+          "cache_n": 0,
+          "predicted_n": 150
+        },
+        "content_head": "The Marvel Cinematic Universe (MCU) is a shared cinematic franchise that began with *Iron Man* (2008) and has since expanded into 34+ films and numerous TV seri"
+      }
+    ]
+  }
+}

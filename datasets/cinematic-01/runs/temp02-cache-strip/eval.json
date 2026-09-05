@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "name": "cinematic-01",
+    "test": "smoketests/cinematic-01/test.py",
+    "run_id": "temp02-cache-strip",
+    "run_at": "2026-09-04T19:38:33+0200",
+    "model_alias": "local-thinking",
+    "base_url": "http://localhost:4000",
+    "dataset": "/home/roro/Workspaces/mcp-codemode-cc/datasets/cinematic-01/dataset.csv",
+    "sample": 2,
+    "year_tolerance": 2,
+    "reasoning": "enabled",
+    "workers": 2
+  },
+  "scenario_1_studio_recall": {
+    "metric": "manual exact match",
+    "score": "1/2",
+    "fraction": 0.5
+  },
+  "scenario_2_year_match": {
+    "metric": "abs diff <= 2",
+    "score": "1/2",
+    "fraction": 0.5
+  },
+  "scenario_3_year_repeat": {
+    "metric": "deepeval.ExactMatchMetric",
+    "threshold": 0.8,
+    "score": 0.5,
+    "passed": false
+  }
+}
