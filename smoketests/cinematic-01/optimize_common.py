@@ -243,7 +243,7 @@ def gepa_evaluator(data, response):
 
 
 def health_all():
-    """Gateway + both llama servers; exits the process on any failure."""
+    """Both llama servers; exits the process on any failure."""
     checks = {
         "judge-8080": llm.health(llm.JUDGE_URL + "/health"),
         "tested-8081": llm.health(llm.THINKING_URL + "/health"),

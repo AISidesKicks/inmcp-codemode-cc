@@ -88,8 +88,13 @@ same AGENT turn shape, with the echoed word as output.value (tiny 8-token
 budgets often return empty model text). Sessions are per **test**: test.py
 uses one Phoenix Session per test call (session id = the test's span name
 `<run_id> recall <film>` etc., two turns — the test and its verdict echo);
-generate.py groups a run into `cinematic-01-generate`; optimize.py groups a
-run under its run-id. The Sessions row's first-input/last-output/user
+generate.py groups a run into `cinematic-01-generate`; optimize.py scores
+per row the same way — one session per scored film
+(`<run_id> <opt> films <film>`, the scored turn + its echo turn), while the
+dspy/deepeval/adalflow internals emit no client spans. Each scored row's
+AGENT turn root additionally carries an `eval` ok/miss span annotation
+(posted via `phoenix.client` after a `llm.flush()`, so failed rows stay
+score-searchable). The Sessions row's first-input/last-output/user
 resolve from the AGENT roots.
 
 The legacy gateway metering path (LiteLLM otel callback → project
@@ -113,7 +118,8 @@ by normalized exact match (`eval_text`). Two stages (`--stage`, default all):
   opt-in only, never part of `all`.
 - **films** — every best prompt over the corpus slice (`--csv`, `--films N`,
   0 = all rows) at `FILMS_MAX_TOKENS = 8192` (INTENT §3 films budget), one
-  Phoenix span per film.
+  AGENT turn root per film (`<run_id> <opt> films <film>`) carrying an
+  `eval` ok/miss span annotation.
 
 Serial by construction: both engines run `--parallel 1`, so the films legs
 score strictly sequentially — no worker flag here, wall time is the accepted
@@ -127,7 +133,8 @@ Each result records the `render` kind its best prompt needs for the films leg
 `filled` for `{film}` placeholder templates). Artifacts per run (`--run-id`
 required): the out json (`datasets/cinematic-01/runs/<run-id>-optimize.json`,
 sweep results + best prompts + films summaries) and one films json per
-optimizer (`<run-id>-<opt>-films.json`, meta + per-film score/feedback).
+optimizer (`<run-id>-<opt>-films.json`, meta + per-film score/feedback with
+the row's turn-root `span_id`).
 Resume-safe: `--optimizer all` skips optimizers already recorded in the out
 json (sweep) or already carrying a films entry (films legs); an explicit
 `--optimizer <name>` always re-runs. For the user-facing howto (prereqs,
@@ -194,7 +201,7 @@ tools that read the old fixed paths keep working.
   carries its scenario fields (`guess`, `expected`, `predicted`,
   `metric_score`) plus `answer`, `correct`, `reasoning` (thinking snippet),
   `seconds` and `usage` (`prompt_tokens`/`completion_tokens`/`total_tokens`).
-  `run_name`/`resp_id` exist only in-process for the Phoenix span annotation
+  `run_name`/`span_id` exist only in-process for the Phoenix span annotation
   and are popped before the artifacts are written.
 - `eval.json` mirrors `meta` plus per-scenario metric/score/fraction summaries.
 
