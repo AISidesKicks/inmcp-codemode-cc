@@ -3,10 +3,10 @@
 
 Formalized from the scratch playground (scratch/promptopt_sweep.py stays the
 experimentation area). Every optimizer reflects/mutates through the local
-granite-4.0-h-tiny judge (non-thinking, gateway `local-judge`, judge spans
-labelled `<run_id> <opt> judge`) and evaluates through the LFM2.5-2.6B
-tested model via the LiteLLM gateway (`local-thinking`, spans labelled
-`<run_id> <opt> eval`):
+granite-4.0-h-tiny judge (non-thinking, engine :8080 alias `local-judge`,
+judge spans labelled `<run_id> <opt> judge`) and evaluates through the
+LFM2.5-2.6B tested model on engine :8081 (alias `local-thinking`, spans
+labelled `<run_id> <opt> eval`):
 
   gepa            standalone gepa.optimize (reflection_lm = judge,
                   DefaultAdapter via task_lm + evaluator)
@@ -19,7 +19,7 @@ tested model via the LiteLLM gateway (`local-thinking`, spans labelled
   dspy-simba      dspy SIMBA (introspective mini-batch ascent, judge proposals)
   dspy-miprov2    dspy MIPROv2 (bayesian instruction/demos proposals)
   adalflow-tgd    adalflow TGDOptimizer text-grad (EvalFnToTextLoss +
-                  BackwardEngine over the gateway; AdalComponent/Trainer path
+                  BackwardEngine over the judge engine; AdalComponent/Trainer path
                   deliberately skipped)
   refiner         promptrefiner BaseStrategy.refine rewrite-only baseline
                   (explicit opt-in only; excluded from `--optimizer all`)
@@ -338,10 +338,10 @@ def run_adalflow(val, run_id, out):
     """adalflow TGDOptimizer lean text-grad loop (no AdalComponent/Trainer).
 
     The prompt Parameter is the {film} template; gradients come from
-    EvalFnToTextLoss + BackwardEngine over the gateway (judge-role calls,
-    tagged via extra_body.metadata riding model_kwargs through the Responses
-    API). Each round: attach gradients from the 6 train rows, propose, score
-    the proposal via score_val, keep the best (manual accept loop).
+    EvalFnToTextLoss + BackwardEngine over the judge engine (judge-role calls
+    ride model_kwargs through the OpenAI-compatible API). Each round: attach
+    gradients from the 6 train rows, propose, score the proposal via
+    score_val, keep the best (manual accept loop).
     """
     from adalflow.components.model_client.openai_client import OpenAIClient
     from adalflow.core.generator import BackwardEngine
@@ -370,12 +370,9 @@ def run_adalflow(val, run_id, out):
         judge_kwargs = {
             "model": common.JUDGE_MODEL,
             "max_tokens": common.JUDGE_MAX_TOKENS,
-            "extra_body": {
-                "metadata": {"generation_name": f"{run_id} {name} judge"}
-            },
         }
         client = _CountedOpenAIClient(
-            api_key=common.llm.get_master_key(), base_url=common.JUDGE_BASE
+            api_key="unused", base_url=common.JUDGE_BASE
         )
 
         def eval_triplet(task_prompt, y_pred, y_gt):
@@ -747,7 +744,7 @@ def main():
         }
 
     # session.id = run-id on the client-side chat spans (project cdmd-lab);
-    # dspy/deepeval/adalflow internals bypass llm.chat and stay gateway-only.
+    # dspy/deepeval/adalflow internals bypass llm.chat and emit no client spans.
     with llm.session(run_id):
         if args.stage in ("sweep", "all"):
             run_sweep(args, run_id, out, out_path)

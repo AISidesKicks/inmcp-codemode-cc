@@ -80,13 +80,10 @@ def render(results, eval_summary, run_id):
     a("")
     a(f"- **model**: `{model_alias}` — {model_hw}")
     engine = ENGINE_BY_ALIAS.get(model_alias, "llama.cpp engine")
-    a(f"- **gateway**: `{meta['base_url']}` (LiteLLM, {engine})")
+    a(f"- **engine**: `{meta['base_url']}` ({engine})")
     a(f"- **dataset**: `{meta['dataset']}`")
     a(f"- **sample**: `{meta['sample']}` rows (round-robin across studios)")
-    a(
-        f"- **mode**: `{meta.get('reasoning', 'disabled')}` reasoning, "
-        f"`{meta.get('workers', 4)}` workers"
-    )
+    a(f"- **mode**: `{meta.get('reasoning', 'disabled')}` reasoning")
     a(f"- **run_at**: `{meta['run_at']}`")
     a(f"- **test**: `{meta['test']}`")
     a("")

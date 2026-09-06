@@ -7,17 +7,16 @@ resolve inside smoketests/cinematic-01/ — `test` is this lab's smoke test
 module, not the stdlib `test` package — and provide the plumbing every
 optimizer variant shares:
 
-- task_text(prompt, ...) -> str    tested 2.6B via the LiteLLM gateway
+- task_text(prompt, ...) -> str    tested 2.6B direct on :8081
                                    (`local-thinking`), every call run_name-
                                    labelled `<run_id> <opt> eval` so Phoenix
                                    spans stay attributable; per-call token
                                    budget (TASK_MAX_TOKENS sweep legs,
                                    FILMS_MAX_TOKENS corpus legs)
-- judge_chat(prompt) -> str        granite judge via the LiteLLM gateway
+- judge_chat(prompt) -> str        granite judge direct on :8080
                                    (`local-judge`); when a sweep sets a tag,
-                                   metadata.generation_name lands the span as
-                                   `<run_id> <opt> judge` in Phoenix (direct
-                                   :8080 stays for stack health probes only)
+                                   the client-side turn span lands as
+                                   `<run_id> <opt> judge` in Phoenix
 - eval_text(row, text)             normalized exact match on the StudioList
                                    schema via test.parse_model (think-block
                                    tolerant); feedback = expected-vs-got
@@ -27,11 +26,11 @@ optimizer variant shares:
 - LocalLLM(DeepEvalBaseLLM)        judge wrapper for deepeval reflection and
                                    mutation (schema calls parse JSON via
                                    json_repair)
-- dspy_lms / dspy_dataset /        dspy plumbing: gateway-routed dspy.LM pair
+- dspy_lms / dspy_dataset /        dspy plumbing: engine-routed dspy.LM pair
   dspy_metric                      (calls OTEL-tagged via extra_body.metadata,
                                    cache=False so dspy's memo never hides calls),
                                    6-row dspy.Example split, exact-match metric
-- health_all()                     gateway + both llama servers, early exit
+- health_all()                     both llama servers, early exit
 
 Budgets: TASK_MAX_TOKENS=1536 (micro sweep), FILMS_MAX_TOKENS=8192 (films
 corpus legs, INTENT §3 "reasoning 8192 budget"), JUDGE_MAX_TOKENS=4096.
@@ -48,7 +47,7 @@ import llm
 import test
 from openai import OpenAI
 
-JUDGE_BASE = "http://localhost:4000/v1"
+JUDGE_BASE = llm.ENGINES["local-judge"]
 JUDGE_MODEL = "local-judge"
 TESTED_MODEL = "local-thinking"
 TASK_MAX_TOKENS = 1536
@@ -61,14 +60,14 @@ SEED_PROMPT = (
     'JSON object shaped like {"studios": ["Studio Name"]}.'
 )
 
-JUDGE_CLIENT = OpenAI(base_url=JUDGE_BASE, api_key=llm.get_master_key())
+JUDGE_CLIENT = OpenAI(base_url=JUDGE_BASE, api_key="unused")
 
 STATS = {"task_calls": 0, "judge_calls": 0, "task_seconds": 0.0, "judge_seconds": 0.0}
 JUDGE_STATE = {"tag": None}
 
 
 def set_judge_tag(tag):
-    """Set (or clear with None) the gateway metadata tag for judge calls."""
+    """Set (or clear with None) the judge-call span tag (run_name)."""
     JUDGE_STATE["tag"] = tag
 
 
@@ -117,7 +116,7 @@ def eval_text(row, text):
 
 
 def task_text(prompt, run_name=None, max_tokens=TASK_MAX_TOKENS):
-    """Tested-model call through the gateway; returns clean primary text."""
+    """Tested-model call on the thinking engine; returns clean primary text."""
     STATS["task_calls"] += 1
     kwargs = {"max_tokens": max_tokens, "reasoning": {"enabled": True}}
     if run_name:
@@ -134,22 +133,19 @@ def _judge_plain(prompt):
     t0 = time.perf_counter()
     kwargs = {}
     if JUDGE_STATE["tag"]:
-        kwargs["extra_body"] = {"metadata": {"generation_name": JUDGE_STATE["tag"]}}
-    resp = JUDGE_CLIENT.chat.completions.create(
-        model=JUDGE_MODEL,
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=JUDGE_MAX_TOKENS,
-        **kwargs,
-    )
+        kwargs["run_name"] = JUDGE_STATE["tag"]
+    resp, _ = llm.chat(prompt, model=JUDGE_MODEL, max_tokens=JUDGE_MAX_TOKENS, **kwargs)
     STATS["judge_seconds"] += time.perf_counter() - t0
-    text = resp.choices[0].message.content or ""
+    if resp is None:
+        raise RuntimeError(f"judge chat failed: {prompt[:80]!r}")
+    text = llm.completion_text(resp)
     if "</think>" in text:
         text = text.split("</think>", 1)[-1].strip()
     return text.strip()
 
 
 def judge_chat(prompt):
-    """Judge reflection text; gateway `local-judge`, OTEL-tagged when a tag is set."""
+    """Judge reflection text; engine `local-judge`, OTEL-tagged when a tag is set."""
     return _judge_plain(prompt)
 
 
@@ -245,9 +241,8 @@ def gepa_evaluator(data, response):
 def health_all():
     """Gateway + both llama servers; exits the process on any failure."""
     checks = {
-        "gateway": llm.health(llm.DEFAULT_BASE_URL + "/health/readiness"),
-        "judge-8080": llm.health("http://localhost:8080/health"),
-        "tested-8081": llm.health("http://localhost:8081/health"),
+        "judge-8080": llm.health(llm.JUDGE_URL + "/health"),
+        "tested-8081": llm.health(llm.THINKING_URL + "/health"),
     }
     for name, ok in checks.items():
         print(f"health {name}: {'ok' if ok else 'FAIL'}")
@@ -257,8 +252,8 @@ def health_all():
 
 def echo_score_rows(base_run_name, scored):
     """Best-effort Phoenix status stamping: one tiny echo call per scored row
-    (`<base_run_name> <film> PASS|FAIL`), so the gateway stamper derives the
-    filterable `metadata.test_status` attribute. Never raises."""
+    (`<base_run_name> <film> PASS|FAIL`), stamped as the session's echo turn
+    output. Never raises."""
     for row in scored:
         status = "PASS" if row["score"] == 1.0 else "FAIL"
         llm.echo_verdict(f"{base_run_name} {row['film']}", status)
@@ -328,7 +323,7 @@ def studio_metric():
 
 
 def dspy_call_counter():
-    """dspy BaseCallback counting LM calls into STATS by gateway alias.
+    """dspy BaseCallback counting LM calls into STATS by engine alias.
 
     dspy.LM runs its own client-side loop, so its calls never touch
     task_text/_judge_plain; this keeps the sweep table's call columns honest
@@ -348,30 +343,28 @@ def dspy_call_counter():
 
 
 def dspy_lms(run_id, opt):
-    """(task_lm, judge_lm) dspy.LM pair routed through the LiteLLM gateway.
+    """(task_lm, judge_lm) dspy.LM pair routed straight to the llama.cpp
+    engines (task -> :8081, judge -> :8080).
 
-    dspy.LM merges kwargs into every litellm call, so extra_body.metadata
-    lands Phoenix spans as `<run_id> <opt> eval` / `... judge` (the proven
-    metadata.generation_name path). cache=False keeps dspy's client-side memo
-    from hiding calls; no temperature -> engine sampling flags govern.
+    dspy drives its own litellm client, so dspy legs get no client-side
+    session spans — the STATS call counter keeps the sweep table honest for
+    dspy rows. cache=False keeps dspy's memo from hiding calls; no
+    temperature -> engine sampling flags govern.
     """
     import dspy
 
-    def lm(model, tag, max_tokens):
+    def lm(model, max_tokens):
         return dspy.LM(
             f"openai/{model}",
-            api_base=JUDGE_BASE,
-            api_key=llm.get_master_key(),
+            api_base=llm.ENGINES[model],
+            api_key="unused",
             max_tokens=max_tokens,
             cache=False,
             num_retries=2,
             callbacks=[dspy_call_counter()],
-            extra_body={"metadata": {"generation_name": f"{run_id} {opt} {tag}"}},
         )
 
-    return lm(TESTED_MODEL, "eval", TASK_MAX_TOKENS), lm(
-        JUDGE_MODEL, "judge", JUDGE_MAX_TOKENS
-    )
+    return lm(TESTED_MODEL, TASK_MAX_TOKENS), lm(JUDGE_MODEL, JUDGE_MAX_TOKENS)
 
 
 def dspy_dataset(rows):

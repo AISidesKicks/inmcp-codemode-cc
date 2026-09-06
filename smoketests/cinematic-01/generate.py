@@ -2,8 +2,8 @@
 """Generate the cinematic-01 micro dataset: real studios -> films -> years.
 
 The 20 studio names are seeded ground truth (see design.md); film titles and
-release years are produced by the llama.cpp-backed LFM2.5-2.6B through the
-LiteLLM gateway (alias `local-judge`) using schema-validated structured output.
+release years are produced by the LFM2.5-2.6B on the llama.cpp engine :8080
+(alias `local-judge`) using schema-validated structured output.
 The dataset lands in a QUOTE_ALL CSV at datasets/cinematic-01/dataset.csv;
 per-call seconds and token usage are checkpointed to
 datasets/cinematic-01/generate.json after every studio.
@@ -24,7 +24,6 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 import llm
 from llm import (
-    DEFAULT_BASE_URL,
     MODEL,
     FilmList,
     YearAnswer,
@@ -153,7 +152,7 @@ def build_meta(target_studios, args, entries, t_start):
         "generator": "smoketests/cinematic-01/generate.py",
         "generated": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "model_alias": MODEL,
-        "base_url": args.base_url,
+        "base_url": llm.ENGINES[MODEL],
         "studios": len(target_studios),
         "max_films": args.max_films,
         "skip_year": args.skip_year,
@@ -185,9 +184,6 @@ def main():
         help="don't ask for release years (fast smoke run)",
     )
     parser.add_argument("--max-tokens", type=int, default=1536)
-    parser.add_argument(
-        "--base-url", default=DEFAULT_BASE_URL, help="LiteLLM gateway URL"
-    )
     parser.add_argument("--output", default=DEFAULT_CSV, help="dataset CSV path")
     parser.add_argument("--log", default=DEFAULT_LOG, help="per-call run log JSON path")
     parser.add_argument("--skip-health", action="store_true", help="skip health probes")
@@ -196,18 +192,10 @@ def main():
     reasoning = {"enabled": True}  # LFM2.5 always thinks
     target_studios = STUDIOS[: args.studios]
 
-    if not args.skip_health:
-        if not health(args.base_url + "/health/readiness"):
-            sys.exit(f"gateway not ready at {args.base_url}/health/readiness")
-        engine = (
-            args.base_url.replace(":4000", ":8080")
-            if ":4000" in args.base_url
-            else "http://localhost:8080"
-        )
-        if not health(engine + "/health"):
-            sys.exit(f"llama.cpp engine not ready at {engine}/health")
+    if not args.skip_health and not health(llm.JUDGE_URL + "/health"):
+        sys.exit(f"engine not ready at {llm.JUDGE_URL}/health")
     print(
-        f"gateway {args.base_url} healthy; generating {len(target_studios)}x"
+        f"engine {llm.JUDGE_URL} healthy; generating {len(target_studios)}x"
         f"{args.max_films} films (reasoning on)"
     )
 
