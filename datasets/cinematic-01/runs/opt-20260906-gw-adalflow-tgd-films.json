@@ -1,0 +1,938 @@
+{
+  "meta": {
+    "run_id": "opt-20260906-gw",
+    "optimizer": "adalflow-tgd",
+    "render": "filled",
+    "max_tokens": 8192,
+    "run_name": "opt-20260906-gw adalflow-tgd films",
+    "tested_model": "local-thinking",
+    "judge_model": "local-judge"
+  },
+  "score": 0.4025974025974026,
+  "rows": [
+    {
+      "film": "Iron Man",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "2a81b153e7e192d2"
+    },
+    {
+      "film": "The Incredible Hulk",
+      "score": 0.0,
+      "feedback": "expected 'Marvel Studios', got 'Columbia Pictures'",
+      "span_id": "48d2d205a813e551"
+    },
+    {
+      "film": "Thor",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "4ea56ecff1f7ad21"
+    },
+    {
+      "film": "Captain America: The First Avenger",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "d106a6ca4f06f309"
+    },
+    {
+      "film": "The Avengers",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "6c9e3096c46d6384"
+    },
+    {
+      "film": "Iron Man 2",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "44e5c5f76fbc5484"
+    },
+    {
+      "film": "Guardians of the Galaxy",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "57b51886a8f57f30"
+    },
+    {
+      "film": "Captain Marvel",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "df07738abbc489b6"
+    },
+    {
+      "film": "Black Panther",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "a07817e3b25eed2c"
+    },
+    {
+      "film": "Doctor Strange",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "fd05b5dab1285ad5"
+    },
+    {
+      "film": "The Dark Knight",
+      "score": 0.0,
+      "feedback": "expected 'DC Studios', got 'Warner Bros. Pictures'",
+      "span_id": "ff9900970e5ad26a"
+    },
+    {
+      "film": "Batman v Superman: Dawn of Justice",
+      "score": 0.0,
+      "feedback": "expected 'DC Studios', got 'Warner Bros. Pictures'",
+      "span_id": "6656e07e480ff6b9"
+    },
+    {
+      "film": "Justice League",
+      "score": 0.0,
+      "feedback": "expected 'DC Studios', got 'Warner Bros. Pictures'",
+      "span_id": "04a0dab7cba0bf42"
+    },
+    {
+      "film": "Wonder Woman",
+      "score": 0.0,
+      "feedback": "expected 'DC Studios', got 'Warner Bros. Pictures'",
+      "span_id": "2ebba76c7c20eac1"
+    },
+    {
+      "film": "Aquaman",
+      "score": 0.0,
+      "feedback": "expected 'DC Studios', got 'Warner Bros. Pictures'",
+      "span_id": "9439929ed9606a29"
+    },
+    {
+      "film": "Shazam!",
+      "score": 0.0,
+      "feedback": "expected 'DC Studios', got 'Warner Bros. Pictures'",
+      "span_id": "3966819ede08822a"
+    },
+    {
+      "film": "The Flash",
+      "score": 0.0,
+      "feedback": "expected 'DC Studios', got 'Warner Bros. Pictures'",
+      "span_id": "8de6b90628668e30"
+    },
+    {
+      "film": "Zack Snyder's Justice League",
+      "score": 0.0,
+      "feedback": "expected 'DC Studios', got 'Warner Bros. Pictures'",
+      "span_id": "0503a309924b2483"
+    },
+    {
+      "film": "The Batman",
+      "score": 0.0,
+      "feedback": "expected 'DC Studios', got 'Warner Bros. Pictures'",
+      "span_id": "ba19e8917f4802a9"
+    },
+    {
+      "film": "Shazam! Fury of the Gods",
+      "score": 0.0,
+      "feedback": "expected 'DC Studios', got 'Warner Bros. Pictures'",
+      "span_id": "2854c2c05b4d63da"
+    },
+    {
+      "film": "The Lion King",
+      "score": 0.0,
+      "feedback": "expected 'Walt Disney Pictures', got 'Walt Disney Animation Studios'",
+      "span_id": "cd2b69f87d3b94e4"
+    },
+    {
+      "film": "Frozen",
+      "score": 0.0,
+      "feedback": "expected 'Walt Disney Pictures', got 'Walt Disney Animation Studios'",
+      "span_id": "200582a7d884984c"
+    },
+    {
+      "film": "The Little Mermaid",
+      "score": 0.0,
+      "feedback": "expected 'Walt Disney Pictures', got 'Walt Disney Animation Studios'",
+      "span_id": "079f3e69a4af5173"
+    },
+    {
+      "film": "Aladdin",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "c1160ff8b451b71c"
+    },
+    {
+      "film": "Beauty and the Beast",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "d591533d66fc3225"
+    },
+    {
+      "film": "Mulan",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "726ad27d3ecb3b21"
+    },
+    {
+      "film": "Toy Story",
+      "score": 0.0,
+      "feedback": "expected 'Walt Disney Pictures', got 'Pixar Animation Studios'",
+      "span_id": "aa5327a7eb23fd97"
+    },
+    {
+      "film": "The Princess and the Frog",
+      "score": 0.0,
+      "feedback": "expected 'Walt Disney Pictures', got 'Walt Disney'",
+      "span_id": "edb8477fcdb91984"
+    },
+    {
+      "film": "Wreck-It Ralph",
+      "score": 0.0,
+      "feedback": "expected 'Walt Disney Pictures', got 'Walt Disney Animation Studios'",
+      "span_id": "7101909268bc58ea"
+    },
+    {
+      "film": "Moana",
+      "score": 0.0,
+      "feedback": "expected 'Walt Disney Pictures', got 'Walt Disney Animation Studios'",
+      "span_id": "449b23e0a2c40e2a"
+    },
+    {
+      "film": "A Bug's Life",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "a1393c8299b249b2"
+    },
+    {
+      "film": "Finding Nemo",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "95cca94c2c878a94"
+    },
+    {
+      "film": "The Incredibles",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "05f0ea08e2765f1f"
+    },
+    {
+      "film": "Up",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "5705933c6267d5e7"
+    },
+    {
+      "film": "WALL-E",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "bd7ea4a81efe7742"
+    },
+    {
+      "film": "Brave",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "b399d65a62a7c1b8"
+    },
+    {
+      "film": "Coco",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "0d19734aa94cb721"
+    },
+    {
+      "film": "Inside Out",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "603c4c0bd974e436"
+    },
+    {
+      "film": "Toy Story 2",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "1320b5db7bd64551"
+    },
+    {
+      "film": "The Dark Knight Rises",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "8bdf20ee4281947c"
+    },
+    {
+      "film": "Harry Potter and the Sorcerer's Stone",
+      "score": 0.0,
+      "feedback": "expected 'Warner Bros. Pictures', got 'Warner Bros.'",
+      "span_id": "d23173821f6a5061"
+    },
+    {
+      "film": "The Lord of the Rings: The Fellowship of the Ring",
+      "score": 0.0,
+      "feedback": "expected 'Warner Bros. Pictures', got 'New Line Pictures'",
+      "span_id": "da5b543b97f453a5"
+    },
+    {
+      "film": "The Lord of the Rings: The Two Towers",
+      "score": 0.0,
+      "feedback": "expected 'Warner Bros. Pictures', got 'New Line Pictures'",
+      "span_id": "11ae38e6ff052521"
+    },
+    {
+      "film": "The Lord of the Rings: The Return of the King",
+      "score": 0.0,
+      "feedback": "expected 'Warner Bros. Pictures', got 'New Line Cinema'",
+      "span_id": "773c16353ea6d618"
+    },
+    {
+      "film": "Batman Begins",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "cb92edd1fa44058b"
+    },
+    {
+      "film": "Man of Steel",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "1881a114220c0eec"
+    },
+    {
+      "film": "Jurassic Park",
+      "score": 0.0,
+      "feedback": "expected 'Universal Pictures', got 'Amblin Entertainment'",
+      "span_id": "c41a0a9ea33ff05c"
+    },
+    {
+      "film": "The Godfather",
+      "score": 0.0,
+      "feedback": "expected 'Universal Pictures', got 'Paramount Pictures'",
+      "span_id": "256b8ead82252ba4"
+    },
+    {
+      "film": "Titanic",
+      "score": 0.0,
+      "feedback": "expected 'Universal Pictures', got '20th Century Fox'",
+      "span_id": "edb5f907bbdc4f0b"
+    },
+    {
+      "film": "E.T. the Extra-Terrestrial",
+      "score": 0.0,
+      "feedback": "expected 'Universal Pictures', got 'Paramount Pictures'",
+      "span_id": "350c7fba28d7b974"
+    },
+    {
+      "film": "The Super Mario Bros. Movie",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "cecd13f48b770980"
+    },
+    {
+      "film": "Fast & Furious",
+      "score": 0.0,
+      "feedback": "expected 'Universal Pictures', got 'New Line Cinema'",
+      "span_id": "b6cc93d21926eae1"
+    },
+    {
+      "film": "Back to the Future",
+      "score": 0.0,
+      "feedback": "expected 'Universal Pictures', got 'Paramount Pictures'",
+      "span_id": "2558e66cd7cd6b3b"
+    },
+    {
+      "film": "The Wizard of Oz",
+      "score": 0.0,
+      "feedback": "expected 'Universal Pictures', got 'Metro-Goldwyn-Mayer'",
+      "span_id": "0ab55f97a87136e6"
+    },
+    {
+      "film": "Scooby-Doo",
+      "score": 0.0,
+      "feedback": "expected 'Universal Pictures', got 'Warner Bros. Pictures'",
+      "span_id": "9d7f38c004aa1427"
+    },
+    {
+      "film": "Star Wars: Episode IV \u2013 A New Hope",
+      "score": 0.0,
+      "feedback": "expected 'Paramount Pictures', got '20th Century Fox'",
+      "span_id": "08f27f40ba3f39f2"
+    },
+    {
+      "film": "The Sound of Music",
+      "score": 0.0,
+      "feedback": "expected 'Paramount Pictures', got 'Metro-Goldwyn-Mayer'",
+      "span_id": "364e72f25beaa990"
+    },
+    {
+      "film": "The Exorcist",
+      "score": 0.0,
+      "feedback": "expected 'Paramount Pictures', got 'Universal Pictures'",
+      "span_id": "a6588894ec988189"
+    },
+    {
+      "film": "The Shining",
+      "score": 0.0,
+      "feedback": "expected 'Paramount Pictures', got 'Universal Pictures'",
+      "span_id": "5b9747d2367ee918"
+    },
+    {
+      "film": "The Ten Commandments",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "332aaf9cdb71a080"
+    },
+    {
+      "film": "The Great Escape",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "1bf39c87977ec36d"
+    },
+    {
+      "film": "Spider-Man: Into the Spider-Verse",
+      "score": 0.0,
+      "feedback": "expected 'Sony Pictures', got 'Sony Pictures Animation'",
+      "span_id": "e5dfe3537255f1b2"
+    },
+    {
+      "film": "The Amazing Spider-Man",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "ae801ae34dafca26"
+    },
+    {
+      "film": "Gravity",
+      "score": 0.0,
+      "feedback": "expected 'Sony Pictures', got 'Paramount Pictures'",
+      "span_id": "a733a3983058da55"
+    },
+    {
+      "film": "The Lost City",
+      "score": 0.0,
+      "feedback": "expected 'Sony Pictures', got '20th Century Studios'",
+      "span_id": "b5b466deefcf77ee"
+    },
+    {
+      "film": "Creed",
+      "score": 0.0,
+      "feedback": "expected 'Sony Pictures', got 'Columbia Pictures'",
+      "span_id": "62e98795ad4d04cd"
+    },
+    {
+      "film": "Alita: Battle Angel",
+      "score": 0.0,
+      "feedback": "expected 'Sony Pictures', got 'Lightstorm Entertainment'",
+      "span_id": "2a797a668f7f5963"
+    },
+    {
+      "film": "Venom",
+      "score": 0.0,
+      "feedback": "expected 'Sony Pictures', got 'Marvel Studios'",
+      "span_id": "71fb6f087e947700"
+    },
+    {
+      "film": "Joy",
+      "score": 0.0,
+      "feedback": "expected 'Sony Pictures', got 'The Jim Henson Company'",
+      "span_id": "7315911d0a4655af"
+    },
+    {
+      "film": "The Girl with the Dragon Tattoo",
+      "score": 0.0,
+      "feedback": "expected 'Sony Pictures', got 'Fincher Film Company'",
+      "span_id": "17b4fe8504eb72a7"
+    },
+    {
+      "film": "Gone with the Wind",
+      "score": 0.0,
+      "feedback": "expected 'Columbia Pictures', got 'MGM'",
+      "span_id": "d3fa4e16985f026b"
+    },
+    {
+      "film": "Home Alone",
+      "score": 0.0,
+      "feedback": "expected 'Columbia Pictures', got 'Universal Pictures'",
+      "span_id": "b25e5a256c5cee07"
+    },
+    {
+      "film": "The Last of the Mohicans",
+      "score": 0.0,
+      "feedback": "expected 'Columbia Pictures', got 'Warner Bros.'",
+      "span_id": "dadce2192dade239"
+    },
+    {
+      "film": "The Shawshank Redemption",
+      "score": 0.0,
+      "feedback": "expected 'Columbia Pictures', got 'New Line Cinema'",
+      "span_id": "b6daae549d8a8ea0"
+    },
+    {
+      "film": "Ratatouille",
+      "score": 0.0,
+      "feedback": "expected '20th Century Studios', got 'Pixar Animation Studios'",
+      "span_id": "dc17ce58846ffbf4"
+    },
+    {
+      "film": "Cars",
+      "score": 0.0,
+      "feedback": "expected '20th Century Studios', got 'Pixar Animation Studios'",
+      "span_id": "1085153ed33305ff"
+    },
+    {
+      "film": "Shrek",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "df97965c1a426374"
+    },
+    {
+      "film": "Shrek 2",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "cedd6ba0a840296d"
+    },
+    {
+      "film": "Kung Fu Panda",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "56b8c693e846671f"
+    },
+    {
+      "film": "Madagascar",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "64e16a3f206abaed"
+    },
+    {
+      "film": "Monsters vs. Aliens",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "e1ce40bb3d697d92"
+    },
+    {
+      "film": "How to Train Your Dragon",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "b69be0110bc60cc9"
+    },
+    {
+      "film": "The Prince of Egypt",
+      "score": 0.0,
+      "feedback": "expected 'DreamWorks Animation', got 'DreamWorks SKG'",
+      "span_id": "1276333423b633d5"
+    },
+    {
+      "film": "Chicken Run",
+      "score": 0.0,
+      "feedback": "expected 'DreamWorks Animation', got 'Aardman Animations'",
+      "span_id": "13912dee331193e2"
+    },
+    {
+      "film": "Puss in Boots",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "14f265a1277131d1"
+    },
+    {
+      "film": "Rise of the Guardians",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "aa537c2142279380"
+    },
+    {
+      "film": "The Fast and the Furious",
+      "score": 0.0,
+      "feedback": "expected 'Lionsgate Films', got 'Viacom International'",
+      "span_id": "3577980686091ca7"
+    },
+    {
+      "film": "The Fast & Furious 7",
+      "score": 0.0,
+      "feedback": "expected 'Lionsgate Films', got 'Universal Pictures'",
+      "span_id": "0396059851cce461"
+    },
+    {
+      "film": "Transformers",
+      "score": 0.0,
+      "feedback": "expected 'Lionsgate Films', got 'Paramount Pictures'",
+      "span_id": "389d7bf150d10c4f"
+    },
+    {
+      "film": "Transformers: Dark of the Moon",
+      "score": 0.0,
+      "feedback": "expected 'Lionsgate Films', got 'Paramount Pictures'",
+      "span_id": "2999ea9351d85161"
+    },
+    {
+      "film": "The Hunger Games",
+      "score": 0.0,
+      "feedback": "expected 'Lionsgate Films', got 'New Line Cinema'",
+      "span_id": "090288df10ce22d4"
+    },
+    {
+      "film": "John Carter",
+      "score": 0.0,
+      "feedback": "expected 'Lionsgate Films', got 'Legendary Pictures'",
+      "span_id": "e87a629035788d5a"
+    },
+    {
+      "film": "The Expendables",
+      "score": 0.0,
+      "feedback": "expected 'Lionsgate Films', got 'Regency Entertainment'",
+      "span_id": "b3be3bea4079d754"
+    },
+    {
+      "film": "The Mummy (2001)",
+      "score": 0.0,
+      "feedback": "expected 'Lionsgate Films', got 'Universal Pictures'",
+      "span_id": "21040b69b7ffe006"
+    },
+    {
+      "film": "The Mummy: Tomb of the Dragon Emperor",
+      "score": 0.0,
+      "feedback": "expected 'Lionsgate Films', got 'DreamWorks SKG'",
+      "span_id": "b41901d1445cfbb5"
+    },
+    {
+      "film": "The Mummy (2017)",
+      "score": 0.0,
+      "feedback": "expected 'Lionsgate Films', got 'Universal Pictures'",
+      "span_id": "84b6507effb7482c"
+    },
+    {
+      "film": "Get Out",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "8c3e14f1e13983c1"
+    },
+    {
+      "film": "Midsommar",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "af2652b158b049f3"
+    },
+    {
+      "film": "The Lighthouse",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "c2aa855e10a72eee"
+    },
+    {
+      "film": "Us",
+      "score": 0.0,
+      "feedback": "expected 'A24', got 'Universal Pictures'",
+      "span_id": "8f1c2eb4143bd486"
+    },
+    {
+      "film": "T\u00e1r",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "6c07cb83086d7667"
+    },
+    {
+      "film": "The Witch",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "99094ebe640ecd5a"
+    },
+    {
+      "film": "Hereditary",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "024950cfb5074033"
+    },
+    {
+      "film": "The Florida Project",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "df06f5c88924bd4e"
+    },
+    {
+      "film": "The Night House",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "b10beb0ad8be18c7"
+    },
+    {
+      "film": "The Menu",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "3ddefc0ded502825"
+    },
+    {
+      "film": "Singin' in the Rain",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "aeb585a1c573cb46"
+    },
+    {
+      "film": "Ben-Hur",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "bb1e56464156547b"
+    },
+    {
+      "film": "Casablanca",
+      "score": 0.0,
+      "feedback": "expected 'Metro-Goldwyn-Mayer', got 'Warner Bros.'",
+      "span_id": "f458e478e00f2b4e"
+    },
+    {
+      "film": "Mutiny on the Bounty",
+      "score": 0.0,
+      "feedback": "expected 'Metro-Goldwyn-Mayer', got 'Paramount Pictures'",
+      "span_id": "95792902470cdd96"
+    },
+    {
+      "film": "The Philadelphia Story",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "36347ffdd30332b8"
+    },
+    {
+      "film": "The King and I",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "01ad09feae193f3c"
+    },
+    {
+      "film": "X-Men: Days of Future Past",
+      "score": 0.0,
+      "feedback": "expected 'Legendary Entertainment', got '20th Century Fox'",
+      "span_id": "446b39034a19e1fb"
+    },
+    {
+      "film": "Furious 7",
+      "score": 0.0,
+      "feedback": "expected 'Legendary Entertainment', got 'Lightstorm Pictures'",
+      "span_id": "9c4a810fd18e1365"
+    },
+    {
+      "film": "The Suicide Squad",
+      "score": 0.0,
+      "feedback": "expected 'Legendary Entertainment', got 'Warner Bros. Pictures'",
+      "span_id": "4489fe91b6f13bd8"
+    },
+    {
+      "film": "The Hobbit: The Desolation of Smaug",
+      "score": 0.0,
+      "feedback": "expected 'Legendary Entertainment', got 'New Line Cinema'",
+      "span_id": "e60d5673beb9e0a4"
+    },
+    {
+      "film": "The Avengers: Age of Ultron",
+      "score": 0.0,
+      "feedback": "expected 'Legendary Entertainment', got 'Marvel Studios'",
+      "span_id": "65070b6d0a57823e"
+    },
+    {
+      "film": "Fight Club",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "79f558147edb44cc"
+    },
+    {
+      "film": "The Big Lebowski",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "74abbb0bd1095878"
+    },
+    {
+      "film": "The Departed",
+      "score": 0.0,
+      "feedback": "expected 'New Line Cinema', got 'Warner Bros. Pictures'",
+      "span_id": "9e7be0ebb2580752"
+    },
+    {
+      "film": "Pirates of the Caribbean: The Curse of the Black Pearl",
+      "score": 0.0,
+      "feedback": "expected 'New Line Cinema', got 'Walt Disney Pictures'",
+      "span_id": "436ad4f0cd96ea93"
+    },
+    {
+      "film": "Memento",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "3eea544994575876"
+    },
+    {
+      "film": "The Social Network",
+      "score": 0.0,
+      "feedback": "expected 'New Line Cinema', got \"Fincher's Production Company\"",
+      "span_id": "0e32b92f9072dd91"
+    },
+    {
+      "film": "My Neighbor Totoro",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "e5bce3c88b6a7b67"
+    },
+    {
+      "film": "Kiki's Delivery Service",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "c21b7d208c3c6915"
+    },
+    {
+      "film": "Princess Mononoke",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "c1900f177f534aac"
+    },
+    {
+      "film": "Spirited Away",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "05dc2cf59a075b52"
+    },
+    {
+      "film": "Howl's Moving Castle",
+      "score": 0.0,
+      "feedback": "expected 'Studio Ghibli', got 'DreamWorks Animation'",
+      "span_id": "0d1469bd8ee7292c"
+    },
+    {
+      "film": "The Wind Rises",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "670480f799bbee0c"
+    },
+    {
+      "film": "Ponyo",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "1f1ef8715f6d4756"
+    },
+    {
+      "film": "The Secret World of Arrietty",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "4d80f43a5fff47d7"
+    },
+    {
+      "film": "The Tale of the Princess Kaguya",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "a22c058fe5eb6394"
+    },
+    {
+      "film": "From Up on Poppy Hill",
+      "score": 0.0,
+      "feedback": "expected 'Studio Ghibli', got 'The Film Company'",
+      "span_id": "3e8fdd28d5b2cad7"
+    },
+    {
+      "film": "The Last Samurai",
+      "score": 0.0,
+      "feedback": "expected 'Focus Features', got 'Paramount Pictures'",
+      "span_id": "9a4437a5eba27ea0"
+    },
+    {
+      "film": "The Mummy",
+      "score": 0.0,
+      "feedback": "expected 'Focus Features', got 'Amblin Entertainment'",
+      "span_id": "4a19458aa22e1afa"
+    },
+    {
+      "film": "The Great Gatsby",
+      "score": 0.0,
+      "feedback": "expected 'Focus Features', got 'Warner Bros. Pictures'",
+      "span_id": "c1b75d63870f56f9"
+    },
+    {
+      "film": "The Martian",
+      "score": 0.0,
+      "feedback": "expected 'Focus Features', got 'Red Mountain Pictures'",
+      "span_id": "caf38709ef01b7b1"
+    },
+    {
+      "film": "The Incredible Burt Wonderstone",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "ea785cc30bdd9648"
+    },
+    {
+      "film": "The Adventures of Tintin",
+      "score": 0.0,
+      "feedback": "expected 'Focus Features', got 'Studio 4 Cinema'",
+      "span_id": "4811d5a564985389"
+    },
+    {
+      "film": "The Chronicles of Narnia: The Lion, the Witch and the Wardrobe",
+      "score": 0.0,
+      "feedback": "expected 'Focus Features', got 'Walden Group'",
+      "span_id": "7c558bcbc1917eb8"
+    },
+    {
+      "film": "The Hobbit: An Unexpected Journey",
+      "score": 0.0,
+      "feedback": "expected 'Focus Features', got 'New Line Cinema'",
+      "span_id": "8df05e772a306754"
+    },
+    {
+      "film": "The Secret Life of Walter Mitty",
+      "score": 1.0,
+      "feedback": "correct",
+      "span_id": "11e3fd9cd23067a4"
+    },
+    {
+      "film": "Sully",
+      "score": 0.0,
+      "feedback": "expected 'Searchlight Pictures', got 'Paramount Pictures'",
+      "span_id": "c54df3c43e1686f2"
+    },
+    {
+      "film": "Dunkirk",
+      "score": 0.0,
+      "feedback": "expected 'Searchlight Pictures', got 'Legendary Pictures'",
+      "span_id": "74e44bd27d8378ed"
+    },
+    {
+      "film": "The Imitation Game",
+      "score": 0.0,
+      "feedback": "expected 'Searchlight Pictures', got 'Warner Bros. Pictures'",
+      "span_id": "8810c28d00baf2cd"
+    },
+    {
+      "film": "The Big Short",
+      "score": 0.0,
+      "feedback": "expected 'Searchlight Pictures', got 'Warner Bros.'",
+      "span_id": "38d4ae0d9e12fdea"
+    },
+    {
+      "film": "The Irishman",
+      "score": 0.0,
+      "feedback": "expected 'Netflix', got 'Universal Pictures'",
+      "span_id": "84d96e4a8dc238ea"
+    },
+    {
+      "film": "Roma",
+      "score": 0.0,
+      "feedback": "expected 'Netflix', got 'Cuar\u00f3n Films'",
+      "span_id": "4e6f5254baec4ecc"
+    },
+    {
+      "film": "Bird Box",
+      "score": 0.0,
+      "feedback": "expected 'Netflix', got 'The Weinstein Company'",
+      "span_id": "d18eea27283eba09"
+    },
+    {
+      "film": "The Gray Man",
+      "score": 0.0,
+      "feedback": "expected 'Netflix', got 'Paramount Pictures'",
+      "span_id": "9622985869910c9f"
+    },
+    {
+      "film": "The Old Guard",
+      "score": 0.0,
+      "feedback": "expected 'Netflix', got 'Warner Bros. Pictures'",
+      "span_id": "3b5df516989634fc"
+    },
+    {
+      "film": "Don't Look Up",
+      "score": 0.0,
+      "feedback": "expected 'Netflix', got 'Focus Features'",
+      "span_id": "41d3d3f14bbda8fc"
+    },
+    {
+      "film": "The Power of the Dog",
+      "score": 0.0,
+      "feedback": "expected 'Netflix', got 'A24'",
+      "span_id": "e47c686866d90599"
+    },
+    {
+      "film": "The Fabelmans",
+      "score": 0.0,
+      "feedback": "expected 'Netflix', got 'Paramount Pictures'",
+      "span_id": "47b588730e4de235"
+    }
+  ]
+}
