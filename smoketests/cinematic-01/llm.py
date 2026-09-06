@@ -104,6 +104,29 @@ def session(session_id):
 
 
 @contextmanager
+def turn(name, input_value):
+    """AGENT root span for one test turn — the probe-style trace shape.
+
+    chat() calls made inside this context nest as LLM children (same thread),
+    so each test reads agent -> LLM in the UI and the Sessions row's
+    first-input/last-output resolve from AGENT roots.
+    """
+    tr = tracer()
+    if tr is None:
+        yield None
+        return
+    with tr.start_as_current_span(name or "llm.turn") as sp:
+        sp.set_attribute(SpanAttributes.OPENINFERENCE_SPAN_KIND, "AGENT")
+        sp.set_attribute(SpanAttributes.INPUT_VALUE, input_value)
+        if SESSION_STATE["session_id"]:
+            sp.set_attribute(
+                SpanAttributes.SESSION_ID, SESSION_STATE["session_id"]
+            )
+        sp.set_attribute(SpanAttributes.USER_ID, USER_ID)
+        yield sp
+
+
+@contextmanager
 def _chat_span(name, content):
     """One client-side OpenInference LLM span; yields the span or None."""
     tr = tracer()
@@ -274,22 +297,32 @@ def chat(
 def echo_verdict(run_name, status, *, base_url=DEFAULT_BASE_URL, model=None):
     """Fire a tiny verdict-echo call so the status lands in Phoenix as a named
     trace (`<run_name> PASS|FAIL`); the gateway stamper derives the filterable
-    `metadata.test_status` attribute from the name token.
+    `metadata.test_status` attribute from the name token. The client-side
+    AGENT turn root carries the echoed verdict as output.value so the
+    Sessions row keeps a filled last output (tiny budgets often return empty
+    model text).
 
     Best-effort: any failure prints a warning and returns None so status
     stamping never breaks the smoke test.
     """
     name = f"{run_name} {status}"
+    prompt = f"Echo back exactly: TEST {status}"
     try:
-        resp, _ = chat(
-            f"Echo back exactly: TEST {status}",
-            base_url=base_url,
-            max_tokens=8,
-            reasoning={"enabled": False},
-            retries=1,
-            run_name=name,
-            model=model,
-        )
+        with turn(name, prompt) as sp:
+            resp, _ = chat(
+                prompt,
+                base_url=base_url,
+                max_tokens=8,
+                reasoning={"enabled": False},
+                retries=1,
+                run_name=name,
+                model=model,
+            )
+            text = completion_text(resp)
+            if sp is not None:
+                sp.set_attribute(
+                    SpanAttributes.OUTPUT_VALUE, text or f"TEST {status}"
+                )
     except Exception as exc:  # noqa: BLE001 - status stamping is best-effort
         print(
             f"warning: echo_verdict({name!r}) skipped: "
@@ -297,7 +330,7 @@ def echo_verdict(run_name, status, *, base_url=DEFAULT_BASE_URL, model=None):
             file=sys.stderr,
         )
         return None
-    return completion_text(resp)
+    return text
 
 
 def completion_text(resp):

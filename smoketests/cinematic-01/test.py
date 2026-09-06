@@ -21,7 +21,6 @@ Phoenix Session (user edu-harness, one turn per call). `--no-session` skips it.
 """
 
 import argparse
-import concurrent.futures
 import csv
 import json
 import os
@@ -96,27 +95,38 @@ def query_schema(content, schema, max_tokens, reasoning, run_name=None):
     original prompt is regenerated, not repeated verbatim. Empty completions
     degrade to a miss instead of failing the run. Guided decoding is skipped
     for vLLM (returns empty completions); parse-then-retry covers it instead.
-    Every attempt's Phoenix generation span is named run_name.
+    Every attempt's Phoenix generation span is named run_name. The whole test
+    runs inside an AGENT turn root (llm.turn) so the trace reads
+    agent -> LLM and the session row's first-input/last-output fill.
     """
     guided = "vllm" not in llm.MODEL
     last_resp = None
     seconds = 0.0
-    for attempt in range(1, MAX_TRIES + 1):
-        payload = (REMINDER + " " + content) if attempt > 1 else content
-        resp, seconds = chat(
-            payload,
-            max_tokens=max_tokens,
-            response_format=schema,
-            reasoning=reasoning,
-            guided=guided,
-            run_name=run_name,
-        )
-        if resp is None:
-            continue
-        last_resp = resp
-        parsed = parse_model(completion_text(resp), schema)
-        if parsed is not None:
-            return parsed, completion_text(resp), seconds, resp
+    with llm.turn(run_name, content) as sp:
+        for attempt in range(1, MAX_TRIES + 1):
+            payload = (REMINDER + " " + content) if attempt > 1 else content
+            resp, seconds = chat(
+                payload,
+                max_tokens=max_tokens,
+                response_format=schema,
+                reasoning=reasoning,
+                guided=guided,
+                run_name=run_name,
+            )
+            if resp is None:
+                continue
+            last_resp = resp
+            parsed = parse_model(completion_text(resp), schema)
+            if parsed is not None:
+                if sp is not None:
+                    sp.set_attribute(
+                        llm.SpanAttributes.OUTPUT_VALUE, completion_text(resp)
+                    )
+                return parsed, completion_text(resp), seconds, resp
+        if sp is not None:
+            sp.set_attribute(
+                llm.SpanAttributes.OUTPUT_VALUE, completion_text(last_resp)
+            )
     return None, completion_text(last_resp), seconds, last_resp
 
 
@@ -154,7 +164,7 @@ def sample_rows(rows, n):
     return picked
 
 
-def scenario_studio_recall(sample, args, executor):
+def scenario_studio_recall(sample, args):
     """Which studio produced each sampled film; exact normalized name match."""
 
     def one(row):
@@ -181,7 +191,7 @@ def scenario_studio_recall(sample, args, executor):
             "resp_id": getattr(resp, "id", None),
         }
 
-    rows = list(executor.map(one, sample))
+    rows = [one(row) for row in sample]
     for row in rows:
         print(
             f"  recall {row['studio']:<28} -> {row.get('guess') or '?'}"
@@ -192,7 +202,7 @@ def scenario_studio_recall(sample, args, executor):
     return rows, correct
 
 
-def scenario_year_match(sample, args, executor):
+def scenario_year_match(sample, args):
     """Model's year for each film, within +/-2 of the dataset year."""
 
     def one(row):
@@ -222,7 +232,7 @@ def scenario_year_match(sample, args, executor):
             "resp_id": getattr(resp, "id", None),
         }
 
-    rows = [r for r in executor.map(one, sample) if r is not None]
+    rows = [r for r in (one(row) for row in sample) if r is not None]
     for row in rows:
         print(
             f"  year   {row['film']:<40} {row['expected']} vs {row.get('predicted')}"
@@ -233,7 +243,7 @@ def scenario_year_match(sample, args, executor):
     return rows, correct
 
 
-def scenario_year_repeat(sample, args, threshold, executor):
+def scenario_year_repeat(sample, args, threshold):
     """Reworded year re-answer scored with deepeval ExactMatchMetric."""
 
     def one(row):
@@ -275,7 +285,7 @@ def scenario_year_repeat(sample, args, threshold, executor):
             "resp_id": getattr(resp, "id", None),
         }
 
-    rows = [r for r in executor.map(one, sample) if r is not None]
+    rows = [r for r in (one(row) for row in sample) if r is not None]
     for row in rows:
         print(
             f"  repeat {row['film']:<40} {row['expected']} vs {row['predicted']}"
@@ -382,12 +392,6 @@ def main():
     )
     parser.add_argument("--max-tokens", type=int, default=None)
     parser.add_argument(
-        "--workers",
-        type=int,
-        default=4,
-        help="client-side concurrency bound only (single-slot engines queue requests)",
-    )
-    parser.add_argument(
         "--threshold", type=float, default=0.8, help="ExactMatchMetric threshold"
     )
     parser.add_argument(
@@ -426,8 +430,6 @@ def main():
     if args.max_tokens is None:
         args.max_tokens = 1536  # thinking always on needs the headroom
     args.reasoning = {"enabled": True}
-    if args.workers < 1:
-        sys.exit("--workers must be >= 1")
 
     if not args.skip_health and not health(args.base_url + "/health/readiness"):
         sys.exit(f"gateway not ready at {args.base_url}/health/readiness")
@@ -447,25 +449,23 @@ def main():
     sample = sample_rows(rows, args.sample)
     print(f"{len(rows)} rows loaded, sampling {len(sample)} ({args.sample})")
 
-    with llm.session(run_id), concurrent.futures.ThreadPoolExecutor(
-        max_workers=args.workers
-    ) as executor:
-            recall, recall_ok = scenario_studio_recall(sample, args, executor)
-            print(f"scenario 1 studio recall: {recall_ok}/{len(recall)}")
+    # single-slot llama.cpp engines: strictly serial, no client thread pool
+    with llm.session(run_id):
+        recall, recall_ok = scenario_studio_recall(sample, args)
+        print(f"scenario 1 studio recall: {recall_ok}/{len(recall)}")
 
-            year_match, year_ok = scenario_year_match(sample, args, executor)
-            print(
-                f"scenario 2 year match (+/-{YEAR_TOLERANCE}): {year_ok}/{len(year_match)}"
-            )
+        year_match, year_ok = scenario_year_match(sample, args)
+        print(
+            f"scenario 2 year match (+/-{YEAR_TOLERANCE}): {year_ok}/{len(year_match)}"
+        )
 
-            year_repeat, exact_score, exact_passed = scenario_year_repeat(
-                sample, args, args.threshold, executor
-            )
-            print(
-                f"scenario 3 year repeat ExactMatchMetric: {exact_score:.2f} "
-                f"({'PASS' if exact_passed else 'FAIL'})"
-            )
-
+        year_repeat, exact_score, exact_passed = scenario_year_repeat(
+            sample, args, args.threshold
+        )
+        print(
+            f"scenario 3 year repeat ExactMatchMetric: {exact_score:.2f} "
+            f"({'PASS' if exact_passed else 'FAIL'})"
+        )
     meta = {
         "name": "cinematic-01",
         "test": "smoketests/cinematic-01/test.py",
@@ -477,7 +477,6 @@ def main():
         "sample": len(sample),
         "year_tolerance": YEAR_TOLERANCE,
         "reasoning": "enabled",
-        "workers": args.workers,
     }
     results = {
         "meta": meta,
