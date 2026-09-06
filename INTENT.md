@@ -62,7 +62,10 @@ the llama.cpp engines and emits OpenInference spans via Arize libs into a
 dedicated `otel-direct` Phoenix project. Span names + arbitrary attributes
 (`session_id` → Phoenix Sessions grouping, `tag.tags`) are set at span
 creation — no gateway stamper, no `metadata.requester_metadata` nesting,
-zero LiteLLM router/proxy spans (bypass proven via span census).
+zero LiteLLM router/proxy spans (bypass proven via span census). Harness
+LLM spans stamp the tested model's full LFM reasoning as a flat
+`reasoning.content` attribute (+ the reasoning token count when the engine
+sends it) — non-thinking judge/echo spans omit it.
 Probe: `scratch/otel_direct_probe.py`. Gotchas: `phoenix.otel.register`
 uses an explicit endpoint verbatim (pass `.../v1/traces`); the grpcio wheel
 needs conda `libabseil==20260526.0` + `libgrpc==1.83.0` for its sonames.

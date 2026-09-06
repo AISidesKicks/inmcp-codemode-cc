@@ -15,6 +15,7 @@ run groups into one Session in the UI. Tracing is best-effort, never raises.
 import atexit
 import json
 import os
+import re
 import sys
 import threading
 import time
@@ -157,6 +158,9 @@ def _stamp_output(sp, resp):
             sp.set_attribute(SpanAttributes.OUTPUT_VALUE, "")
         return
     sp.set_attribute(SpanAttributes.OUTPUT_VALUE, completion_text(resp))
+    reasoning = _reasoning_full(resp)
+    if reasoning:
+        sp.set_attribute("reasoning.content", reasoning)
     usage = getattr(resp, "usage", None)
     if usage is None:
         return
@@ -168,6 +172,14 @@ def _stamp_output(sp, resp):
         val = getattr(usage, key, None)
         if val is not None:
             sp.set_attribute(attr, val)
+    reasoning_tokens = getattr(
+        getattr(usage, "completion_tokens_details", None), "reasoning_tokens", None
+    )
+    if reasoning_tokens is not None:
+        sp.set_attribute(
+            SpanAttributes.LLM_TOKEN_COUNT_COMPLETION_DETAILS_REASONING,
+            reasoning_tokens,
+        )
 
 
 class StudioList(BaseModel):
@@ -350,13 +362,14 @@ def completion_text(resp):
         return ""
 
 
-def reasoning_content(resp, limit=400):
+def reasoning_content(resp, limit: int | None = 400):
     """Thinking snippet from a completion response, else None.
 
     Tries the first-class `message.reasoning_content` field, then common
     provider extras (reasoning_content/reasoning/thinking) under
     `model_extra`, so llama.cpp/vLLM/SGLang response shapes all resolve.
-    Long reasoning is trimmed with an overflow marker.
+    Long reasoning is trimmed with an overflow marker; `limit=None` returns
+    the full thinking text untrimmed.
     """
     message = getattr(getattr(resp, "choices", [None])[0], "message", None)
     if message is None:
@@ -373,9 +386,27 @@ def reasoning_content(resp, limit=400):
     if not isinstance(text, str) or not text:
         return None
     text = text.strip()
-    if len(text) > limit:
+    if limit is not None and len(text) > limit:
         return text[:limit] + "..."
     return text
+
+
+_THINK_BLOCK = re.compile(r"<think>(.*?)</think>", re.DOTALL)
+
+
+def _reasoning_full(resp):
+    """Full thinking text for span stamping: response field, inline fallback.
+
+    Prefers `reasoning_content(resp, limit=None)`; falls back to the closed
+    inline `<think>...</think>` block in the primary content (unclosed blocks
+    are not extracted, matching evaluator semantics). Returns "" when the
+    response carries no thinking at all.
+    """
+    text = reasoning_content(resp, limit=None)
+    if text:
+        return text
+    match = _THINK_BLOCK.search(completion_text(resp))
+    return match.group(1).strip() if match else ""
 
 
 def usage_fields(resp):

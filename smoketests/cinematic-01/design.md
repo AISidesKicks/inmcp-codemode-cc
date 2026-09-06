@@ -91,7 +91,10 @@ uses one Phoenix Session per test call (session id = the test's span name
 generate.py groups a run into `cinematic-01-generate`; optimize.py scores
 per row the same way — one session per scored film
 (`<run_id> <opt> films <film>`, the scored turn + its echo turn), while the
-dspy/deepeval/adalflow internals emit no client spans. Each scored row's
+dspy/deepeval/adalflow internals emit no client spans. LLM spans carry the
+full LFM reasoning as a flat `reasoning.content` attribute (+ the reasoning
+token count when the engine sends it) — the non-thinking judge/echo spans
+omit it. Each scored row's
 AGENT turn root additionally carries an `eval` ok/miss span annotation
 (posted via `phoenix.client` after a `llm.flush()`, so failed rows stay
 score-searchable). The Sessions row's first-input/last-output/user
