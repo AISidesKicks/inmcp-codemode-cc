@@ -2,8 +2,8 @@
   "meta": {
     "name": "cinematic-01",
     "test": "smoketests/cinematic-01/test.py",
-    "run_id": "run-20260906-123245-local-thinking",
-    "run_at": "2026-09-06T12:33:10+0200",
+    "run_id": "run-20260906-123044-local-thinking",
+    "run_at": "2026-09-06T12:31:18+0200",
     "model_alias": "local-thinking",
     "base_url": "http://localhost:4000",
     "dataset": "/home/roro/Workspaces/mcp-codemode-cc/datasets/cinematic-01/dataset.csv",
