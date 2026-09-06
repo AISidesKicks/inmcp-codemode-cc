@@ -212,6 +212,27 @@
         "judge_calls": 0,
         "file": "datasets/cinematic-01/runs/opt-20260906-gw-adalflow-tgd-films.json"
       }
+    },
+    "refiner": {
+      "status": "ok",
+      "wall_seconds": 22.1,
+      "val_score_before": 0.25,
+      "val_score_after": 0.25,
+      "task_calls": 8,
+      "judge_calls": 1,
+      "render": "filled",
+      "best_prompt": "Which studio produced the movie \"{film}\"? Please respond with a JSON object formatted as {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "Which studio produced the movie \"{film}\"? Please respond with a JSON object formatted as {\"studios\": [\"Studio Name\"]}.",
+      "error": null,
+      "films": {
+        "score": 0.34415584415584416,
+        "films": 154,
+        "max_tokens": 8192,
+        "wall_seconds": 488.7,
+        "task_calls": 154,
+        "judge_calls": 0,
+        "file": "datasets/cinematic-01/runs/opt-20260906-gw-refiner-films.json"
+      }
     }
   }
 }
