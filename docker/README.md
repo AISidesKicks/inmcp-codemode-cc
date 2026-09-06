@@ -161,13 +161,13 @@ verdicts (tiny "echo back exactly: TEST PASS|FAIL" calls, see
 kept as an attribute), which the sweep tooling and Phoenix checks rely on —
 hence v1 + stamper.
 
-Client-side session traces: on top of the gateway path, every smoketests
-model call emits a probe-style trace direct to Phoenix project `cdmd-lab` —
-an AGENT turn root (session.id = run-id, user.id = `edu-harness`,
-input/output values) with the gateway call nested as an LLM child. One
-Session per run in the Sessions UI, one turn per model call. Gateway spans
-in `default` keep the metering/naming scheme above; `--no-session` (test.py)
-or `llm.TRACING["enabled"] = False` opts out.
+Client-side session traces: every smoketests model call emits a probe-style
+trace direct to Phoenix project `cdmd-lab` — an AGENT turn root (session.id
+= run-id, user.id = `edu-harness`, input/output values) with the engine call
+nested as an LLM child. One Session per run in the Sessions UI, one turn per
+model call. Since 2026-09-06 the smoketests call the llama.cpp engines
+directly — LiteLLM is stopped and `default` receives no new harness traces
+(`--no-session` (test.py) or `llm.TRACING["enabled"] = False` opts out).
 
 ## Text-to-GraphQL MCP (anti-ZTA demo)
 

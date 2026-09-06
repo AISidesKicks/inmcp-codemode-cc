@@ -6,8 +6,10 @@ Field-decision notes for the `cinematic-01` micro dataset. Written down so the
 ## Motivation
 
 The lab is about *metering* local inference in a lean stack: token counts,
-per-call latency and Phoenix execution traces from llama.cpp + LiteLLM +
-Phoenix, with no external databases. The cinematic-01 dataset gives the smoke
+per-call latency and Phoenix execution traces from llama.cpp + Phoenix, with
+no external databases. Since 2026-09-06 the harness calls the engines
+directly — the LiteLLM gateway sits stopped in the docker stack and the
+smoketests no longer route through it. The cinematic-01 dataset gives the smoke
 pipeline a small, fun, stable set of studio->film->year triplets to run
 generate/test cycles against. (The caching-tier demos of the original lab live
 in [localai.isnot.cheap](https://localai.isnot.cheap); this lab runs
@@ -34,9 +36,10 @@ the model's limitations.
 ## Structured output
 
 Every call goes through `llm.chat()` with a Pydantic `response_format`
-(`StudioList` / `FilmList` / `YearAnswer`) plus
-`enable_json_schema_validation=True`. The 2.6B camel is comfortable emitting
-small JSON. Reasoning is **always on** (`{"enabled": True}`, no opt-in flag):
+(`StudioList` / `FilmList` / `YearAnswer`) mapped to a llama.cpp
+`json_schema` constraint (grammar-guided; `guided=False` skips it — vLLM
+engines return empty completions under guided decoding). The 2.6B camel is
+comfortable emitting small JSON. Reasoning is **always on** (`{"enabled": True}`, no opt-in flag):
 LFM2.5-2.6B is a pure reasoning model whose chat template hardcodes the think
 open, so the old `--reasoning` opt-in and the budget-0 off-switch were removed.
 Every call gets token headroom (`max_tokens` 1536 default) — with thinking on,
@@ -78,20 +81,19 @@ plus `seconds` are the metering signals.
 
 Every model call gets a probe-style trace in the Phoenix project `cdmd-lab`
 (direct OTLP to `http://localhost:6006/v1/traces`): an AGENT turn root
-(`llm.turn`, named like the gateway span — `<run_id> recall <film>` etc.)
-carrying `session.id` + `user.id` (`edu-harness`) and
-`input.value`/`output.value`, with the gateway-routed call nested underneath
-as an LLM child (via the client-side chat span). Verdict-echo stamps get the
+(`llm.turn`, named `<run_id> recall <film>` etc.) carrying `session.id` +
+`user.id` (`edu-harness`) and `input.value`/`output.value`, with the engine
+call nested underneath as an LLM child (client-side chat span). Verdict-echo stamps get the
 same AGENT turn shape, with the echoed word as output.value (tiny 8-token
 budgets often return empty model text). A whole run groups into one Phoenix
 Session (test.py: session = run-id, one turn per call; generate.py:
 `cinematic-01-generate`; optimize.py: session = run-id), and the Sessions
 row's first-input/last-output/user resolve from the AGENT roots.
 
-The gateway metering path (LiteLLM otel callback → project `default`) is
-untouched: span naming (`<run_id> <opt> eval|judge|films`),
-`metadata.test_status` stamps and the `eval` span annotations keep landing
-there. The session rides plain module state (`llm.SESSION_STATE`), not
+The legacy gateway metering path (LiteLLM otel callback → project
+`default`) is retired with the gateway routing — `default` sees no new
+traces from the harness. The session rides plain module state
+(`llm.SESSION_STATE`), not
 contextvars — ambient propagation would not survive thread boundaries.
 `--no-session` (test.py) or `llm.TRACING["enabled"] = False` disables it;
 tracing stays best-effort and never fails the run.
@@ -114,9 +116,9 @@ by normalized exact match (`eval_text`). Two stages (`--stage`, default all):
 Serial by construction: both engines run `--parallel 1`, so the films legs
 score strictly sequentially — no worker flag here, wall time is the accepted
 cost (~25 min for the full sweep plus hours for full-corpus legs). Tagging
-rides the proven gateway `metadata.generation_name` path: spans land as
-`<run_id> <opt> eval` / `<run_id> <opt> judge` / `<run_id> <opt> films`, and
-`health_all()` gates the run on gateway + both llama servers.
+rides the client-side spans: turn/LLM spans named
+`<run_id> <opt> eval` / `<run_id> <opt> judge` / `<run_id> <opt> films` in
+project `cdmd-lab`, and `health_all()` gates the run on both llama servers.
 
 Each result records the `render` kind its best prompt needs for the films leg
 (`system` for gepa/dspy instructions that expect the film as the user message,
