@@ -125,6 +125,25 @@ profiles `lab` / `phoenix`. See `docker/README.md`.
    (judge) via gateway OTEL tagging (`metadata.generation_name`); artifacts
    in `datasets/cinematic-01/runs/opt-scale-20260904-*`
 
+## 4. Backup traces to /sidecar
+
+We will make a sidecar backup (and show to lab user/harness how to backup)
+
+A. Local SQLite (Default)
+
+
+B. Exporting with Phonix CLI (CLI snapshoting)
+
+```
+px trace list --limit 10000 --format json --project default > ./sidecar/phoenix_traces_films_raw.json
+Resolving project: default
+Fetching last 10000 trace(s)...
+Found 4451 trace(s)
+```
+
+Status: sidecar artifacts 2026-09-06 — SQLite volume tar.gz (`cmod-phoenix-backup-20.7.tgz`,
+method A) + PX CLI export (`phoenix_traces_films_raw.json`, 4451 traces, method B).
+
 # Installed tools
 
 ## Arize Phoenix CLI
