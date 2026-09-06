@@ -31,7 +31,7 @@ We also want to demonstrate ZTA (Zero Token Architecture) - report strips in Pyt
 
 Contrast & compare punchline: `text-to-graphql-mcp` is the anti-ZTA - an LLM writes the graphQL for you (gpt-4o via LangGraph). Same data, nonzero token bill.
 
-Status: dockerized in the lab as `cmod-text-to-graphql` (judge as generator via LiteLLM) and harness-tested 2026-09-05 — granite needs the connection pattern named in the prompt; howto in `eduailab/text-to-graphql.md`.
+Status: dockerized in the lab as `cmod-text-to-graphql` (judge as generator via LiteLLM) and harness-tested 2026-09-05 — granite needs the connection pattern named in the prompt; howto in `eduailab/text-to-graphql.md`. Note: the `cmod-litellm` gateway sits stopped since the 2026-09-06 engine-direct switch (harness no longer routes through it) — container removal pending.
 
 # The EDU AI LAB
 
@@ -46,14 +46,15 @@ The goal of the lab is to create /skills for 3 modes in 3 dirs, can be switched 
 - Arize Phoenix: Built-in MCP with LLM and codemode
 
 ## 3. Lab environment
- - litellm + small llm in llama-server + Arize Phoenix
+ - two small llms in llama-server + Arize Phoenix (LiteLLM gateway stopped 2026-09-06 — harness is engine-direct, removal pending)
 
 **Note:** As leaner setup as possible (no external DBs - main focus on execution traces ONLY!)
 
 Docker variant of the lab env lives in `docker/` — two llama.cpp servers
 (non-thinking granite judge @ 64K ctx + thinking LFM2.5-2.6B tested model
-@ 32K ctx, Q4 GGUFs, built-in WebUI) + LiteLLM gateway + Arize Phoenix,
-profiles `lab` / `phoenix`. See `docker/README.md`.
+@ 32K ctx, Q4 GGUFs, built-in WebUI) + Arize Phoenix, profiles `lab` /
+`phoenix` (the LiteLLM gateway service stays defined but stopped —
+engine-direct since 2026-09-06, removal pending). See `docker/README.md`.
 
 Gateway-free OTEL mode (2026-09-06): drop the proxy from the trace path —
 client-side `OpenAIInstrumentor()` wraps OpenAI-SDK calls aimed straight at
@@ -137,8 +138,11 @@ only); parked in `scratch/gateway`. Going direct instead.
    dspy-simba 81 / 0 and adalflow-tgd 24 / 12; full per-optimizer table
    (films scores + wall seconds) in `smoketests/cinematic-01/design.md`
  - spans labelled `<run_id> <opt> eval` (tested) + `<run_id> <opt> judge`
-   (judge) via gateway OTEL tagging (`metadata.generation_name`); artifacts
-   in `datasets/cinematic-01/runs/opt-scale-20260904-*`
+   (judge) — client-side OpenInference spans straight into the Phoenix
+   project `cdmd-lab` (engine-direct since 2026-09-06, no gateway in the
+   trace path); each scored row's AGENT turn root carries an `eval` ok/miss
+   span annotation so failed rows stay score-searchable; artifacts in
+   `datasets/cinematic-01/runs/opt-scale-20260904-*`
 
 ## 4. Backup traces to /sidecar
 
