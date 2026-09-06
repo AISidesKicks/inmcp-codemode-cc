@@ -55,6 +55,21 @@ Docker variant of the lab env lives in `docker/` — two llama.cpp servers
 @ 32K ctx, Q4 GGUFs, built-in WebUI) + LiteLLM gateway + Arize Phoenix,
 profiles `lab` / `phoenix`. See `docker/README.md`.
 
+Gateway-free OTEL mode (2026-09-06): drop the proxy from the trace path —
+client-side `OpenAIInstrumentor()` wraps OpenAI-SDK calls aimed straight at
+the llama.cpp engines and emits OpenInference spans via Arize libs into a
+dedicated `otel-direct` Phoenix project. Span names + arbitrary attributes
+(`session_id` → Phoenix Sessions grouping, `tag.tags`) are set at span
+creation — no gateway stamper, no `metadata.requester_metadata` nesting,
+zero LiteLLM router/proxy spans (bypass proven via span census).
+Probe: `scratch/otel_direct_probe.py`. Gotchas: `phoenix.otel.register`
+uses an explicit endpoint verbatim (pass `.../v1/traces`); the grpcio wheel
+needs conda `libabseil==20260526.0` + `libgrpc==1.83.0` for its sonames.
+
+Gateway search verdict: Portkey v1 evaluated 2026-09-06 — lean (~2 MB TS,
+no DB/Redis) but no built-in OTEL export (in-memory ring + SSE console
+only); parked in `scratch/gateway`. Going direct instead.
+
 ## 3. Generating traces in Phoenix
 
  a. Run naive script
