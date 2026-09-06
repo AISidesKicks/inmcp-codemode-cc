@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "run_id": "opt-20260906-gw",
+    "tested_model": "local-thinking",
+    "judge_model": "local-judge",
+    "task_max_tokens": 1536,
+    "films_max_tokens": 8192,
+    "seed_prompt": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+    "gepa_seed": "You will receive a movie title as the user message. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+    "dspy_seed": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+    "train_films": [
+      "The Princess and the Frog",
+      "The Fast & Furious 7",
+      "Dunkirk",
+      "Home Alone",
+      "The Big Lebowski",
+      "Singin' in the Rain"
+    ],
+    "val_films": [
+      "The Super Mario Bros. Movie",
+      "Justice League",
+      "Frozen",
+      "The Suicide Squad"
+    ]
+  },
+  "results": {
+    "gepa": {
+      "status": "ok",
+      "wall_seconds": 127.8,
+      "val_score_before": 0.0,
+      "val_score_after": 0.0,
+      "task_calls": 24,
+      "judge_calls": 2,
+      "render": "system",
+      "best_prompt": "You will receive a movie title as the user message. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "You will receive a movie title as the user message. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null
+    },
+    "depeval-gepa": {
+      "status": "ok",
+      "wall_seconds": 155.5,
+      "val_score_before": 0.25,
+      "val_score_after": 0.0,
+      "task_calls": 34,
+      "judge_calls": 4,
+      "render": "filled",
+      "best_prompt": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null
+    },
+    "depeval-miprov2": {
+      "status": "ok",
+      "wall_seconds": 95.2,
+      "val_score_before": 0.25,
+      "val_score_after": 0.0,
+      "task_calls": 25,
+      "judge_calls": 4,
+      "render": "filled",
+      "best_prompt": "Identify the production company associated with the given film title. Respond with only a JSON object shaped like {'studios': ['Studio Name']}. Be sure to handle potential sarcastic inputs appropriately, focusing solely on the factual production company name.\n\nMovie: {film}",
+      "best_prompt_head": "Identify the production company associated with the given film title. Respond with only a JSON object shaped like {'studios': ['Studio Name']}. Be sure to handle potential sarcastic inputs appropriately, focusing solely ",
+      "error": null
+    },
+    "depeval-copro": {
+      "status": "ok",
+      "wall_seconds": 71.7,
+      "val_score_before": 0.25,
+      "val_score_after": 0.0,
+      "task_calls": 18,
+      "judge_calls": 1,
+      "render": "filled",
+      "best_prompt": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null
+    },
+    "dspy-bootstrap": {
+      "status": "ok",
+      "wall_seconds": 53.8,
+      "val_score_before": 0.0,
+      "val_score_after": 0.0,
+      "task_calls": 8,
+      "judge_calls": 1,
+      "render": "system",
+      "best_prompt": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null
+    },
+    "depeval-simba": {
+      "status": "ok",
+      "wall_seconds": 299.8,
+      "val_score_before": 0.0,
+      "val_score_after": 0.25,
+      "task_calls": 68,
+      "judge_calls": 1,
+      "render": "filled",
+      "best_prompt": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.\n\n[Example]\nInput: The Princess and the Frog\nOutput: Walt Disney Pictures",
+      "best_prompt_head": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.\n\n[Example]\nInput: The Princess and the Frog\nOutput: Walt Disney Pictures",
+      "error": null
+    },
+    "dspy-simba": {
+      "status": "ok",
+      "wall_seconds": 280.1,
+      "val_score_before": 0.0,
+      "val_score_after": 0.0,
+      "task_calls": 84,
+      "judge_calls": 1,
+      "render": "system",
+      "best_prompt": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null
+    },
+    "dspy-miprov2": {
+      "status": "ok",
+      "wall_seconds": 127.2,
+      "val_score_before": 0.25,
+      "val_score_after": 0.25,
+      "task_calls": 29,
+      "judge_calls": 8,
+      "render": "system",
+      "best_prompt": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null
+    },
+    "adalflow-tgd": {
+      "status": "ok",
+      "wall_seconds": 126.1,
+      "val_score_before": 0.0,
+      "val_score_after": 0.0,
+      "task_calls": 24,
+      "judge_calls": 12,
+      "render": "filled",
+      "best_prompt": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null
+    }
+  }
+}
