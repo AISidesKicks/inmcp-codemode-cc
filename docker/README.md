@@ -154,12 +154,19 @@ natively in Phoenix UI and via MCP `getSpans` `attribute: ["metadata.run_id:<tag
 default-named spans (`litellm_request`, `raw_gen_ai_request`) are excluded. Names
 carrying an uppercase `PASS`/`FAIL` token also get a filterable
 `metadata.test_status` attribute — that is how the smoketests stamp per-scenario
-verdicts (tiny "echo back to me: TEST PASS|FAIL" calls, see
+verdicts (tiny "echo back exactly: TEST PASS|FAIL" calls, see
 `smoketests/cinematic-01/llm.py echo_verdict`). The v2
 `arize_phoenix` callback stamps kinds natively but hard-names spans
 `chat <model>` (probed 2026-09-05: `generation_name` is neither promoted nor
 kept as an attribute), which the sweep tooling and Phoenix checks rely on —
 hence v1 + stamper.
+
+Client-side session traces: on top of the gateway path, every smoketests
+`llm.chat()` call emits its own OpenInference LLM span (input/output values +
+token counts, `session.id` = run-id, `user.id` = `edu-harness`) direct to
+Phoenix project `cdmd-lab` — one Session per run in the Sessions UI, one turn
+per model call. Gateway spans in `default` keep the metering/naming scheme
+above; `--no-session` (test.py) or `llm.TRACING["enabled"] = False` opts out.
 
 ## Text-to-GraphQL MCP (anti-ZTA demo)
 

@@ -74,6 +74,24 @@ No caching tier anywhere in this lab, by design:
 Per-call results therefore carry no cache fields: the `usage` token counts
 plus `seconds` are the metering signals.
 
+## Sessions tracing
+
+Every `llm.chat()` call also emits a client-side OpenInference LLM span direct
+to Phoenix (`http://localhost:6006/v1/traces`, project `cdmd-lab`) carrying
+`session.id` + `user.id` (`edu-harness`), `input.value`/`output.value` and
+`llm.token_count.*`. A whole run groups into one Phoenix Session (test.py:
+session = run-id, one turn per model call; generate.py:
+`cinematic-01-generate`; optimize.py: session = run-id). The gateway metering
+path (LiteLLM otel callback → project `default`) is untouched: span naming
+(`<run_id> <opt> eval|judge|films`), `metadata.test_status` stamps and the
+`eval` span annotations keep landing there.
+
+Threading note: the session rides plain module state (`llm.SESSION_STATE`),
+not contextvars — the test's ThreadPoolExecutor workers start with a fresh
+context, so ambient propagation would silently drop `session.id` on
+concurrent calls. `--no-session` (test.py) or `llm.TRACING["enabled"] = False`
+disables it; tracing stays best-effort and never fails the run.
+
 ## Optimizer runs
 
 `optimize.py` (+ `optimize_common.py`) formalizes the prompt-optimizer sweep
