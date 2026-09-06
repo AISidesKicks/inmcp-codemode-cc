@@ -317,7 +317,8 @@ def echo_verdict(run_name, status, *, model=None):
     name = f"{run_name} {status}"
     prompt = f"Echo back exactly: TEST {status}"
     try:
-        with turn(name, prompt) as sp:
+        # the echo joins the test's own session (session id = test run_name)
+        with session(run_name), turn(name, prompt) as sp:
             resp, _ = chat(
                 prompt,
                 max_tokens=8,

@@ -103,7 +103,9 @@ def query_schema(content, schema, max_tokens, reasoning, run_name=None):
     last_resp = None
     seconds = 0.0
     span_id = None
-    with llm.turn(run_name, content) as sp:
+    # one test == one Phoenix Session (id = the test's span name); the
+    # verdict-echo turn joins the same session from echo_verdict
+    with llm.session(run_name or "query_schema"), llm.turn(run_name, content) as sp:
         if sp is not None:
             span_id = format(sp.get_span_context().span_id, "016x")
         for attempt in range(1, MAX_TRIES + 1):
@@ -433,23 +435,23 @@ def main():
     sample = sample_rows(rows, args.sample)
     print(f"{len(rows)} rows loaded, sampling {len(sample)} ({args.sample})")
 
-    # single-slot llama.cpp engines: strictly serial, no client thread pool
-    with llm.session(run_id):
-        recall, recall_ok = scenario_studio_recall(sample, args)
-        print(f"scenario 1 studio recall: {recall_ok}/{len(recall)}")
+    # single-slot llama.cpp engines: strictly serial, no client thread pool;
+    # sessions are per test (query_schema/echo), not per run
+    recall, recall_ok = scenario_studio_recall(sample, args)
+    print(f"scenario 1 studio recall: {recall_ok}/{len(recall)}")
 
-        year_match, year_ok = scenario_year_match(sample, args)
-        print(
-            f"scenario 2 year match (+/-{YEAR_TOLERANCE}): {year_ok}/{len(year_match)}"
-        )
+    year_match, year_ok = scenario_year_match(sample, args)
+    print(
+        f"scenario 2 year match (+/-{YEAR_TOLERANCE}): {year_ok}/{len(year_match)}"
+    )
 
-        year_repeat, exact_score, exact_passed = scenario_year_repeat(
-            sample, args, args.threshold
-        )
-        print(
-            f"scenario 3 year repeat ExactMatchMetric: {exact_score:.2f} "
-            f"({'PASS' if exact_passed else 'FAIL'})"
-        )
+    year_repeat, exact_score, exact_passed = scenario_year_repeat(
+        sample, args, args.threshold
+    )
+    print(
+        f"scenario 3 year repeat ExactMatchMetric: {exact_score:.2f} "
+        f"({'PASS' if exact_passed else 'FAIL'})"
+    )
     meta = {
         "name": "cinematic-01",
         "test": "smoketests/cinematic-01/test.py",
@@ -519,8 +521,7 @@ def main():
             )
     print(f"wrote {run_results} and {run_eval}")
     print(f"latest copies at {RESULTS_PATH} and {EVAL_PATH}")
-    with llm.session(run_id):
-        echo_verdicts(args, annotate_rows)
+    echo_verdicts(args, annotate_rows)
     # flush the batch exporter first — annotations target span ids Phoenix
     # does not know about until the turn roots are exported
     llm.flush()

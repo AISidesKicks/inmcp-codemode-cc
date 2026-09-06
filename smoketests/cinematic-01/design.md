@@ -85,10 +85,12 @@ Every model call gets a probe-style trace in the Phoenix project `cdmd-lab`
 `user.id` (`edu-harness`) and `input.value`/`output.value`, with the engine
 call nested underneath as an LLM child (client-side chat span). Verdict-echo stamps get the
 same AGENT turn shape, with the echoed word as output.value (tiny 8-token
-budgets often return empty model text). A whole run groups into one Phoenix
-Session (test.py: session = run-id, one turn per call; generate.py:
-`cinematic-01-generate`; optimize.py: session = run-id), and the Sessions
-row's first-input/last-output/user resolve from the AGENT roots.
+budgets often return empty model text). Sessions are per **test**: test.py
+uses one Phoenix Session per test call (session id = the test's span name
+`<run_id> recall <film>` etc., two turns — the test and its verdict echo);
+generate.py groups a run into `cinematic-01-generate`; optimize.py groups a
+run under its run-id. The Sessions row's first-input/last-output/user
+resolve from the AGENT roots.
 
 The legacy gateway metering path (LiteLLM otel callback → project
 `default`) is retired with the gateway routing — `default` sees no new
