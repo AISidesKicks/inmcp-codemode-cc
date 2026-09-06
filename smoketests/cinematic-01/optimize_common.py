@@ -21,8 +21,12 @@ optimizer variant shares:
                                    schema via test.parse_model (think-block
                                    tolerant); feedback = expected-vs-got
 - score_rows / score_val           mean score + per-row results over rendered
-                                   rows; score_val is the micro 6/4 wrapper at
-                                   the sweep budget, films legs pass their own
+                                    rows (each row one AGENT turn root with a
+                                    span_id); score_val is the micro 6/4
+                                    wrapper at the sweep budget, films legs
+                                    pass their own; echo=True stamps PASS/FAIL
+                                    echo verdicts + `eval` ok/miss span
+                                    annotations (flush-first)
 - LocalLLM(DeepEvalBaseLLM)        judge wrapper for deepeval reflection and
                                    mutation (schema calls parse JSON via
                                    json_repair)
@@ -250,6 +254,37 @@ def health_all():
         sys.exit("lab stack not fully healthy; aborting sweep")
 
 
+def annotate_eval_links(links):
+    """Best-effort Phoenix span annotations (`eval` = ok/miss) on each scored
+    row's AGENT turn root in project cdmd-lab; `links` are (span_id, ok)
+    pairs captured client-side from llm.turn, so no span lookup is needed.
+    Call llm.flush() first — annotations target span ids Phoenix does not
+    know about until the turn roots are exported. Never raises; returns the
+    written count.
+    """
+    if not links:
+        return 0
+    try:
+        from phoenix.client import Client
+
+        client = Client()
+        for span_id, ok in links:
+            client.spans.add_span_annotation(
+                span_id=span_id,
+                annotation_name="eval",
+                annotator_kind="CODE",
+                label="ok" if ok else "miss",
+                score=1.0 if ok else 0.0,
+                sync=True,
+            )
+        return len(links)
+    except Exception as exc:  # noqa: BLE001 - annotations are best-effort
+        print(
+            f"warning: span annotations skipped: {type(exc).__name__}: {str(exc)[:200]}"
+        )
+        return 0
+
+
 def echo_score_rows(base_run_name, scored):
     """Best-effort Phoenix status stamping: one tiny echo call per scored row
     (`<base_run_name> <film> PASS|FAIL`), stamped as the session's echo turn
@@ -262,15 +297,45 @@ def echo_score_rows(base_run_name, scored):
 def score_rows(rows, render, run_name, max_tokens, echo=False):
     """Mean score + per-row results; render(row) builds the full prompt and
     max_tokens sets the per-call generation budget (sweep vs films legs).
-    echo=True additionally stamps per-row PASS/FAIL into Phoenix."""
+    Each row's task call runs inside its own AGENT turn root
+    (`<run_name> <film>`, session of the same name — the echo turn joins it),
+    and the root's span id lands on the row so failed rows stay
+    score-searchable. echo=True additionally stamps per-row PASS/FAIL echo
+    verdicts and posts `eval` ok/miss span annotations onto the turn roots
+    (flush first, same pattern as test.annotate_eval_links)."""
     scored = []
+    links = []
     for row in rows:
-        text = task_text(render(row), run_name=run_name, max_tokens=max_tokens)
+        prompt = render(row)
+        span_id = None
+        with (
+            llm.session(f"{run_name} {row['film']}"),
+            llm.turn(f"{run_name} {row['film']}", prompt) as sp,
+        ):
+            if sp is not None:
+                span_id = format(sp.get_span_context().span_id, "016x")
+            text = task_text(prompt, run_name=run_name, max_tokens=max_tokens)
+            if sp is not None:
+                sp.set_attribute(llm.SpanAttributes.OUTPUT_VALUE, text or "")
         score, feedback = eval_text(row, text)
-        scored.append({"film": row["film"], "score": score, "feedback": feedback})
+        scored.append(
+            {
+                "film": row["film"],
+                "score": score,
+                "feedback": feedback,
+                "span_id": span_id,
+            }
+        )
+        if span_id:
+            links.append((span_id, score == 1.0))
     mean = sum(r["score"] for r in scored) / len(scored) if scored else 0.0
     if echo:
         echo_score_rows(run_name, scored)
+        # flush the batch exporter first — annotations target span ids
+        # Phoenix does not know about until the turn roots are exported
+        llm.flush()
+        written = annotate_eval_links(links)
+        print(f"phoenix annotations: {written} written", flush=True)
     return mean, scored
 
 
