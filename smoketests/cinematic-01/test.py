@@ -370,7 +370,7 @@ def main():
         "--sample",
         type=int,
         default=20,
-        help="films to probe per scenario (default 20)",
+        help="films to probe per scenario, 0 = all rows (default 20)",
     )
     parser.add_argument("--max-tokens", type=int, default=None)
     parser.add_argument(
@@ -432,7 +432,7 @@ def main():
     rows = load_rows(args.csv)
     if not rows:
         sys.exit("empty dataset; run cinematic-01-generate first")
-    sample = sample_rows(rows, args.sample)
+    sample = sample_rows(rows, args.sample or len(rows))
     print(f"{len(rows)} rows loaded, sampling {len(sample)} ({args.sample})")
 
     # single-slot llama.cpp engines: strictly serial, no client thread pool;
