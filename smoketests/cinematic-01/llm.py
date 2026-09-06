@@ -6,15 +6,26 @@ demo placeholder that is never the real key), wraps the verified
 `litellm.completion` call against the `local-judge` alias, and defines the
 Pydantic response schemas the generator and the test both use: StudioList,
 FilmList, YearAnswer.
+
+Direct-OTEL session tracing: every chat() call also emits a client-side
+OpenInference LLM span (input.value/output.value/llm.token_count.*) into the
+Phoenix project `cdmd-lab`, tagged session.id + user.id so a run groups into
+one Session in the UI. The gateway metering path (project `default`) stays
+untouched; tracing is best-effort and never raises.
 """
 
+import atexit
 import os
 import sys
+import threading
 import time
 import urllib.error
 import urllib.request
+from contextlib import contextmanager
 
 import litellm
+from openinference.semconv.trace import SpanAttributes
+from opentelemetry import trace
 from pydantic import BaseModel
 
 MODEL = "local-judge"
@@ -23,6 +34,111 @@ DEFAULT_MAX_TOKENS = 256
 DEFAULT_REASONING = {"enabled": True}
 DEMO_KEY = "sk-1234-master-key-4321"
 TIMEOUT_S = 120
+USER_ID = "edu-harness"
+PHOENIX_URL = "http://localhost:6006"
+PHOENIX_PROJECT = "cdmd-lab"
+
+TRACING = {"enabled": True}
+SESSION_STATE = {"session_id": None}
+_TRACER = None
+_TRACER_LOCK = threading.Lock()
+
+
+def tracer():
+    """Lazy direct-OTEL tracer into Phoenix project `cdmd-lab`; None if off.
+
+    Returns None forever once init failed, so calls stay quiet and the smoke
+    test never depends on Phoenix being up. Lock-guarded: worker threads hit
+    this concurrently on the first calls.
+    """
+    global _TRACER
+    if not TRACING["enabled"] or _TRACER is False:
+        return None
+    if _TRACER is None:
+        with _TRACER_LOCK:
+            if _TRACER is None:
+                try:
+                    import phoenix.otel
+
+                    phoenix.otel.register(
+                        endpoint=f"{PHOENIX_URL}/v1/traces",
+                        protocol="http/protobuf",
+                        project_name=PHOENIX_PROJECT,
+                        batch=True,
+                    )
+                    _TRACER = trace.get_tracer("cinematic-01")
+                    atexit.register(flush)
+                except Exception as exc:  # noqa: BLE001 - tracing is best-effort
+                    print(
+                        f"warning: phoenix tracing disabled: "
+                        f"{type(exc).__name__}: {str(exc)[:160]}",
+                        file=sys.stderr,
+                    )
+                    _TRACER = False
+    return _TRACER
+
+
+def flush(timeout_s=5):
+    """Force-flush the tracer provider; safe when tracing is off."""
+    try:
+        tp = trace.get_tracer_provider()
+        if hasattr(tp, "force_flush"):
+            tp.force_flush(timeout_s)
+    except Exception as exc:  # noqa: BLE001 - flush is best-effort
+        print(f"warning: trace flush skipped: {type(exc).__name__}: {exc}", file=sys.stderr)
+
+
+@contextmanager
+def session(session_id):
+    """Group every chat() call until exit into one Phoenix Session.
+
+    Plain module state, not contextvars: worker threads of the smoke test's
+    ThreadPoolExecutor start with a fresh context, so ambient propagation
+    would silently drop session.id on concurrent calls.
+    """
+    SESSION_STATE["session_id"] = str(session_id)
+    try:
+        yield
+    finally:
+        SESSION_STATE["session_id"] = None
+
+
+@contextmanager
+def _chat_span(name, content):
+    """One client-side OpenInference LLM span; yields the span or None."""
+    tr = tracer()
+    if tr is None:
+        yield None
+        return
+    with tr.start_as_current_span(name) as sp:
+        sp.set_attribute(SpanAttributes.OPENINFERENCE_SPAN_KIND, "LLM")
+        sp.set_attribute(SpanAttributes.INPUT_VALUE, content)
+        if SESSION_STATE["session_id"]:
+            sp.set_attribute(
+                SpanAttributes.SESSION_ID, SESSION_STATE["session_id"]
+            )
+        sp.set_attribute(SpanAttributes.USER_ID, USER_ID)
+        yield sp
+
+
+def _stamp_output(sp, resp):
+    """Output.value + token counts onto a chat span; no-op when tracing off."""
+    if sp is None or resp is None:
+        if sp is not None:
+            sp.set_attribute(SpanAttributes.OUTPUT_VALUE, "")
+        return
+    sp.set_attribute(SpanAttributes.OUTPUT_VALUE, completion_text(resp))
+    usage = getattr(resp, "usage", None)
+    if usage is None:
+        return
+    for key, attr in (
+        ("prompt_tokens", SpanAttributes.LLM_TOKEN_COUNT_PROMPT),
+        ("completion_tokens", SpanAttributes.LLM_TOKEN_COUNT_COMPLETION),
+        ("total_tokens", SpanAttributes.LLM_TOKEN_COUNT_TOTAL),
+    ):
+        val = getattr(usage, key, None)
+        if val is not None:
+            sp.set_attribute(attr, val)
 
 
 class StudioList(BaseModel):
@@ -126,29 +242,33 @@ def chat(
             extra_body = {}
         extra_body.setdefault("metadata", metadata)
         kwargs["extra_body"] = extra_body
-    t0 = time.perf_counter()
-    for attempt in range(1, retries + 1):
-        if attempt > 1:
-            time.sleep(0.5 * attempt)
-            kwargs["messages"] = [
-                {
-                    "role": "user",
-                    "content": "Please answer again: " + content,
-                }
-            ]
-            kwargs["max_tokens"] = max(1024, max_tokens)
-        try:
-            resp = litellm.completion(**kwargs)
-            return resp, time.perf_counter() - t0
-        except litellm.exceptions.JSONSchemaValidationError:
-            if attempt == retries:
-                print(
-                    "chat: validation still failing, last attempt",
-                    repr(content)[:160],
-                    file=sys.stderr,
-                )
-                return None, time.perf_counter() - t0
-    raise RuntimeError("unreachable")
+    span_name = run_name or f"llm.chat {model}"
+    with _chat_span(span_name, content) as sp:
+        t0 = time.perf_counter()
+        for attempt in range(1, retries + 1):
+            if attempt > 1:
+                time.sleep(0.5 * attempt)
+                kwargs["messages"] = [
+                    {
+                        "role": "user",
+                        "content": "Please answer again: " + content,
+                    }
+                ]
+                kwargs["max_tokens"] = max(1024, max_tokens)
+            try:
+                resp = litellm.completion(**kwargs)
+                _stamp_output(sp, resp)
+                return resp, time.perf_counter() - t0
+            except litellm.exceptions.JSONSchemaValidationError:
+                if attempt == retries:
+                    print(
+                        "chat: validation still failing, last attempt",
+                        repr(content)[:160],
+                        file=sys.stderr,
+                    )
+                    _stamp_output(sp, None)
+                    return None, time.perf_counter() - t0
+        raise RuntimeError("unreachable")
 
 
 def echo_verdict(run_name, status, *, base_url=DEFAULT_BASE_URL, model=None):
@@ -162,7 +282,7 @@ def echo_verdict(run_name, status, *, base_url=DEFAULT_BASE_URL, model=None):
     name = f"{run_name} {status}"
     try:
         resp, _ = chat(
-            f"Echo back to me: TEST {status}",
+            f"Echo back exactly: TEST {status}",
             base_url=base_url,
             max_tokens=8,
             reasoning={"enabled": False},

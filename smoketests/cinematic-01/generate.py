@@ -22,6 +22,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(__file__))
 
+import llm
 from llm import (
     DEFAULT_BASE_URL,
     MODEL,
@@ -294,4 +295,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    with llm.session("cinematic-01-generate"):
+        main()

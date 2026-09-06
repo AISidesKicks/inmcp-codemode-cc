@@ -53,6 +53,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import llm
 import optimize_common as common
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -745,10 +746,13 @@ def main():
             "results": {},
         }
 
-    if args.stage in ("sweep", "all"):
-        run_sweep(args, run_id, out, out_path)
-    if args.stage in ("films", "all"):
-        run_films(args, run_id, out, out_path)
+    # session.id = run-id on the client-side chat spans (project cdmd-lab);
+    # dspy/deepeval/adalflow internals bypass llm.chat and stay gateway-only.
+    with llm.session(run_id):
+        if args.stage in ("sweep", "all"):
+            run_sweep(args, run_id, out, out_path)
+        if args.stage in ("films", "all"):
+            run_films(args, run_id, out, out_path)
 
     print_table(out)
     out_dump(out_path, out)

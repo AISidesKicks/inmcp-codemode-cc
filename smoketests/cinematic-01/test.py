@@ -14,6 +14,10 @@ the model against it:
 Writes per-run datasets/cinematic-01/runs/<run-id>/results.json (raw rows) and
 datasets/cinematic-01/runs/<run-id>/eval.json (scored scenarios), plus refreshed
 "latest" copies at datasets/cinematic-01/results.json and eval.json.
+
+Every model call also emits a client-side OpenInference LLM span direct to
+Phoenix project `cdmd-lab` with session.id = run-id, so the run groups into one
+Phoenix Session (user edu-harness, one turn per call). `--no-session` skips it.
 """
 
 import argparse
@@ -410,8 +414,14 @@ def main():
         action="store_true",
         help="skip Phoenix verdict-echo status stamping",
     )
+    parser.add_argument(
+        "--no-session",
+        action="store_true",
+        help="skip client-side Phoenix session tracing (project cdmd-lab)",
+    )
     args = parser.parse_args()
     llm.MODEL = args.model  # chat() defaults to MODEL when no model kwarg given
+    llm.TRACING["enabled"] = not args.no_session
 
     if args.max_tokens is None:
         args.max_tokens = 1536  # thinking always on needs the headroom
@@ -437,22 +447,24 @@ def main():
     sample = sample_rows(rows, args.sample)
     print(f"{len(rows)} rows loaded, sampling {len(sample)} ({args.sample})")
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as executor:
-        recall, recall_ok = scenario_studio_recall(sample, args, executor)
-        print(f"scenario 1 studio recall: {recall_ok}/{len(recall)}")
+    with llm.session(run_id), concurrent.futures.ThreadPoolExecutor(
+        max_workers=args.workers
+    ) as executor:
+            recall, recall_ok = scenario_studio_recall(sample, args, executor)
+            print(f"scenario 1 studio recall: {recall_ok}/{len(recall)}")
 
-        year_match, year_ok = scenario_year_match(sample, args, executor)
-        print(
-            f"scenario 2 year match (+/-{YEAR_TOLERANCE}): {year_ok}/{len(year_match)}"
-        )
+            year_match, year_ok = scenario_year_match(sample, args, executor)
+            print(
+                f"scenario 2 year match (+/-{YEAR_TOLERANCE}): {year_ok}/{len(year_match)}"
+            )
 
-        year_repeat, exact_score, exact_passed = scenario_year_repeat(
-            sample, args, args.threshold, executor
-        )
-        print(
-            f"scenario 3 year repeat ExactMatchMetric: {exact_score:.2f} "
-            f"({'PASS' if exact_passed else 'FAIL'})"
-        )
+            year_repeat, exact_score, exact_passed = scenario_year_repeat(
+                sample, args, args.threshold, executor
+            )
+            print(
+                f"scenario 3 year repeat ExactMatchMetric: {exact_score:.2f} "
+                f"({'PASS' if exact_passed else 'FAIL'})"
+            )
 
     meta = {
         "name": "cinematic-01",
@@ -524,8 +536,10 @@ def main():
             )
     print(f"wrote {run_results} and {run_eval}")
     print(f"latest copies at {RESULTS_PATH} and {EVAL_PATH}")
-    echo_verdicts(args, annotate_rows)
+    with llm.session(run_id):
+        echo_verdicts(args, annotate_rows)
     annotate_eval_links(args, annotate_rows)
+    llm.flush()
 
 
 if __name__ == "__main__":
