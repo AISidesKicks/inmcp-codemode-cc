@@ -44,14 +44,14 @@ a 256-token cap truncates into all-think/empty content — and the thinking text
 is recorded per call via `llm.reasoning_content()`. The `generate.py` path
 uses the same always-on reasoning.
 
-## Concurrency
+## Serial execution
 
 Both engines run single-slot (`--parallel 1` on both containers in
-`docker/docker-compose.yml`), so `test.py --workers` (default 4) bounds
-client-side concurrency only — extra requests just queue in llama.cpp. Row
-order stays deterministic (`executor.map`); each call resolves its own master
-key per thread. Run mode is recorded in `meta` (`reasoning: enabled`,
-`workers`) and shown in the rendered report.
+`docker/docker-compose.yml`), so client-side concurrency only queues requests
+without adding throughput. test.py therefore executes strictly serially (no
+thread pool, no `--workers`); row order is inherently deterministic and each
+call resolves its own master key. Run mode is recorded in `meta`
+(`reasoning: enabled`) and shown in the rendered report.
 
 ## Dedup and the year guard
 
@@ -76,21 +76,25 @@ plus `seconds` are the metering signals.
 
 ## Sessions tracing
 
-Every `llm.chat()` call also emits a client-side OpenInference LLM span direct
-to Phoenix (`http://localhost:6006/v1/traces`, project `cdmd-lab`) carrying
-`session.id` + `user.id` (`edu-harness`), `input.value`/`output.value` and
-`llm.token_count.*`. A whole run groups into one Phoenix Session (test.py:
-session = run-id, one turn per model call; generate.py:
-`cinematic-01-generate`; optimize.py: session = run-id). The gateway metering
-path (LiteLLM otel callback → project `default`) is untouched: span naming
-(`<run_id> <opt> eval|judge|films`), `metadata.test_status` stamps and the
-`eval` span annotations keep landing there.
+Every model call gets a probe-style trace in the Phoenix project `cdmd-lab`
+(direct OTLP to `http://localhost:6006/v1/traces`): an AGENT turn root
+(`llm.turn`, named like the gateway span — `<run_id> recall <film>` etc.)
+carrying `session.id` + `user.id` (`edu-harness`) and
+`input.value`/`output.value`, with the gateway-routed call nested underneath
+as an LLM child (via the client-side chat span). Verdict-echo stamps get the
+same AGENT turn shape, with the echoed word as output.value (tiny 8-token
+budgets often return empty model text). A whole run groups into one Phoenix
+Session (test.py: session = run-id, one turn per call; generate.py:
+`cinematic-01-generate`; optimize.py: session = run-id), and the Sessions
+row's first-input/last-output/user resolve from the AGENT roots.
 
-Threading note: the session rides plain module state (`llm.SESSION_STATE`),
-not contextvars — the test's ThreadPoolExecutor workers start with a fresh
-context, so ambient propagation would silently drop `session.id` on
-concurrent calls. `--no-session` (test.py) or `llm.TRACING["enabled"] = False`
-disables it; tracing stays best-effort and never fails the run.
+The gateway metering path (LiteLLM otel callback → project `default`) is
+untouched: span naming (`<run_id> <opt> eval|judge|films`),
+`metadata.test_status` stamps and the `eval` span annotations keep landing
+there. The session rides plain module state (`llm.SESSION_STATE`), not
+contextvars — ambient propagation would not survive thread boundaries.
+`--no-session` (test.py) or `llm.TRACING["enabled"] = False` disables it;
+tracing stays best-effort and never fails the run.
 
 ## Optimizer runs
 
@@ -180,7 +184,7 @@ tools that read the old fixed paths keep working.
 ### results.json shape
 
 - `meta`: `name`, `test`, `run_id`, `run_at`, `model_alias`, `base_url`,
-  `dataset`, `sample`, `year_tolerance`, `reasoning` (`"enabled"`), `workers`.
+  `dataset`, `sample`, `year_tolerance`, `reasoning` (`"enabled"`).
 - one block per scenario (`scenario_1_studio_recall`, `scenario_2_year_match`,
   `scenario_3_year_repeat`), each with a `score` string and `rows`. A row
   carries its scenario fields (`guess`, `expected`, `predicted`,
