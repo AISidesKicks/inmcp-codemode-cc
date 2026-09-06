@@ -521,8 +521,10 @@ def main():
     print(f"latest copies at {RESULTS_PATH} and {EVAL_PATH}")
     with llm.session(run_id):
         echo_verdicts(args, annotate_rows)
-    annotate_eval_links(args, annotate_rows)
+    # flush the batch exporter first — annotations target span ids Phoenix
+    # does not know about until the turn roots are exported
     llm.flush()
+    annotate_eval_links(args, annotate_rows)
 
 
 if __name__ == "__main__":
