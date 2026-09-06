@@ -192,6 +192,16 @@ posts raced Phoenix ingest on a few legs (transient 404s) and were backfilled
 offline from the recorded span ids — the films legs' echo-verdict margin
 makes them race-free.
 
+Post-run wipe + regen (2026-09-06): Phoenix was cleared and every trace
+regenerated under the `-regen` run ids — naive `run-20260906-regen-local-thinking`
+(recall 57/154, year 123/154, repeat 0.79, 462 echo verdicts + annotations,
+302 ok / 160 miss) and `opt-20260906-regen` (all 10 sweep + films legs ok,
+depeval-simba tops the corpus at 0.435, 1624/1624 scored roots annotated,
+556 ok / 1068 miss); these runs also carry the full-reasoning span stamp
+(`reasoning.content` untrimmed, verified no `...` tails — the engine sent no
+reasoning-token counts this time). Scores differ from the table above
+(engine nondeterminism); that table stays as the historical record.
+
 ## Verify your traces
 
 Quick windowed check against `cdmd-lab` (bound the fetch by the run's time

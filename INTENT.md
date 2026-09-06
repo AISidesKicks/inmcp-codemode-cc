@@ -133,6 +133,12 @@ only); parked in `scratch/gateway`. Going direct instead.
   results in `eduailab/nn-gentraces.md`, artifacts in
   `datasets/cinematic-01/runs/opt-20260906-gw-*`.
 
+  Regen status (2026-09-06): Phoenix was wiped post-run and all traces
+  regenerated under the `-regen` ids (`run-20260906-regen-local-thinking`,
+  `opt-20260906-regen` — all 10 legs ok, depeval-simba tops at 0.435) with
+  the full-reasoning span stamp verified live; the `opt-20260906-gw`
+  artifacts stay as the historical record.
+
   Sweep experience (2026-09-04 opt-scale-20260904 full run on the current
  pair — non-thinking granite-4.0-h-tiny judge (`local-judge`) + thinking
  LFM2.5-2.6B tested (`local-thinking`); formalized in
