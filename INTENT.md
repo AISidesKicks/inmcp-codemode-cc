@@ -118,9 +118,19 @@ only); parked in `scratch/gateway`. Going direct instead.
   forbids subclassing, loss forward wants id= per row
  - optimize -> 154 films -> trace runs
 
- Ruled out: promptimal (hardcoded gpt-4o). Kept: all of the above.
+  Ruled out: promptimal (hardcoded gpt-4o). Kept: all of the above.
 
- Sweep experience (2026-09-04 opt-scale-20260904 full run on the current
+  Full-run status (2026-09-06, `opt-20260906-gw`): §3a-k executed
+  end-to-end on the engine-direct trace path — naive `test.py --sample 0`
+  (recall 56/154, year match 121/154, repeat 0.81 PASS, 462 echo verdicts +
+  462 eval annotations) plus all 10 optimizers with full-corpus films legs
+  (adalflow-tgd tops at 0.403); per-test Phoenix sessions in `cdmd-lab`,
+  every scored row's turn root carries an `eval` ok/miss span annotation
+  (score-searchable miss=miss filter works); runbook +
+  results in `eduailab/nn-gentraces.md`, artifacts in
+  `datasets/cinematic-01/runs/opt-20260906-gw-*`.
+
+  Sweep experience (2026-09-04 opt-scale-20260904 full run on the current
  pair — non-thinking granite-4.0-h-tiny judge (`local-judge`) + thinking
  LFM2.5-2.6B tested (`local-thinking`); formalized in
  `smoketests/cinematic-01/optimize.py`, user howto in

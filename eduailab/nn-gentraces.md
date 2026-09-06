@@ -166,9 +166,31 @@ annotations on every scored row's turn root (replaces the gateway
 `metadata.test_status`). Naive `test.py --sample 0` (full corpus, 8192
 budget): recall **56/154**, year match **121/154**, repeat ExactMatch
 **0.81 (PASS)**, **462 echo verdicts + 462 eval annotations** (302 ok /
-160 miss). Optimizer sweep + films table lands below when the run completes.
+160 miss). All 10 optimizers + films legs ok:
 
-<!-- RESULTS-TABLE: filled from datasets/cinematic-01/runs/opt-20260906-gw-optimize.json -->
+| optimizer        | sweep before → after | films | task | judge | sweep s | films s |
+|------------------|---------------------:|------:|-----:|------:|--------:|--------:|
+| gepa             | 0.00 → 0.00          | 0.364 | 24   | 2     | 127.8   | 796.0   |
+| depeval-gepa     | 0.25 → 0.00          | 0.364 | 34   | 4     | 155.5   | 648.4   |
+| depeval-miprov2  | 0.25 → 0.00          | 0.325 | 25   | 4     | 95.2    | 703.9   |
+| depeval-copro    | 0.25 → 0.00          | 0.357 | 18   | 1     | 71.7    | 618.8   |
+| dspy-bootstrap   | 0.00 → 0.00          | 0.370 | 8    | 1     | 53.8    | 1014.4  |
+| depeval-simba    | 0.00 → 0.25          | 0.383 | 68   | 1     | 299.8   | 569.6   |
+| dspy-simba       | 0.00 → 0.00          | 0.351 | 84   | 1     | 280.1   | 1006.4  |
+| dspy-miprov2     | 0.25 → 0.25          | 0.331 | 29   | 8     | 127.2   | 993.4   |
+| adalflow-tgd     | 0.00 → 0.00          | 0.403 | 24   | 12    | 126.1   | 637.4   |
+| refiner          | 0.25 → 0.25          | 0.344 | 8    | 1     | 22.1    | 488.7   |
+
+Totals: sweep legs 22.1–299.8 s ≈ **~19 min**; films legs 488.7–1014.4 s
+(10 × 154 task calls, zero judge calls) ≈ **~1h58m**. adalflow-tgd tops the
+corpus at 0.403 (0.325–0.403 spread). Phoenix readback (SQL analytics):
+2086 lab sessions (one per scored row), 2086 `eval` annotations
+(863 ok / 1223 miss), 13 client-side `<run_id> <opt> judge` spans
+(dspy/adalflow judge calls bypass `llm.chat`, so they emit no client spans —
+the sweep table's judge column stays the honest count). Sweep-val annotation
+posts raced Phoenix ingest on a few legs (transient 404s) and were backfilled
+offline from the recorded span ids — the films legs' echo-verdict margin
+makes them race-free.
 
 ## Verify your traces
 
