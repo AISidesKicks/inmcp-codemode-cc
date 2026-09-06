@@ -4,11 +4,17 @@ Howto for a lab user driving an AI harness (Kilo/opencode MCP) who wants a
 fresh, attributable set of Phoenix execution traces: one `optimize.py` run
 sweeps 9 prompt optimizers over the cinematic-01 studio-recall task and lands
 **~10k run-labelled spans** (task evals + judge reflections + verdict-echo
-stamps + films corpus legs) in the Phoenix `default` project — every span
+stamps + films corpus legs) in the Phoenix **`cdmd-lab`** project — every span
 carries your `--run-id` prefix, so the whole set stays one query away.
 
-Time warning up front: the full run takes **~2.5 h wall** — ~19 min sweep +
-9 films legs of ~10.5–17.5 min each (154 films at the 8192-token reasoning
+Since 2026-09-06 the harness is **engine-direct**: the OpenAI SDK talks
+straight to the two llama.cpp servers and the client emits OpenInference spans
+(AGENT turn roots + LLM children) straight into Phoenix. No gateway in the
+trace path — no `metadata.*` nesting, no double-export, spans land with real
+names and sessions at creation time.
+
+Time warning up front: the full run takes **~2.5 h wall** — ~20 min sweep +
+9 films legs of ~10–18 min each (154 films at the 8192-token reasoning
 budget, [INTENT.md §3](../INTENT.md)). In a hurry? Add `--films 20`: ~2 min
 per films leg, coffee-break scale, and the trace shapes are identical (just
 fewer films spans). For per-test-type client vs trace timing methodology
@@ -16,17 +22,20 @@ fewer films spans). For per-test-type client vs trace timing methodology
 
 ## Prereqs
 
-- **Stack healthy** — `cmod-litellm` (:4000 gateway), `cmod-llama` (:8080,
-  granite judge), `cmod-llama-thinking` (:8081, LFM2.5-2.6B tested),
-  `cmod-phoenix` (:6006). No manual probing needed:
-  `optimize_common.health_all()` gates the run at startup and aborts unless
-  gateway + both llama servers answer.
+- **Stack healthy** — `cmod-llama` (:8080, granite judge),
+  `cmod-llama-thinking` (:8081, LFM2.5-2.6B tested), `cmod-phoenix` (:6006).
+  The `cmod-litellm` gateway stays defined in the docker stack but **stopped**
+  (removal pending) — the harness no longer routes through it, so don't start
+  it. No manual probing needed: `optimize_common.health_all()` gates the run
+  at startup and aborts unless both llama servers answer.
 - **Dataset present** — `datasets/cinematic-01/dataset.csv`, 154 film rows.
   The sweep itself only needs its fixed seeded 6-train/4-val slice; the films
   legs score the corpus (`--csv`, `--films N`).
 - **Pixi env** — run inside the `cdmd` shell (`pixi shell`) or prefix commands
   with `pixi run`. Python 3.12; gepa, deepeval, dspy, adalflow and
-  promptrefiner are preinstalled.
+  promptrefiner are preinstalled. `litellm` is no longer a direct dependency
+  (it remains installed transitively for dspy only); `trulens-providers-litellm`
+  is gone.
 - **Fresh trace set (optional, HITL)** — traces accumulate in the
   `cmod-phoenix-data` volume; old runs coexist fine because span prefixes keep
   them apart. If you really want a clean slate, wiping that volume is **user
@@ -37,7 +46,7 @@ fewer films spans). For per-test-type client vs trace timing methodology
 ## The one-liner
 
 ```bash
-pixi run python smoketests/cinematic-01/optimize.py --stage all --run-id opt-scale-20260905
+pixi run python smoketests/cinematic-01/optimize.py --stage all --run-id opt-20260906-gw
 ```
 
 Flag cheatsheet:
@@ -54,14 +63,15 @@ Flag cheatsheet:
 Coffee-break variant (sweep + 9 short films legs, ~30–40 min total):
 
 ```bash
-pixi run python smoketests/cinematic-01/optimize.py --stage all --films 20 --run-id opt-coffee-20260905
+pixi run python smoketests/cinematic-01/optimize.py --stage all --films 20 --run-id opt-coffee-20260906
 ```
 
 ## One runner, one sentence
 
 Every optimizer reflects/mutates through the local granite judge and evaluates
-through the 2.6B tested model via the LiteLLM gateway (condensed from the
-[optimize.py](../smoketests/cinematic-01/optimize.py) docstring):
+through the 2.6B tested model, engine-direct over the OpenAI-compatible APIs
+(condensed from the [optimize.py](../smoketests/cinematic-01/optimize.py)
+docstring):
 
 | optimizer | tool + method |
 | --- | --- |
@@ -78,17 +88,22 @@ through the 2.6B tested model via the LiteLLM gateway (condensed from the
 
 ## Where traces & artifacts land
 
-- **Phoenix spans** (project `default`, same server as
+- **Phoenix spans** (project `cdmd-lab`, same server as
   [phoenix-mcp.md](phoenix-mcp.md)): `<run_id> <opt> eval` (tested-model task
   calls), `<run_id> <opt> judge` (judge reflections), `<run_id> <opt> films`
-  (one span per film) — riding the proven gateway
-  `metadata.generation_name` path.
+  (one AGENT turn root per film with the engine call nested as LLM child) —
+  emitted client-side at span creation, no gateway stamper in between. Each
+  scored row (sweep val legs + films legs) gets its own Phoenix session
+  (`<run_id> <opt> ... <film>`, the scored turn + its verdict-echo turn), and
+  the scored turn root carries an **`eval` ok/miss span annotation** so failed
+  rows stay score-searchable.
 - **Sweep out json**: `datasets/cinematic-01/runs/<run-id>-optimize.json` —
   per-optimizer status, val before/after, call counts, wall seconds, the
   `render` kind its best prompt needs for the films leg (`system` vs
   `filled`), the full `best_prompt`, plus nested films summaries.
 - **Films jsons**: `datasets/cinematic-01/runs/<run-id>-<opt>-films.json` —
-  meta + score + one row per film (`film` / `score` / `feedback`).
+  meta + score + one row per film (`film` / `score` / `feedback` / turn-root
+  `span_id`).
 
 ## Real results (opt-scale-20260904)
 
@@ -114,14 +129,15 @@ corpus legs are the honest comparison, and there the spread is tight:
 0.338–0.377 with dspy-bootstrap on top. Full table + notes live in
 [design.md "Optimizer runs"](../smoketests/cinematic-01/design.md).
 
-## Fresh rerun (opt-scale-20260905, echo stamping on)
+## Fresh rerun (opt-scale-20260905, gateway era)
 
 Second full run (2026-09-05) after the verdict-echo stamping fix — INTENT §3
-re-executed end-to-end: naive `test.py` at 154 films × 3 scenarios (8192
-budget) + all 10 optimizers (the 9 `--optimizer all` legs plus `refiner` as
-explicit opt-in), every films leg the full 154-film corpus. Naive scored
-recall 51/154, year match 121/154, repeat ExactMatch 0.79 (FAIL vs 0.8) and
-stamped **462 echo verdicts**; per-optimizer:
+re-executed end-to-end on the then-current **gateway** path (spans via LiteLLM
+OTEL, `metadata.test_status` stamping, double export). Naive `test.py` at 154
+films × 3 scenarios (8192 budget) + all 10 optimizers (the 9 `--optimizer all`
+legs plus `refiner` as explicit opt-in), every films leg the full 154-film
+corpus. Naive scored recall 51/154, year match 121/154, repeat ExactMatch
+0.79 (FAIL vs 0.8) and stamped **462 echo verdicts**; per-optimizer:
 
 | optimizer        | sweep before → after | films | task | judge | sweep s | films s |
 |------------------|---------------------:|------:|-----:|------:|--------:|--------:|
@@ -138,46 +154,36 @@ stamped **462 echo verdicts**; per-optimizer:
 
 Totals: sweep legs 24.2–253.1 s ≈ **~19 min**; films legs 492.9–879.4 s
 (10 × 154 task calls, zero judge calls) ≈ **~1h55m**. depeval-simba tops the
-corpus at 0.403 (0.299–0.403 spread — wider than the 0904 run). Verified via
-Phoenix MCP: all 10 films names at 154 films ×2, judge spans granite-modelled
-(adalflow-tgd judge calls stay untagged — BackwardEngine path), films spans
-strictly on the tested model, `metadata.test_status` PASS/FAIL stamped on
-echo spans (echo calls ride `local-judge` at max_tokens=8 by design). Note:
-the gateway exports every call **twice** (same as the 0904 healthy-run
-numbers), so raw run-labelled span counts are 2× the unique calls.
+corpus at 0.403 (0.299–0.403 spread — wider than the 0904 run). Note: the
+gateway exported every call **twice**, so raw run-labelled span counts were
+2× the unique calls — gone with the engine-direct switch.
+
+## Engine-direct full run (opt-20260906-gw, score-annotation era)
+
+Third full run (2026-09-06), first on the **engine-direct** trace path:
+no gateway, per-test Phoenix sessions in `cdmd-lab`, `eval` ok/miss span
+annotations on every scored row's turn root (replaces the gateway
+`metadata.test_status`). Naive `test.py --sample 0` (full corpus, 8192
+budget): recall **56/154**, year match **121/154**, repeat ExactMatch
+**0.81 (PASS)**, **462 echo verdicts + 462 eval annotations** (302 ok /
+160 miss). Optimizer sweep + films table lands below when the run completes.
+
+<!-- RESULTS-TABLE: filled from datasets/cinematic-01/runs/opt-20260906-gw-optimize.json -->
 
 ## Verify your traces
 
-Quick semantic check (`scratch/` tool, gitignored — the playground stays
-playground):
-
-```bash
-pixi run python scratch/promptopt_phoenix_check.py opt-scale-20260905
-```
-
-It verifies: ≥1 `<run_id> ...` span exists in project `default`, ≥1 run span
-is named `... judge`, and zero judge-model references in non-judge run spans.
-What a healthy full run looks like (opt-scale-20260904): **3422** run-labelled
-spans across **43** unique names, **44** judge-labelled spans, zero judge-model
-leakage → `PASS`.
-
-Caveat, learned the hard way: the check's fetch is unbounded — the Phoenix
-client returns only the **most recent 1000 spans**, and at full-run size the
-run-labelled spans in that window are films spans only (the sweep-stage judge
-spans are hours older), so the judge check fails spuriously. Verified live on
-opt-scale-20260904: 250 run-labelled films spans, 0 judge spans, `FAIL` —
-while the run really carries 44 judge spans. Bound the fetch by the run's
-time window (and raise the timeout — the client default is 5 s, one big fetch
-trips it):
+Quick windowed check against `cdmd-lab` (bound the fetch by the run's time
+window — the Phoenix client returns only the most recent 1000 spans by
+default, and at full-run size that window is films spans only):
 
 ```python
 from datetime import datetime, timedelta, timezone
 
 from phoenix.client import Client
 
-run_id = "opt-scale-20260905"
+run_id = "opt-20260906-gw"
 df = Client().spans.get_spans_dataframe(
-    project_identifier="default",
+    project_identifier="cdmd-lab",
     start_time=datetime.now(timezone.utc) - timedelta(hours=24),  # covers one full run (~2.5 h) with slack
     end_time=datetime.now(timezone.utc),
     limit=20000,
@@ -190,15 +196,29 @@ judge = mine[mine_names.str.endswith(" judge")]
 print(len(mine), "run spans,", len(judge), "judge spans,", mine_names.nunique(), "unique names")
 ```
 
+Score-searchability check (the engine-direct replacement for the old
+`metadata.test_status` count): pull the run's eval annotations and split by
+label. Via SQL against the Phoenix analytics endpoint it is one query:
+
+```sql
+SELECT a.result_label, COUNT(*) AS n
+FROM span_annotations a
+WHERE a.name = 'eval'
+GROUP BY a.result_label;
+-- healthy full run: ok + miss == 462 (naive) + 9..10 x 154 (films) + sweep legs
+```
+
 Or browse interactively with the Phoenix MCP tools (catalog:
 [phoenix-mcp.md](phoenix-mcp.md)) — `spanSearch`/`getSpans` accept
-`start_time`/`end_time`/`name` filters, so the same windowing applies.
+`start_time`/`end_time`/`name` filters and `listSpanAnnotationsBySpanIds`
+returns the `eval` labels, so the same windowing applies.
 
 ## Crash = resume
 
-Kill the run mid-way (Ctrl-C, laptop nap, gateway hiccup) → re-run the exact
+Kill the run mid-way (Ctrl-C, laptop nap, engine hiccup) → re-run the exact
 same command with the same `--run-id`: `--optimizer all` skips optimizers
 already recorded in the out json (sweep) and films legs already carrying an
 entry — only the interrupted leg re-runs. An explicit `--optimizer <name>`
 always re-runs that one from scratch. Per-optimizer failures are recorded as
-findings and never abort the run.
+findings and never abort the run. The opt-in refiner leg re-runs the same
+way with `--optimizer refiner`.
