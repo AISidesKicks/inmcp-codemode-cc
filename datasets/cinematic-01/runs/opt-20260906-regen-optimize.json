@@ -1,0 +1,238 @@
+{
+  "meta": {
+    "run_id": "opt-20260906-regen",
+    "tested_model": "local-thinking",
+    "judge_model": "local-judge",
+    "task_max_tokens": 1536,
+    "films_max_tokens": 8192,
+    "seed_prompt": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+    "gepa_seed": "You will receive a movie title as the user message. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+    "dspy_seed": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+    "train_films": [
+      "The Princess and the Frog",
+      "The Fast & Furious 7",
+      "Dunkirk",
+      "Home Alone",
+      "The Big Lebowski",
+      "Singin' in the Rain"
+    ],
+    "val_films": [
+      "The Super Mario Bros. Movie",
+      "Justice League",
+      "Frozen",
+      "The Suicide Squad"
+    ]
+  },
+  "results": {
+    "gepa": {
+      "status": "ok",
+      "wall_seconds": 90.4,
+      "val_score_before": 0.0,
+      "val_score_after": 0.0,
+      "task_calls": 24,
+      "judge_calls": 2,
+      "render": "system",
+      "best_prompt": "You will receive a movie title as the user message. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "You will receive a movie title as the user message. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null,
+      "films": {
+        "score": 0.38311688311688313,
+        "films": 154,
+        "max_tokens": 8192,
+        "wall_seconds": 825.1,
+        "task_calls": 154,
+        "judge_calls": 0,
+        "file": "datasets/cinematic-01/runs/opt-20260906-regen-gepa-films.json"
+      }
+    },
+    "depeval-gepa": {
+      "status": "ok",
+      "wall_seconds": 128.3,
+      "val_score_before": 0.25,
+      "val_score_after": 0.0,
+      "task_calls": 34,
+      "judge_calls": 4,
+      "render": "filled",
+      "best_prompt": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null,
+      "films": {
+        "score": 0.33766233766233766,
+        "films": 154,
+        "max_tokens": 8192,
+        "wall_seconds": 602.1,
+        "task_calls": 154,
+        "judge_calls": 0,
+        "file": "datasets/cinematic-01/runs/opt-20260906-regen-depeval-gepa-films.json"
+      }
+    },
+    "depeval-miprov2": {
+      "status": "ok",
+      "wall_seconds": 86.4,
+      "val_score_before": 0.0,
+      "val_score_after": 0.0,
+      "task_calls": 23,
+      "judge_calls": 4,
+      "render": "filled",
+      "best_prompt": "Here are some examples:\n\nExample 1:\nInput: The Big Lebowski\nOutput: {\"studios\": [\"New Line Cinema\"]}\n\n\nNow, please respond to the following:\n\nIdentify the production company associated with the given film title. Respond with only a JSON object shaped like {'studios': ['Studio Name']}. Ensure the response handles variations in capitalization and acknowledges potential sarcasm in the input.\n\nMovie: {film}",
+      "best_prompt_head": "Here are some examples:\n\nExample 1:\nInput: The Big Lebowski\nOutput: {\"studios\": [\"New Line Cinema\"]}\n\n\nNow, please respond to the following:\n\nIdentify the production company associated with the given film title. Respond ",
+      "error": null,
+      "films": {
+        "score": 0.33766233766233766,
+        "films": 154,
+        "max_tokens": 8192,
+        "wall_seconds": 545.0,
+        "task_calls": 154,
+        "judge_calls": 0,
+        "file": "datasets/cinematic-01/runs/opt-20260906-regen-depeval-miprov2-films.json"
+      }
+    },
+    "depeval-copro": {
+      "status": "ok",
+      "wall_seconds": 60.3,
+      "val_score_before": 0.0,
+      "val_score_after": 0.0,
+      "task_calls": 18,
+      "judge_calls": 1,
+      "render": "filled",
+      "best_prompt": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null,
+      "films": {
+        "score": 0.34415584415584416,
+        "films": 154,
+        "max_tokens": 8192,
+        "wall_seconds": 653.8,
+        "task_calls": 154,
+        "judge_calls": 0,
+        "file": "datasets/cinematic-01/runs/opt-20260906-regen-depeval-copro-films.json"
+      }
+    },
+    "dspy-bootstrap": {
+      "status": "ok",
+      "wall_seconds": 42.8,
+      "val_score_before": 0.25,
+      "val_score_after": 0.25,
+      "task_calls": 8,
+      "judge_calls": 1,
+      "render": "system",
+      "best_prompt": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null,
+      "films": {
+        "score": 0.33766233766233766,
+        "films": 154,
+        "max_tokens": 8192,
+        "wall_seconds": 913.1,
+        "task_calls": 154,
+        "judge_calls": 0,
+        "file": "datasets/cinematic-01/runs/opt-20260906-regen-dspy-bootstrap-films.json"
+      }
+    },
+    "depeval-simba": {
+      "status": "ok",
+      "wall_seconds": 246.1,
+      "val_score_before": 0.0,
+      "val_score_after": 0.5,
+      "task_calls": 68,
+      "judge_calls": 1,
+      "render": "filled",
+      "best_prompt": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.\n\n[Example]\nInput: The Fast & Furious 7\nOutput: Lionsgate Films\n\n[Example]\nInput: The Princess and the Frog\nOutput: Walt Disney Pictures",
+      "best_prompt_head": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.\n\n[Example]\nInput: The Fast & Furious 7\nOutput: Lionsgate Films\n\n[Example]\nInput: The Princess and the Frog",
+      "error": null,
+      "films": {
+        "score": 0.43506493506493504,
+        "films": 154,
+        "max_tokens": 8192,
+        "wall_seconds": 465.6,
+        "task_calls": 154,
+        "judge_calls": 0,
+        "file": "datasets/cinematic-01/runs/opt-20260906-regen-depeval-simba-films.json"
+      }
+    },
+    "dspy-simba": {
+      "status": "ok",
+      "wall_seconds": 262.7,
+      "val_score_before": 0.25,
+      "val_score_after": 0.0,
+      "task_calls": 88,
+      "judge_calls": 1,
+      "render": "system",
+      "best_prompt": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.\n\nIf the module receives a movie title as input, it should accurately identify and return the correct producing studio in the output. To achieve this, the module should maintain an up-to-date database or knowledge base of movie titles and their corresponding producing studios. It should then compare the input movie title against this database and return the matching studio in the output JSON object. The module should prioritize accuracy over speed and avoid making assumptions or guesses when the input movie title is not found in the database.",
+      "best_prompt_head": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.\n\nIf the module receives a movie title as input, it should accurat",
+      "error": null,
+      "films": {
+        "score": 0.3246753246753247,
+        "films": 154,
+        "max_tokens": 8192,
+        "wall_seconds": 606.6,
+        "task_calls": 154,
+        "judge_calls": 0,
+        "file": "datasets/cinematic-01/runs/opt-20260906-regen-dspy-simba-films.json"
+      }
+    },
+    "dspy-miprov2": {
+      "status": "ok",
+      "wall_seconds": 101.9,
+      "val_score_before": 0.5,
+      "val_score_after": 0.5,
+      "task_calls": 27,
+      "judge_calls": 8,
+      "render": "system",
+      "best_prompt": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "You will receive a movie title as the film field. Which studio produced the movie? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null,
+      "films": {
+        "score": 0.3246753246753247,
+        "films": 154,
+        "max_tokens": 8192,
+        "wall_seconds": 890.5,
+        "task_calls": 154,
+        "judge_calls": 0,
+        "file": "datasets/cinematic-01/runs/opt-20260906-regen-dspy-miprov2-films.json"
+      }
+    },
+    "adalflow-tgd": {
+      "status": "ok",
+      "wall_seconds": 106.3,
+      "val_score_before": 0.25,
+      "val_score_after": 0.25,
+      "task_calls": 24,
+      "judge_calls": 9,
+      "render": "filled",
+      "best_prompt": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "Which studio produced the movie \"{film}\"? Reply with only a JSON object shaped like {\"studios\": [\"Studio Name\"]}.",
+      "error": null,
+      "films": {
+        "score": 0.34415584415584416,
+        "films": 154,
+        "max_tokens": 8192,
+        "wall_seconds": 648.3,
+        "task_calls": 154,
+        "judge_calls": 0,
+        "file": "datasets/cinematic-01/runs/opt-20260906-regen-adalflow-tgd-films.json"
+      }
+    },
+    "refiner": {
+      "status": "ok",
+      "wall_seconds": 30.1,
+      "val_score_before": 0.0,
+      "val_score_after": 0.25,
+      "task_calls": 8,
+      "judge_calls": 1,
+      "render": "filled",
+      "best_prompt": "Which studio produced the movie \"{film}\"? Please respond with a JSON object formatted as {\"studios\": [\"Studio Name\"]}.",
+      "best_prompt_head": "Which studio produced the movie \"{film}\"? Please respond with a JSON object formatted as {\"studios\": [\"Studio Name\"]}.",
+      "error": null,
+      "films": {
+        "score": 0.35714285714285715,
+        "films": 154,
+        "max_tokens": 8192,
+        "wall_seconds": 548.5,
+        "task_calls": 154,
+        "judge_calls": 0,
+        "file": "datasets/cinematic-01/runs/opt-20260906-regen-refiner-films.json"
+      }
+    }
+  }
+}
