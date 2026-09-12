@@ -27,7 +27,7 @@
     background: var(--bg);
   }
   main, header.site, footer.site {
-    max-width: 60rem;
+    max-width: 68rem;
     margin: 0 auto;
     padding: 0 1.25rem;
   }
@@ -73,15 +73,18 @@
   .lede strong { color: var(--fg); }
   .patterns {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16.5rem, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: .9rem;
     margin-top: 1.25rem;
+  }
+  @media (min-width: 64rem) {
+    .patterns { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
   .card {
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: .75rem;
-    padding: 1rem 1.1rem;
+    padding: .95rem 1rem;
   }
   .card .num {
     display: inline-block;
@@ -99,8 +102,8 @@
     letter-spacing: -.01em;
   }
   .card p.desc {
-    margin: 0 0 .75rem;
-    font-size: .9rem;
+    margin: 0 0 .7rem;
+    font-size: .86rem;
     color: var(--muted);
     font-style: italic;
   }
@@ -115,8 +118,8 @@
   .pc.con { color: var(--con); }
   .card ul {
     margin: 0;
-    padding-left: 1.1rem;
-    font-size: .87rem;
+    padding-left: 1.05rem;
+    font-size: .85rem;
   }
   .card li { margin-bottom: .4rem; }
   .card li strong { font-weight: 650; }
