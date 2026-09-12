@@ -79,13 +79,20 @@
     margin-top: 1.25rem;
   }
   @media (min-width: 64rem) {
-    .patterns { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .patterns {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: auto auto auto;
+    }
   }
   .card {
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: .75rem;
     padding: .95rem 1rem;
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    align-content: start;
   }
   .card .num {
     display: inline-block;
@@ -103,19 +110,26 @@
     letter-spacing: -.01em;
   }
   .card p.desc {
-    margin: 0 0 .7rem;
+    margin: .3rem 0 0;
     font-size: .86rem;
     color: var(--muted);
     font-style: italic;
   }
+  .pc {
+    font-size: .8rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin: 0 0 .3rem;
+  }
+  .pc.pro { color: var(--pro); }
+  .pc.con { color: var(--con); }
   .card ul {
     margin: 0;
     padding-left: 1.05rem;
     font-size: .85rem;
   }
   .card li { margin-bottom: .4rem; }
-  .card li.pro::marker { color: var(--pro); }
-  .card li.con::marker { color: var(--con); }
   .card li strong { font-weight: 650; }
   figure.diagram {
     margin: 1.5rem 0 0;
@@ -209,51 +223,91 @@
 
   <div class="patterns">
     <section class="card">
-      <span class="num">01</span>
-      <h4>Agent Skills + CLI</h4>
-      <p class="desc">Invocation of pre-defined agent skills through a terminal interface and shell binaries.</p>
-      <ul>
-        <li class="pro"><strong>Rapid Prototyping:</strong> Directly leverages standard OS binaries, custom CLI scripts, and existing terminal tools without custom protocol wrappers.</li>
-        <li class="pro"><strong>Standardized System Telemetry:</strong> Phoenix natively captures process exit codes, stdout/stderr streams, and low-level system logs.</li>
-        <li class="con"><strong>Brittle Parsing:</strong> Reliant on parsing unstructured text output, which frequently breaks downstream reasoning loops.</li>
-        <li class="con"><strong>Expanded Attack Surface:</strong> Unrestricted command-line access carries significant command injection and sandbox-escape risks.</li>
-      </ul>
+      <div class="c-head">
+        <span class="num">01</span>
+        <h4>Agent Skills + CLI</h4>
+        <p class="desc">Invocation of pre-defined agent skills through a terminal interface and shell binaries.</p>
+      </div>
+      <div class="c-zone">
+        <p class="pc pro">Pros</p>
+        <ul>
+          <li><strong>Rapid Prototyping:</strong> Directly leverages standard OS binaries, custom CLI scripts, and existing terminal tools without custom protocol wrappers.</li>
+          <li><strong>Standardized System Telemetry:</strong> Phoenix natively captures process exit codes, stdout/stderr streams, and low-level system logs.</li>
+        </ul>
+      </div>
+      <div class="c-zone">
+        <p class="pc con">Cons</p>
+        <ul>
+          <li><strong>Brittle Parsing:</strong> Reliant on parsing unstructured text output, which frequently breaks downstream reasoning loops.</li>
+          <li><strong>Expanded Attack Surface:</strong> Unrestricted command-line access carries significant command injection and sandbox-escape risks.</li>
+        </ul>
+      </div>
     </section>
 
     <section class="card">
-      <span class="num">02</span>
-      <h4>MCP LLM</h4>
-      <p class="desc">Standard Model Context Protocol exposing JSON-RPC tool definitions into the LLM context window.</p>
-      <ul>
-        <li class="pro"><strong>Native Semantic Awareness:</strong> Tools are embedded directly into model context, allowing fluid multi-turn planning and dynamic schema discovery.</li>
-        <li class="pro"><strong>Fine-Grained Prompt Observability:</strong> Phoenix tracks complete prompt/response cycles, token usage, tool invocation latency, and protocol metadata.</li>
-        <li class="con"><strong>Heavy Context Overhead:</strong> Loading extensive MCP tool schemas directly into prompts rapidly exhausts available context space.</li>
-        <li class="con"><strong>Compounding Costs:</strong> High latency and token consumption across multi-step agent reasoning chains.</li>
-      </ul>
+      <div class="c-head">
+        <span class="num">02</span>
+        <h4>MCP LLM</h4>
+        <p class="desc">Standard Model Context Protocol exposing JSON-RPC tool definitions into the LLM context window.</p>
+      </div>
+      <div class="c-zone">
+        <p class="pc pro">Pros</p>
+        <ul>
+          <li><strong>Native Semantic Awareness:</strong> Tools are embedded directly into model context, allowing fluid multi-turn planning and dynamic schema discovery.</li>
+          <li><strong>Fine-Grained Prompt Observability:</strong> Phoenix tracks complete prompt/response cycles, token usage, tool invocation latency, and protocol metadata.</li>
+        </ul>
+      </div>
+      <div class="c-zone">
+        <p class="pc con">Cons</p>
+        <ul>
+          <li><strong>Heavy Context Overhead:</strong> Loading extensive MCP tool schemas directly into prompts rapidly exhausts available context space.</li>
+          <li><strong>Compounding Costs:</strong> High latency and token consumption across multi-step agent reasoning chains.</li>
+        </ul>
+      </div>
     </section>
 
     <section class="card">
-      <span class="num">03</span>
-      <h4>MCP codemode</h4>
-      <p class="desc">Sandboxed Python execution on an MCP server returning processed prompt, code, and response data.</p>
-      <ul>
-        <li class="pro"><strong>Token Efficiency:</strong> Processes and filters large datasets in-memory on the server, returning only curated summary data to the agent rather than raw context.</li>
-        <li class="pro"><strong>Granular Traceability:</strong> Phoenix records execution flow, variable states, code performance benchmarks, and runtime exceptions.</li>
-        <li class="con"><strong>Runtime Sandboxing Complexity:</strong> Requires strict isolation boundaries (such as a restricted Python subset) to prevent unauthorized execution.</li>
-        <li class="con"><strong>Dynamic Debugging Friction:</strong> Code execution failures require robust runtime recovery paths to prevent the harness from stalling.</li>
-      </ul>
+      <div class="c-head">
+        <span class="num">03</span>
+        <h4>MCP codemode</h4>
+        <p class="desc">Sandboxed Python execution on an MCP server returning processed prompt, code, and response data.</p>
+      </div>
+      <div class="c-zone">
+        <p class="pc pro">Pros</p>
+        <ul>
+          <li><strong>Token Efficiency:</strong> Processes and filters large datasets in-memory on the server, returning only curated summary data to the agent rather than raw context.</li>
+          <li><strong>Granular Traceability:</strong> Phoenix records execution flow, variable states, code performance benchmarks, and runtime exceptions.</li>
+        </ul>
+      </div>
+      <div class="c-zone">
+        <p class="pc con">Cons</p>
+        <ul>
+          <li><strong>Runtime Sandboxing Complexity:</strong> Requires strict isolation boundaries (such as a restricted Python subset) to prevent unauthorized execution.</li>
+          <li><strong>Dynamic Debugging Friction:</strong> Code execution failures require robust runtime recovery paths to prevent the harness from stalling.</li>
+        </ul>
+      </div>
     </section>
 
     <section class="card">
-      <span class="num">04</span>
-      <h4>ZTA – Zero Token Architecture</h4>
-      <p class="desc">Deterministic orchestration using a Python SDK or direct API calls, reporting final status back to the agent.</p>
-      <ul>
-        <li class="pro"><strong>Maximum Cost &amp; Speed Efficiency:</strong> Payload movement occurs entirely outside the LLM context, virtually eliminating token overhead and latency bottlenecks.</li>
-        <li class="pro"><strong>Deterministic Policy Governance:</strong> Strict API schemas provide tight compliance, predictable auditing, and deterministic security controls.</li>
-        <li class="con"><strong>Zero Adaptive Reasoning:</strong> Inflexible handling of novel edge cases; changes require programmatic code updates rather than dynamic agent adaptation.</li>
-        <li class="con"><strong>Higher Engineering Burden:</strong> Demands custom SDK and API pipeline maintenance rather than generic declarative agent prompts.</li>
-      </ul>
+      <div class="c-head">
+        <span class="num">04</span>
+        <h4>ZTA – Zero Token Architecture</h4>
+        <p class="desc">Deterministic orchestration using a Python SDK or direct API calls, reporting final status back to the agent.</p>
+      </div>
+      <div class="c-zone">
+        <p class="pc pro">Pros</p>
+        <ul>
+          <li><strong>Maximum Cost &amp; Speed Efficiency:</strong> Payload movement occurs entirely outside the LLM context, virtually eliminating token overhead and latency bottlenecks.</li>
+          <li><strong>Deterministic Policy Governance:</strong> Strict API schemas provide tight compliance, predictable auditing, and deterministic security controls.</li>
+        </ul>
+      </div>
+      <div class="c-zone">
+        <p class="pc con">Cons</p>
+        <ul>
+          <li><strong>Zero Adaptive Reasoning:</strong> Inflexible handling of novel edge cases; changes require programmatic code updates rather than dynamic agent adaptation.</li>
+          <li><strong>Higher Engineering Burden:</strong> Demands custom SDK and API pipeline maintenance rather than generic declarative agent prompts.</li>
+        </ul>
+      </div>
     </section>
   </div>
 
