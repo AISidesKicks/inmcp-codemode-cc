@@ -175,11 +175,13 @@ A. Local SQLite (Default) — consistent DB dump + full volume archive:
 # one exec produces both artifacts inside the container (/tmp)
 docker cp setup/backup_phoenix_db.py cmod-phoenix:/tmp/backup_phoenix_db.py
 docker exec cmod-phoenix python3 /tmp/backup_phoenix_db.py
-# copy both out: phoenix-sqlite-20.7.db (WAL-safe sqlite3 .backup API dump)
-#              + cmod-phoenix-backup-20.7.tgz (whole /phoenix/data volume:
-#                phoenix.db + wal/shm + inferences/ + trace_datasets/ + wasm/)
+# copy both out, gzip -9 the oversize ones (github warns > 50 MB):
+#   phoenix-sqlite-20.7.db (WAL-safe sqlite3 .backup API dump)
+#   cmod-phoenix-backup-20.7.tgz (whole /phoenix/data volume:
+#     phoenix.db + wal/shm + inferences/ + trace_datasets/ + wasm/)
 docker cp cmod-phoenix:/tmp/phoenix-sqlite-20.7.db ./sidecar/
 docker cp cmod-phoenix:/tmp/cmod-phoenix-backup-20.7.tgz ./sidecar/
+gzip -9 sidecar/phoenix-sqlite-20.7.db
 ```
 
 Hot backup (distroless image — python only, no tar/sqlite3 CLI, hence the
@@ -197,9 +199,10 @@ Fetching trace and span annotations...
 Fetching trace and span notes...
 ```
 
-Status: sidecar artifacts — SQLite dump (`phoenix-sqlite-20.7.db`, method A)
-+ full-volume tar.gz (`cmod-phoenix-backup-20.7.tgz`, method A) + PX CLI
-export (`phoenix_traces_films_raw.json`, 4324 traces, method B); refreshed
+Status: sidecar artifacts (gzipped, github 50 MB warn) — SQLite dump
+(`phoenix-sqlite-20.7.db.gz`, method A) + full-volume tar.gz
+(`cmod-phoenix-backup-20.7.tgz`, method A) + PX CLI export
+(`phoenix_traces_films_raw.json.gz`, 4324 traces, method B); refreshed
 post-regen wipe 2026-09-12.
 
 # Installed tools
