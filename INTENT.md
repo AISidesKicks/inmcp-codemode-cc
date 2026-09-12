@@ -169,20 +169,38 @@ only); parked in `scratch/gateway`. Going direct instead.
 
 We will make a sidecar backup (and show to lab user/harness how to backup)
 
-A. Local SQLite (Default)
+A. Local SQLite (Default) — consistent DB dump + full volume archive:
 
+```
+# one exec produces both artifacts inside the container (/tmp)
+docker cp setup/backup_phoenix_db.py cmod-phoenix:/tmp/backup_phoenix_db.py
+docker exec cmod-phoenix python3 /tmp/backup_phoenix_db.py
+# copy both out: phoenix-sqlite-20.7.db (WAL-safe sqlite3 .backup API dump)
+#              + cmod-phoenix-backup-20.7.tgz (whole /phoenix/data volume:
+#                phoenix.db + wal/shm + inferences/ + trace_datasets/ + wasm/)
+docker cp cmod-phoenix:/tmp/phoenix-sqlite-20.7.db ./sidecar/
+docker cp cmod-phoenix:/tmp/cmod-phoenix-backup-20.7.tgz ./sidecar/
+```
+
+Hot backup (distroless image — python only, no tar/sqlite3 CLI, hence the
+script + `sqlite3 .backup` API). Fine for the idle lab; stop cmod-phoenix
+first for a guaranteed-cold tar. Verify dump: `pragma integrity_check` → ok.
 
 B. Exporting with Phonix CLI (CLI snapshoting)
 
 ```
-px trace list --limit 10000 --format json --project default > ./sidecar/phoenix_traces_films_raw.json
-Resolving project: default
+px trace list --limit 10000 --format json --project cdmd-lab --include-annotations --include-notes > ./sidecar/phoenix_traces_films_raw.json
+Resolving project: cdmd-lab
 Fetching last 10000 trace(s)...
-Found 4451 trace(s)
+Found 4324 trace(s)
+Fetching trace and span annotations...
+Fetching trace and span notes...
 ```
 
-Status: sidecar artifacts 2026-09-06 — SQLite volume tar.gz (`cmod-phoenix-backup-20.7.tgz`,
-method A) + PX CLI export (`phoenix_traces_films_raw.json`, 4451 traces, method B).
+Status: sidecar artifacts — SQLite dump (`phoenix-sqlite-20.7.db`, method A)
++ full-volume tar.gz (`cmod-phoenix-backup-20.7.tgz`, method A) + PX CLI
+export (`phoenix_traces_films_raw.json`, 4324 traces, method B); refreshed
+post-regen wipe 2026-09-12.
 
 # Installed tools
 
