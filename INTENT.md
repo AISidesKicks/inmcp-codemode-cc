@@ -191,7 +191,7 @@ first for a guaranteed-cold tar. Verify dump: `pragma integrity_check` → ok.
 B. Exporting with Phonix CLI (CLI snapshoting)
 
 ```
-px trace list --limit 10000 --format json --project cdmd-lab --include-annotations --include-notes > ./sidecar/phoenix_traces_films_raw.json
+px trace list --limit 10000 --format json --project cdmd-lab --include-annotations --include-notes | gzip -9 > ./sidecar/phoenix_traces_films_raw.json.gz
 Resolving project: cdmd-lab
 Fetching last 10000 trace(s)...
 Found 4324 trace(s)
