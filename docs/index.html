@@ -1,2 +1,373 @@
-mcp-codemode-cc
-EDU AI LAB: codemode - new way how LLM can exec code inside MCP srv (Contrast & Compare old ways)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mcp.codemode.cc — MCP codemode (Contrast &amp; Compare)</title>
+<meta name="description" content="EDU AI LAB: MCP codemode — new way how LLM can exec code inside MCP srv (Contrast &amp; Compare 3 old ways). Head 2 head: Agent Skills + CLI, MCP LLM, MCP codemode, ZTA.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23111827'/%3E%3Ctext x='16' y='22' font-size='16' font-family='monospace' fill='%2338bdf8' text-anchor='middle'%3E%26gt;_%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --fg: #0f172a;
+    --muted: #475569;
+    --card: #ffffff;
+    --line: #e2e8f0;
+    --accent: #0ea5e9;
+    --pro: #16a34a;
+    --con: #dc2626;
+    --code-bg: #eef2f7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--fg);
+    background: var(--bg);
+  }
+  main, header.site, footer.site {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+  header.site {
+    padding-top: 2.5rem;
+    padding-bottom: 1rem;
+  }
+  h1 {
+    margin: 0 0 .25rem;
+    font-size: 1.9rem;
+    letter-spacing: -.02em;
+  }
+  h1 .domain { color: var(--accent); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .tagline {
+    margin: 0 0 .75rem;
+    font-size: 1.05rem;
+    color: var(--muted);
+  }
+  .gh {
+    display: inline-block;
+    font-size: .9rem;
+    text-decoration: none;
+    color: var(--accent);
+    border: 1px solid var(--line);
+    border-radius: .5rem;
+    padding: .15rem .6rem;
+    background: #fff;
+  }
+  .gh:hover { border-color: var(--accent); }
+  h2 {
+    margin: 2.5rem 0 .75rem;
+    font-size: 1.4rem;
+    letter-spacing: -.01em;
+    border-bottom: 2px solid var(--line);
+    padding-bottom: .35rem;
+  }
+  h3 { margin: 0 0 .1rem; font-size: 1.08rem; }
+  .kicker {
+    margin: 0 0 1rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .lede strong { color: var(--fg); }
+  .patterns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16.5rem, 1fr));
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: .75rem;
+    padding: 1rem 1.1rem;
+  }
+  .card .num {
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .75rem;
+    color: var(--accent);
+    background: var(--code-bg);
+    border-radius: .4rem;
+    padding: 0 .45rem;
+    margin-bottom: .4rem;
+  }
+  .card h4 {
+    margin: 0 0 .15rem;
+    font-size: 1rem;
+    letter-spacing: -.01em;
+  }
+  .card p.desc {
+    margin: 0 0 .75rem;
+    font-size: .9rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .pc {
+    font-size: .8rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin: .75rem 0 .3rem;
+  }
+  .pc.pro { color: var(--pro); }
+  .pc.con { color: var(--con); }
+  .card ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: .87rem;
+  }
+  .card li { margin-bottom: .4rem; }
+  .card li strong { font-weight: 650; }
+  figure.diagram {
+    margin: 1.5rem 0 0;
+    text-align: center;
+  }
+  figure.diagram img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: .75rem;
+  }
+  .video {
+    margin: 1.25rem 0;
+  }
+  .frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--line);
+    border-radius: .75rem;
+    overflow: hidden;
+    background: #000;
+  }
+  .frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  figcaption {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    margin-top: .5rem;
+    font-size: .92rem;
+    color: var(--muted);
+  }
+  figcaption a {
+    color: inherit;
+    text-decoration: none;
+  }
+  figcaption a:hover { color: var(--accent); }
+  .yt {
+    flex: none;
+    width: 24px;
+    height: 17px;
+    display: inline-block;
+    vertical-align: -3px;
+  }
+  .lab {
+    margin: 2.5rem 0 2rem;
+    padding: 1rem 1.25rem;
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: .75rem;
+    font-size: .95rem;
+  }
+  footer.site {
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
+    color: var(--muted);
+    font-size: .85rem;
+  }
+  a.ext { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1><span class="domain">mcp.codemode.cc</span></h1>
+  <p class="tagline">EDU AI LAB: MCP codemode — new way how LLM can exec code inside MCP srv (Contrast &amp; Compare 3 old ways)</p>
+  <a class="gh" href="https://github.com/AISidesKicks/mcp-codemode-cc">github</a>
+</header>
+
+<main>
+  <p class="lede">
+    We all see emerging Agentic Infra as replacement of IaC (Infrastruture as Code) — 4 principles here are universal, I select observablity as area where we work with very <strong>large, comples, interconected, timed data structures</strong>, ideal use to demonstrate pros and cons of diferent aproaches + plus every AI project need observability so may you will learn something usefull by the way too.
+  </p>
+
+  <h2>HEAD 2 HEAD — 4 principles</h2>
+  <p>
+    Blueprint detailing how an AI agent harness connects to the
+    <a class="ext" href="https://arize.com/phoenix/"><strong>Arize Phoenix</strong></a>
+    observability platform. It maps the end-to-end execution flow, telemetry
+    tracking spans, and architectural characteristics across four AI Harness
+    patterns:
+  </p>
+
+  <div class="patterns">
+    <section class="card">
+      <span class="num">01</span>
+      <h4>Agent Skills + CLI</h4>
+      <p class="desc">Invocation of pre-defined agent skills through a terminal interface and shell binaries.</p>
+      <p class="pc pro">Pros</p>
+      <ul>
+        <li><strong>Rapid Prototyping:</strong> Directly leverages standard OS binaries, custom CLI scripts, and existing terminal tools without custom protocol wrappers.</li>
+        <li><strong>Standardized System Telemetry:</strong> Phoenix natively captures process exit codes, stdout/stderr streams, and low-level system logs.</li>
+      </ul>
+      <p class="pc con">Cons</p>
+      <ul>
+        <li><strong>Brittle Parsing:</strong> Reliant on parsing unstructured text output, which frequently breaks downstream reasoning loops.</li>
+        <li><strong>Expanded Attack Surface:</strong> Unrestricted command-line access carries significant command injection and sandbox-escape risks.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <span class="num">02</span>
+      <h4>MCP LLM</h4>
+      <p class="desc">Standard Model Context Protocol exposing JSON-RPC tool definitions into the LLM context window.</p>
+      <p class="pc pro">Pros</p>
+      <ul>
+        <li><strong>Native Semantic Awareness:</strong> Tools are embedded directly into model context, allowing fluid multi-turn planning and dynamic schema discovery.</li>
+        <li><strong>Fine-Grained Prompt Observability:</strong> Phoenix tracks complete prompt/response cycles, token usage, tool invocation latency, and protocol metadata.</li>
+      </ul>
+      <p class="pc con">Cons</p>
+      <ul>
+        <li><strong>Heavy Context Overhead:</strong> Loading extensive MCP tool schemas directly into prompts rapidly exhausts available context space.</li>
+        <li><strong>Compounding Costs:</strong> High latency and token consumption across multi-step agent reasoning chains.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <span class="num">03</span>
+      <h4>MCP codemode</h4>
+      <p class="desc">Sandboxed Python execution on an MCP server returning processed prompt, code, and response data.</p>
+      <p class="pc pro">Pros</p>
+      <ul>
+        <li><strong>Token Efficiency:</strong> Processes and filters large datasets in-memory on the server, returning only curated summary data to the agent rather than raw context.</li>
+        <li><strong>Granular Traceability:</strong> Phoenix records execution flow, variable states, code performance benchmarks, and runtime exceptions.</li>
+      </ul>
+      <p class="pc con">Cons</p>
+      <ul>
+        <li><strong>Runtime Sandboxing Complexity:</strong> Requires strict isolation boundaries (such as a restricted Python subset) to prevent unauthorized execution.</li>
+        <li><strong>Dynamic Debugging Friction:</strong> Code execution failures require robust runtime recovery paths to prevent the harness from stalling.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <span class="num">04</span>
+      <h4>ZTA – Zero Token Architecture</h4>
+      <p class="desc">Deterministic orchestration using a Python SDK or direct API calls, reporting final status back to the agent.</p>
+      <p class="pc pro">Pros</p>
+      <ul>
+        <li><strong>Maximum Cost &amp; Speed Efficiency:</strong> Payload movement occurs entirely outside the LLM context, virtually eliminating token overhead and latency bottlenecks.</li>
+        <li><strong>Deterministic Policy Governance:</strong> Strict API schemas provide tight compliance, predictable auditing, and deterministic security controls.</li>
+      </ul>
+      <p class="pc con">Cons</p>
+      <ul>
+        <li><strong>Zero Adaptive Reasoning:</strong> Inflexible handling of novel edge cases; changes require programmatic code updates rather than dynamic agent adaptation.</li>
+        <li><strong>Higher Engineering Burden:</strong> Demands custom SDK and API pipeline maintenance rather than generic declarative agent prompts.</li>
+      </ul>
+    </section>
+  </div>
+
+  <figure class="diagram">
+    <img src="4types.jpeg" alt="The four harness patterns — Agent Skills + CLI, MCP LLM, MCP codemode, ZTA" width="2752" height="1536" loading="lazy" decoding="async">
+  </figure>
+
+  <h2>Part of EDU AI LAB — “Local AI is not CHEAP!”</h2>
+  <div class="lab">
+    <a class="ext" href="https://localai.isnot.cheap">localai.isnot.cheap</a>
+    <!-- TODO: add links -->
+  </div>
+
+  <h2>Inspirations</h2>
+
+  <figure class="video">
+    <div class="frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/oblaHqULUHk" title="MCP Explained Simply — What It Is and Why It Exists" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <figcaption>
+      <a href="https://www.youtube.com/watch?v=oblaHqULUHk">MCP Explained Simply — What It Is and Why It Exists</a>
+      <svg class="yt" role="img" aria-label="YouTube"><use href="#yt-logo"/></svg>
+    </figcaption>
+  </figure>
+
+  <figure class="video">
+    <div class="frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/TU6VY3fKAbk" title="Making Agents Useful: MCP, Tool Calling, and Sandboxed Execution" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <figcaption>
+      <a href="https://www.youtube.com/watch?v=TU6VY3fKAbk">Making Agents Useful: MCP, Tool Calling, and Sandboxed Execution</a>
+      <svg class="yt" role="img" aria-label="YouTube"><use href="#yt-logo"/></svg>
+    </figcaption>
+  </figure>
+
+  <figure class="video">
+    <div class="frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/IXe48aIw_X4" title="Code Mode: Why AI Agents Are Ditching Tool Calls for Code" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <figcaption>
+      <a href="https://www.youtube.com/watch?v=IXe48aIw_X4">Code Mode: Why AI Agents Are Ditching Tool Calls for Code</a>
+      <svg class="yt" role="img" aria-label="YouTube"><use href="#yt-logo"/></svg>
+    </figcaption>
+  </figure>
+
+  <figure class="video">
+    <div class="frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/nxnQl4AcqFg" title="Monty: the ultrafast Python interpreter by Agents for Agents — Samuel Colvin, Pydantic" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <figcaption>
+      <a href="https://www.youtube.com/watch?v=nxnQl4AcqFg">Monty: the ultrafast Python interpreter by Agents for Agents — Samuel Colvin, Pydantic</a>
+      <svg class="yt" role="img" aria-label="YouTube"><use href="#yt-logo"/></svg>
+    </figcaption>
+  </figure>
+
+  <figure class="video">
+    <div class="frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/8txf05vVVl4?start=76" title="Code Mode: Let the Code do the Talking — Sunil Pai, Cloudflare" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <figcaption>
+      <a href="https://www.youtube.com/watch?v=8txf05vVVl4&amp;t=76s">Code Mode: Let the Code do the Talking — Sunil Pai, Cloudflare</a>
+      <svg class="yt" role="img" aria-label="YouTube"><use href="#yt-logo"/></svg>
+    </figcaption>
+  </figure>
+
+  <figure class="video">
+    <div class="frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/A7WFt2JQ5s" title="ZTA: Zero Token Architecture — Kelsey Hightower | PlatformCon 2026" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <figcaption>
+      <a href="https://www.youtube.com/watch?v=A7WFt2JQ5s">ZTA: Zero Token Architecture — Kelsey Hightower | PlatformCon 2026</a>
+      <svg class="yt" role="img" aria-label="YouTube"><use href="#yt-logo"/></svg>
+    </figcaption>
+  </figure>
+
+  <h2>Code Mode design ‘deep dive’</h2>
+
+  <figure class="video">
+    <div class="frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/IXe48aIw_X4" title="Code Mode: Why AI Agents Are Ditching Tool Calls for Code" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <figcaption>
+      <a href="https://www.youtube.com/watch?v=IXe48aIw_X4">Code Mode: Why AI Agents Are Ditching Tool Calls for Code</a>
+      <svg class="yt" role="img" aria-label="YouTube"><use href="#yt-logo"/></svg>
+    </figcaption>
+  </figure>
+</main>
+
+<footer class="site">
+  <a class="ext" href="https://github.com/AISidesKicks/mcp-codemode-cc">AISidesKicks/mcp-codemode-cc</a>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="yt-logo" viewBox="0 0 28 20">
+    <path fill="#ff0000" d="M27.4 3.1a3.5 3.5 0 0 0-2.5-2.5C22.8 0 14 0 14 0S5.2 0 3.1.6A3.5 3.5 0 0 0 .6 3.1 36.2 36.2 0 0 0 0 10a36.2 36.2 0 0 0 .6 6.9 3.5 3.5 0 0 0 2.5 2.5C5.2 20 14 20 14 20s8.8 0 10.9-.6a3.5 3.5 0 0 0 2.5-2.5A36.2 36.2 0 0 0 28 10a36.2 36.2 0 0 0-.6-6.9z"/>
+    <path fill="#ffffff" d="M11.2 14.3 18.5 10l-7.3-4.3z"/>
+  </symbol>
+</svg>
+
+</body>
+</html>
