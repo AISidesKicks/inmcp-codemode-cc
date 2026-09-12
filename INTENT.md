@@ -25,6 +25,8 @@ Ideally we want also to ship BACKUP of observability data - so MCP part of lab c
 We also want to demonstrate ZTA (Zero Token Architecture) - report strips in Python, zero LLM tokens. Three direct interfaces against the running Phoenix (no MCP, no harness):
 
 - SDK: `arize-phoenix-client` (installed) - spans / traces / annotations / experiments helpers
+
+Out of scope, there will be lab [rest graphql win](https://rest.graphql.win)
 - REST API: plain `requests` against `http://localhost:6006/v1/...`
 - graphQL: POST `http://localhost:6006/graphql` - same endpoint the Phoenix UI itself uses; one query, one round trip, project stats included:
   `{ projects(first: 3) { edges { node { name traceCount tokenCountTotal } } } }` (verified live on Phoenix 20.7); mutations too (`createProject`, `transferTracesToProject`, Phoenix 11.9+)
@@ -216,12 +218,12 @@ https://arize.com/docs/phoenix/sdk-api-reference
 https://arize-phoenix.readthedocs.io/projects/client/
 https://arize-phoenix.readthedocs.io/projects/evals/
 
-## Arize Phoenix REST API
+## Arize Phoenix REST API (not used in this LAB)
 https://arize.com/docs/phoenix/sdk-api-reference/rest-api/overview
 https://arize.com/docs/phoenix/sdk-api-reference/rest-api/api-reference
 https://github.com/AISidesKicks/tutorials_python
 
-## Arize Phoenix graphql
+## Arize Phoenix graphql (not used in this LAB)
 https://arize.com/docs/ax/graphql-reference
 https://github.com/AISidesKicks/graphql-api-examples
 https://arize.com/blog/text-to-graphql-mcp-server/
